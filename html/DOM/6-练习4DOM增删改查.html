@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript-DOM增删改查练习3</title>
+	<style type="text/css">
+		* a{
+			padding: 0;
+			margin: 0;
+			text-decoration: none;
+		}
+		#tbox {
+			margin: 0 auto ;
+			margin-top: 50px;
+
+			border-collapse:collapse;
+			border:none;
+		}
+		#tbox td{
+					padding: 5px;
+			border:solid #000 1px;
+		}
+		#add{
+			margin: 0 auto ;
+			margin-top: 50px;
+			padding: 5px;
+			width: 300px;
+
+			text-align: center;
+			border-style: solid;
+			border-width: 1px;
+		}
+		#add input{
+			margin: 5px;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<p>
+		DOM操作的一般步骤
+		1.先获取要操作的dom对象，使用document节点对象提供的方法
+		如：getElementById,getElementsByClassName, getElementsByName,getElementsByTagName
+		2.获取想要的内容或修改样式，使用element节点对象的 innerHTML属性，style属性等。
+		新增元素，元素属性，文本等，使用Node接口提供的createElement()，createTextNode()，appendChild()等方法。
+	</p>
+<table id="tbox">
+		<tr>
+			<th>姓名</th>
+			<th>邮箱</th>
+			<th>工资</th>
+			<th>操作</th>
+		</tr>
+		<tr>
+			<td>张三</td>
+			<td>zhangsan@163.com</td>
+			<td>3000</td>
+			<td><a href="###">删除</a></td>
+		</tr>
+		<tr>
+			<td>李四</td>
+			<td>lisi@163.com</td>
+			<td>4000</td>
+			<td><a href="###">删除</a></td>
+		</tr>
+		<tr>
+			<td>王五</td>
+			<td>wangwu@163.com</td>
+			<td>5000</td>
+			<td><a href="###">删除</a></td>
+		</tr>
+	</table>
+	<!-- 操作模块 -->
+	<div id="add">
+		<h2>添加新员工</h2>
+		<form>
+			姓名：<input type="text" name="myName" value="" class="userInput"><br>
+			邮箱：<input type="text" name="myEmail" value="" class="userInput"><br>
+			工资：<input type="text" name="mySalary" value="" class="userInput"><br>
+			<input id="btn" type="button" value="提交">
+		</form>
+	</div>
+<!-- js -->
+<script type="text/javascript">
+window.onload = function(){
+
+		// 输入数据后点击添加按钮添加一行tr
+	// 先获取按钮并绑定点击事件
+	var btn = document.getElementById("btn");
+	// 绑定点击事件
+	btn.onclick = function(){		
+		var inputList = document.getElementsByClassName("userInput")	
+		// console.log(inputList)
+		var tbox = document.getElementById("tbox")
+		var tr = document.createElement("tr")
+		for(var i=0;i<inputList.length;i++){
+			var td = document.createElement("td")
+			td.innerHTML = inputList[i].value
+			tr.appendChild(td)
+		}
+		var td = document.createElement("td")
+		var a = document.createElement("a")
+		var atxt = document.createTextNode("删除")
+		a.appendChild(atxt)
+		a.setAttribute("href","###")
+		td.appendChild(a)
+		tr.appendChild(td)
+		// console.log(tr)
+		tbox.appendChild(tr)
+		// // 获取输入的内容
+		// var myName = document.getElementsByName("myName");
+		// var myEmail = document.getElementsByName("myEmail");
+		// var mySalary = document.getElementsByName("mySalary");
+		// // 获取table
+		// var tbox = document.getElementById("tbox")
+		// var tr = document.createElement("tr")
+		// var nameTd = document.createElement("td")
+		// var emailTd = document.createElement("td")
+		// var salaryTd = document.createElement("td")
+		// nameTd.innerHTML = myName[0].value
+		// emailTd.innerHTML = myEmail[0].value
+		// salaryTd.innerHTML = mySalary[0].value
+		// var td = document.createElement("td")
+		// var a = document.createElement("a")
+		// var atxt = document.createTextNode("删除")
+		// a.appendChild(atxt)
+		// a.setAttribute("href","###")
+		// td.appendChild(a)
+		// tr.appendChild(nameTd)
+		// tr.appendChild(emailTd)
+		// tr.appendChild(salaryTd)
+		// tr.appendChild(td)
+		// tbox.appendChild(tr)
+
+		// 要实现的功能：点击删除时一整行删除（一个tr删除）
+	  // 先获取a元素并给每一个a绑定点击事件
+		var del = document.getElementsByTagName("a");
+		for (var i = 0; i < del.length; i++) {
+			// 给每一个a绑定点击事件
+			del[i].onclick= function(){
+				// 获取到要删除的tr
+				var tr = this.parentNode.parentNode;
+				// 点击时删除但是这样就直接删除了加一个弹窗让用户再确认一次
+				// var flag = confirm("你确定要删除吗");
+				// 我想知道我删除的是谁
+				// 获取要删除的tr的第一个td的文本内容
+				// var name = tr.getElementsByTagName("td")[0];
+				var name = tr.children[0];
+				var flag = confirm("你确定要"+name.innerHTML+"删除吗");
+				if (flag) {
+					tr.parentNode.removeChild(tr);
+				}
+				return false;
+			};
+		};
+
+	}
+};
+</script>
+</body>
+</html>

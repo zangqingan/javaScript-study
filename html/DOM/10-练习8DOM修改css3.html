@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM修改css封装</title>
+    <style type="text/css">
+        .b1{
+            width: 200px;
+            height: 200px;
+            background-color:red;
+        }
+        .b2{
+            /* width: 300px; */
+            height:300px;
+            background-color:yellow;
+        }
+    </style>
+</head>
+<body>
+    <p>
+        通过style属性来修改元素的样式，每修改一次浏览器都要重新渲染一次。
+        所以这种方法性能比较差。
+        修改多个样式时也不方便。
+        css和js也耦合（表现和行为耦合）
+
+        通过添加类名的形式来间接的修改样式
+        性能比较好，浏览器只渲染一次
+        行为和表现进一步分离，引入样式表中定义好的样式，性能更好。
+    </p>
+    <button id="btn">点击按钮以后修改样式</button>
+    <div id="box" class="b1"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //获取div
+    var box = document.getElementById("box");
+    //获取按钮
+    var btn = document.getElementById("btn");
+    //为按钮绑定点击事件
+    btn.onclick = function(){
+        //修改box的样式
+        // box.style.width = "300px";
+        // box.style.height = "300px";
+        // box.style.backgroundColor = "yellow"
+       
+        // box.className = "b2";
+        // box.className += " b2";
+        // addClass(box,"b2");
+        // removeClass(box,"b2");
+        toggleClass(box,"b2");
+    };
+
+    //定义一个函数用来向一个元素中添加指定的class属性
+    //obj要添加class属性的 对象
+    //cn添加的类名
+    function addClass(obj,cn){
+        //先检查obj中是否含有cn这个class。
+        if(!hasClass(obj,cn)){
+            obj.className += " " + cn;
+        }
+    }
+
+    //判断一个元素中是否含有指定的class属性值
+    //有返回true，没有返回false
+    function hasClass(obj,cn){
+        //创建一个正则表达式
+        // var reg = /\b\b/;
+        var  reg = new RegExp("\\b"+cn+"\\b");
+        return reg.test(obj.className);
+    }
+
+    //删除一个元素中的指定class属性
+    function removeClass(obj,cn){
+        //创建一个正则表达式
+        var  reg = new RegExp("\\b"+cn+"\\b");
+        //删除class
+        obj.className = obj.className.replace(reg,"");
+    }
+
+    //定义一个可以来回切换的函数
+    //有就删除，没有就添加
+    function toggleClass(obj,cn){
+        if(hasClass(obj,cn)){
+            //有删除
+            removeClass(obj,cn);
+        }else{
+            //没有就添加
+            addClass(obj,cn);
+        }
+    }
+};
+</script>
+</body>
+</html>

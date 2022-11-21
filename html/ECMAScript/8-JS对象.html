@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript对象Object</title>
+</head>
+<body>
+    <div>
+        <h3>1、js对象的概述</h3>
+        <div>
+            <h4>1.js对象的定义</h4>
+            <div>
+                对象就是现实事物在计算机程序语言中的抽象表示,在JavaScript 中其实所有事物都是对象:字符串、数字、数组、日期,等等。
+                而且JavaScript 的所有其他对象都继承自Object对象,即那些对象都是Object的实例。
+                对象是一种复合的数据类型,它可以保存多个不同数据类型的变量,这些变量也叫做属性或方法。就像一个袋子或者说一个容器或者说一张无序的表一样。
+                属性是与对象相关的值,方法是能够在对象上执行的动作。在面向对象的语言中,属性和方法常被称为对象的成员。
+                在js对象中都是以名值对形式存在(key-value)的无序的复合数据集合,名字也叫“属性”(property),
+                注意:名值对之间用逗号分隔,属性名都是字符串所以可以不用逗号括起来,而属性值是字符串类型时必须用双引号括起来。
+                如果一个属性的值为函数,通常把这个属性称为“方法”,它可以像函数那样调用。
+                {
+                    属性名:属性值,
+                    name:"zhangsan",
+                    age:25,
+                    sayHi:function(){...}
+                }
+                注意:属性名和属性值的要求
+                    属性名都是字符串或者符号类型同时应遵守js标识符的命名规则且应尽量语义化,对于特殊的属性名不能使用 对象.属性名 的方式访问操作。而是应该使用 对象[属性名] 来操作。
+                    属性值可以是除undefined值之外的任何值,即其它任意的 js数据类型(也可以是另一个对象这时就是嵌套了)
+                    
+                js对象特性:
+                    js对象都有自由扩展属性的特性,即object.新属性名 = 属性值;而不是必须在声明对象时同时声明所有的属性。
+            </div>
+            <h4>2.js对象的分类</h4>
+            <div>
+                内置对象:由ecmascript标准中定义的对象,如Math,String等
+                宿主对象:由js的运行环境即浏览器提供的对象,主要是BOM和DOM.
+                自定义对象:由开发人员自己创建的对象(最难最重要)
+            </div>
+            <h4>3.js对象属性的操作</h4>
+            <div>
+                <h5>1.属性的增删改查</h5>
+                <p>
+                    
+                    在js中读取对象的属性,有两种方法,一种是使用点运算符 . ,还有一种是使用方括号运算符 [] (属性是变量或者不易表达的值就使用)。
+                    优先考虑使用 . 点运算符来操作(增删改查)对象的属性。
+                    增:通过赋值语句来增加,如果之前有就覆盖久的值,没有就添加为新的属性。对象.要增加的属性名 = 对应的属性值;
+                    删:delete 对象.要删除的属性名;删除成功后返回true,只能删除对象本身的属性,无法删除继承的属性
+                    改:重新调用赋值语句就行,对象.要修改的属性名 = 新修改的值;
+                    查:对象.要查找的属性名 或者 对象.["属性名"], 查找到了返回的是属性名对应的属性值,查找不到返回undefined。
+                    经常使用的定义与赋值方法
+                    obj.prop =value
+                    obj['prop']=value,
+                    此外还有Object.defineProperty()方法。
+                    var obj = {
+                        p: 'Hello World'
+                    };
+                    obj.p // "Hello World"
+                    obj['p'] // "Hello World"
+                </p>
+                <h5>2.属性的遍历</h5>
+                <p>
+                    1.for in 循环,通过利用in操作符在循环中把对象的属性遍历处理,可以定义一个数组接收遍历的属性名。
+                    所有可枚举属性包括实例属性和原型属性。
+                    function Person(){}
+                    Person.prototype.name ="zhangsan";
+                    Person.prototype.age = 27;
+                    Person.prototype.gender = "male";
+                    Person.prototype.city = "guangzhou";
+                    Person.prototype.sayName = function(){
+                        console.log(this.name)
+                    };
+                    let person = new Person();
+                    person.name = "lisi";
+                    person.age = 22;
+                    person.gender = "female";
+                    // for in
+                    let arr = []//定义一个数组接收遍历的对象属性 
+                    for(let i in person){
+                        arr.push(i)
+                    
+                    }
+                    console.log('arr is',arr)//arr is Array(5) [ "name", "age", "gender", "city", "sayName" ]
+                    
+
+                    2. Object.keys(),接收一个对象作为参数,返回一个包含该实例对象所有可枚举的属性名称的字符串数组。
+                    const result = Object.keys(person)
+                    console.log('result is',result)//result is Array(3) [ "name", "age", "gender" ]
+
+                    3. Object.getOwnPropertyNames(),接收一个对象作为参数,返回一个包含所有实例属性无论是否可以枚举的属性名称的字符串数组。
+                    const otherResult = Object.getOwnPropertyNames(person)
+                    console.log('otherResult is',otherResult)//result is Array(3) [ "name", "age", "gender" ]
+
+                    es8之后又新增了两个迭代的静态方法,它们都接收一个对象,返回对应的内容数组。
+                    Object.values()返回对象值的数组, Object.entries()返回键值对的二维数组。
+
+                    4. Object.values()
+                    const valusResult = Object.values(person)
+                    console.log('valusResult is',valusResult)//valusResult is Array(3) [ "lisi", 22, "female" ]
+
+                    5. Object.entries()
+                    const entriesResult = Object.entries(person)
+                    console.log('entriesResult is',entriesResult)//entriesResult is[[ "name", "lisi" ],[ "age", 22 ],[ "gender", "female" ]]
+                </p>
+            </div>
+            <h4>4.js对象的增强语法</h4>
+            <div>
+                ECMAScript6为定义和操作对象新增了很多极其有用的语法特性,极大的提升了处理对象的方便程度。
+                <h5>1.属性值简写</h5>
+                <p>
+                    如果一个对象中属性名和属性值(属性值是一个变量)一样(key值和value值一样)则可以简写,写一个就好。
+                    es5: <br>
+                    let name = "zhangsan";
+                    let person = {
+                        name:name
+                    }
+                    es6: <br>
+                    let name = "zhangsan";
+                    let person = {
+                        name
+                    }
+                </p>
+                <h5>2.可计算属性</h5>
+                <p>
+                    在es5里使用变量作为属性名,需要使用中括号语法来添加。
+                    而在es6增强之后可以使用可计算属性直接在对象字面量中定义动态属性。也是使用中括号告诉浏览器里面的是JavaScript表达式而不是字符串。
+                    es5: <br>
+                    let nameKey = "zhangsan";
+                    let person = {}
+                    person[nameKey] = "lisi"
+                    es6: <br>
+                    let nameKey = "zhangsan";
+                    let person = {
+                        [nameKey]:'lisi'
+                    }
+                </p>
+                <h5>3.方法名的简写</h5>
+                <p>
+                    es5时给对象定义方法时,一般都是方法名:匿名函数表达式,如下:
+                    let person = {
+                        sayName:function(name){
+                            console.log(`my name is ${name}`)
+                        },
+                        get:function(){},
+                        set:function(val){}
+                    }
+                    person.sayName('zhangsan');my name is zhangsan 
+                    es6: 不用再使用匿名函数表达式了,对获取和设置函数也适用,与可计算属性也相互兼容 <br> 
+                    let meKey = 'sayHi'
+                    let person = {
+                        sayName(name){
+                            console.log(`my name is ${name}`)
+                        },
+                        get name(){},
+                        set name(name){},//这里的name函数名是根据实际取的属性自己定义的。
+                        [meKey](name){
+                            console.log(`hi ${name}`)
+                        }
+                    }
+                    person.sayName('zhangsan');my name is zhangsan 
+                </p>
+                <h5>4.对象的解构</h5>
+                <p>
+                    就是变量那一节,使用它可以简化变量的赋值操作,在模块化引入中使用比较多。
+                </p>
+                <h5>5.三点运算符...</h5>
+                <p>
+                    扩展运算符... ES2018 将这个运算符引入了对象。
+                    对已知对象使用扩展运算符 ... 则会取出参数对象自身的、可枚举的所有属性,浅拷贝到当前对象之中。
+                    
+                    let obj1 = { a: 1, b: 2 };
+                    let obj2 = { name:"wang",...obj1, c: 3 }; // { a:1, b:2, c:3 }
+                    let obj3 = { ...obj1,name:"wang"}; // { a: 1, b: 2, name: "wang" }
+                    console.log('obj1 is',obj1)
+                    console.log('obj2 is',obj2)
+                    console.log('obj3 is',obj3)
+                    浅拷贝时相当于使用Object.assign()
+                    let aClone = { ...a };
+                    // 等同
+                    let aClone = Object.assign({}, a);
+                </p>
+            </div>
+            <h4>5.js对象的复制拷贝</h4>
+            <div>
+                所谓拷贝就是将一个对象的所有属性,复制一份一模一样的到另一个对象里,拷贝又分成浅拷贝和深拷贝两种。
+                <h5>1.浅拷贝</h5>
+                <p>
+
+                </p>
+                <h5>2.深拷贝</h5>
+                <p>
+                    
+                </p>
+            </div>
+        </div>
+        <h3>2、js对象的创建方法</h3>
+        <div>
+            <h4>1.使用内置的构造函数 Object() 创建</h4>
+            <div>
+                创建一个对象,使用new运算符调用Object()构造函数,然后再给它添加属性和方法。构造函数就是专门用来创建对象的函数它的首字母默认要大写。
+                语法:var obj = new Object();这样就创建了一个obj对象了。
+                obj.name = 'zhangsan';
+                obj.age = 29;
+                obj.sayName = function(){console.log(this.name)}
+            </div>
+            <h4>2.使用对象字面量的方法创建</h4>
+            <div>
+                对象字面量就是在 {} 花括号中直接指定对象含有的属性和属性值。实际开发中多使用对象字面量的声明方式。
+                语法:var obj = {属性名1:属性值1,属性名2:属性值2};
+                注意:属性名和属性值之间使用 : 冒号分隔,名值对之间使用 , 逗号分隔。
+                var obj = {
+                    name:'zhangsan',
+                    age:29,
+                    sayName:function(){console.log(this.name)}
+                }
+                实际上 var obj = {} 是 var obj = new Object();的语法糖。
+            </div>
+            <h4>3.使用工厂函数的方法创建</h4>
+            <div>
+                当我们要重复定义很多对象且它们的属性名基本相同时,这时再使用Object()构造函数或者对象字面量方法定义时都会重复编写很多代码。
+                就可以使用这个方法。
+                这个方法的本质是定义了一个函数,这个函数的返回值是一个对象的实例。
+                通过定义形参作为创建的对象的属性,这样传入不同的实参,对象的属性值也就不同了。
+                语法: 
+                    function creatPerson(name,属性名2){
+                        let obj = new Object()
+                        obj.name = name
+                        return obj
+                    }
+                var obj1 =  creatPerson("zhangsan"); 这时执行一次函数就会生成一个对象。
+                var obj2 =  creatPerson("lisi"); 这时执行一次函数就会又生成一个对象。
+                注意:使用工厂函数方法可以解决创建多个类似对象的问题,但是创建的对象都是使用Object()构造函数创建的,所以都是object类型的,无法具体区分对象的类型。
+
+            </div>
+            <h4>4.使用自定义构造函数的方法创建</h4>
+            <div>
+                构造函数,就是专门来创建对象的函数,与普通函数没什么区别,只是构造函数首字母要大写,
+                同时普通函数是直接调用,而构造函数要使用 new 关键字来调用。
+                这样使用同一个构造函数创建的对象称为一类对象,所以也将一个构造函数称为一个类,而由它创建出来的对象称为这个类的一个实例。
+                function Person(name,){
+                    this.name = name
+                }
+                可以使用 instanceof 运算符 检查一个实例对象是否是某个类的实例。
+                    语法:实例对象 instanceof 构造函数(类);如果是则返回true反之则返回false。
+                function Foo(name,age){
+                    this.name = name
+                    this.age = age
+                    return this //默认有返回,不写时new返回的也是这个this对象
+                }
+                var foo = new Foo('zhangsan',25)
+                console.log(foo instanceof Foo)//true
+
+                new 运算符 生成的实例对象能访问构造函数里的属性,也能访问构造函数原型prototype里的属性。
+                也就是这个对象的this是指向构造函数里的this。
+                构造函数默认是return返回this对象,人为设置返回原始类型的值毫无意义,人为返回是一个对象时new出来的就是返回的对象。
+                这时候和普通函数返回一个对象没区别,new运算符也就失去了它的作用而变的毫无意义。所以定义构造函数时一般不要返回值。
+                在实例化时,如果不传入参数,构造函数后面的括号()也可以不加,但是建议都加。
+
+                面试题:描述new一个对象的过程?手动实现一个new操作符?
+                    1.立刻在内存中创建一个新的空对象{},
+                    2.将这个空对象的原型特性指向构造函数的显示原型prototype上,即: {}.prototype = 构造函数.prototype。
+                    3.将新建的空对象{}设置为构造函数内部中的this,即this指向这个新的空对象。
+                    所以this指每次新生成的那个空对象,即每次new出来的那一个,所以针对this的操作都会发生到new出来的那个空对象上。
+                    4.逐行执行构造函数中的代码,给新对象添加属性。
+                    5.执行完后,如果构造函数返回非空对象,则直接返回该非空对象。否则将新建的空对象作为返回值返回即返回this。
+                注意:构造函数每执行一次,就会创建一个新的实例,这时如果一个构造函数中的某个方法是通用的,
+                它会被重复创建多次,这样非常浪费内存。因为在js里函数也是一个对象。
+                解决方法:
+                    1.打这个方法放到全局作用域中定义,但是这样也会造成全局作用域命名空间污染而且也不安全。
+                    2.定义到对象的原型属性prototype上。
+
+                与工厂模式的区别
+                    1.构造函数方法没有显示的创建对象new Object(),但是后台会自动var  obj = new Object();
+                    2.直接将属性和方法赋值给this对象即this就相当与obj
+                    3.没用return语句返回对象引用,由后台自动返回。
+               
+            </div>
+            <h4>5.构造函数和原型模式</h4>
+            <div>
+                针对4中提到的方法被重复定义的问题,就可以将公共的属性定义到构造函数的原型属性prototype上。
+                这是因为js所有的函数都有一个 prototype属性,可以叫显示原型属性,它是浏览器帮忙添加的。它指向一个对象即它的值是一个对象。
+                在它上面定义的属性和方法会被所有对象实例共享:
+                function Person(){}
+                Person.prototype.name = "zhangsan";
+                Person.prototype.sayName = function (){
+                    console.log(this.name)
+                };
+                let person1 = new Person()
+                let person2 = new Person()
+                person1.sayName()//zhangsan
+                person2.sayName()//zhangsan
+                console.log(person1.sayName() == person2.sayName())//true
+                <h5>1.理解原型</h5>
+                <p>
+                    js原型就是一个对象,分为隐式原型和显示原型。
+                    所有的引用数据类型都有一个隐式原型属性 __proto__ (null除外),它是浏览器帮忙添加,它指向一个对象。
+                    所有的函数都有一个显示原型属性 prototype,它也是浏览器帮忙添加,它也指向一个对象。
+                    也就是说定义一个对象或者函数它们会自动添加这个原型属性。
+                    所有原型对象都会自动获得一个名为constructor属性,它的值是与之关联的那个构造函数。
+                </p>
+                <h5>2.js对象原型规则</h5>
+                <p>
+                    1. js中所有的引用数据类型(对象,数组,函数等)都具有对象的特性,即可自由扩展属性(null除外)
+                    例子:
+                        var obj = {}
+                        obj.name = 'zhangsan'//自由扩展属性
+                        var arr = []
+                        arr.a = 100
+                        function fn(){}
+                        fn.age = 20
+                    2.所有的引用数据类型都有一个隐式原型属性 __proto__ (null除外),它是浏览器帮忙添加,它指向一个对象。
+                    这是浏览器给的实际脚本是没有访问这个特性的标准方法,而是通过[[Prototype]]来表示这个特性。
+                    即: 
+                        obj.__proto__ = {},
+                        arr.__proto__ = {}
+                        fn.__proto__ = {}
+                    3.所有的函数都有一个显示原型属性 prototype,它也是浏览器帮忙添加,它也指向一个对象。
+                    即: 只要创建一个函数,js原型规则就会给这个函数添加一个prototype属性。
+                        fn.prototype = {}
+                    
+                    4.所有的引用数据类型的隐式原型属性__proto__指向它对应的构造函数的显示原型属性 prototype上。
+                    即:__proto__与 prototype指向的是同一个对象上,	obj.__proto__ === Object.prototype = {}。
+                    这个对象就是原型对象。
+                    5.当试图得到引用数据类型的某个属性时,会现在自己本身查找有没有这个属性,如果没有就会去它的__proto__上寻找也就是它的构造函数的prototype上寻找。
+                    如果还是没有继续去构造函数的__proto__对象上找,一层一层往上找直到Object.prototype,还是没有就是undefined,这也就形成了原型链。
+
+                    实例通过隐式原型属性__proto__链接到原型对象,构造函数通过显示原型prototype链接原型对象。
+                    注意:原型链只有在检索一个属性值的时候才被用到,同时原型链也是动态更新的在上面添加一个属性会对所有基于该原型链的对象可见。
+                </p>
+                <h5>3.js原型链</h5>
+                <p>
+                    根据原型的规则可以在访问一个对象属性时,会按照这个属性的名称先在实例自己本身搜索,找到了就返回找不到就会沿着指针进入原型对象搜索。
+                    一层一层往上找直到Object.prototype,还是没有就是undefined,这也就形成了原型链。
+                    原型链只有在检索一个属性值的时候才被用到,同时原型链也是动态更新的在上面添加一个属性会对所有基于该原型链的对象可见。
+                    同时给实例添加属性会遮蔽原型上同名的属性,即在查找实例本身时找到了就返回值并停止继续向原型对象查找了。
+
+                    原型模式之所以重要是因为js语言提供的原生引用类型的构造函数都在原型上定义了各种实例方法。这样实例对象都可以直接使用原型上的方法。
+                </p>
+
+            </div>
+            <h4>6.es6使用类关键字声明</h4>
+            <div>
+                JavaScript 语言中,生成实例对象的传统方法是通过构造函数。ES6 提供了更接近传统语言的写法,引入了 Class(类)这个概念,作为对象的模板。
+                通过class关键字,就可以定义类,新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。本质上是构造函数生成对象的语法糖,也是使用了原型对象。
+                语法1:类声明,不存在提升。
+                    class Person{
+                        constructor()
+                            //构造函数方法
+
+                        }
+                        get value(){} //获取函数
+                        set value(newValue){} //设置函数
+                        static changeA(){} //静态类方法
+                        sayName(){
+                            //实例方法
+                        }
+                    }
+                    typeof Person // "function" 类的数据类型就是函数
+                    Person === Person.prototype.constructor // true 类本身就指向构造函数
+                所以说类是构造函数的另一种写法,也就是语法糖。
+                语法2:类表达式
+                    const Person = class {
+
+                    }
+                类包含构造函数方法、实例方法、获取/设置函数、静态类方法但都不是必需的。可以定义空的类。
+                类的名字首字母也要大写,以便区别通过它创建的实例。
+                方法与方法之间不需要逗号分隔,加了会报错而且所有方法都是不可枚举的。
+                使用时和构造函数一样要用new 声明,let 实例 = new 类名()
+                在类里面定义的所有方法都是定义在类的prototype属性上面,因此在类的实例上面调用方法,其实就是调用原型上的方法。
+
+                // es6生成实例对象
+                // 定义一个私有变量
+                    let _age = 25
+                    class MathHandle{
+                        constructor(x,y){
+                            this.x = x
+                            this.y = y
+                            this.show = () => {console.log('我是类的实例方法',this)}
+                        }
+                        get age(){
+                            return _age //对某个属性设置存值函数和取值函数,拦截该属性的存取行为。
+                        }
+                        set age(value){
+                            if(value < 30 && value > 25){
+                                _age = value
+                            }
+                        }
+                        static show(){
+                            console.log('我是类的静态方法',this)
+                        }
+                        add(){
+                            MathHandle.show()
+                            return this.x + this.y
+                        }
+                        show(){
+                            console.log('我是类的原型方法',this)
+                        }
+                    }
+                    // 创建实例对象
+                    const m = new MathHandle(3,2)
+                    console.log(m.add())//5
+                    console.log(m.age)//25// 'getter'
+                    m.age = 28// setter: 28
+                    console.log(m.age)//28
+                    console.log(m)//Object { x: 3, y: 2 }
+                    console.log(MathHandle)//class MathHandle { constructor(x, y) }
+                    console.log(typeof MathHandle)//function
+                    console.log(MathHandle.name)//MathHandle
+                    console.log(MathHandle === MathHandle.prototype.constructor)//true
+                <img src="../../images/class.png" alt=""> <br>
+                <h5>1.类构造函数</h5>
+                <p>
+                    constructor 关键字用于在类定义块内部创建类的构造函数,而方法名constructor则是告诉浏览器在new 操作符创建类的新实例时要调用一次这个函数。
+                    也就是说使用new和类就意味着constructor函数会自动被调用。类实例化时传入的参数也是在这里声明定义的。
+                    这个是必须的没有时浏览器自动添加一个空的constructor() {}。它执行之后默认返回实例对象即 this,每次实例化this都是实例化的那个对象。
+                    constructor(name,age){
+                        //这里所有添加到this的属性和方法都是实例上的,每次初始化都会生成一次。
+                        this.name = name;
+                        this.age = age;
+                        this.sayName = () => {console.log('实例属性')}
+                        //继承时
+                        super();
+
+                    }
+                    在继承时必须在这里面执行 super()
+                </p>
+                <h5>2.静态类方法</h5>
+                <p>
+                    在类块中使用 static 方法名(){}定义的就是静态类方法,它不会被实例继承,而是直接通过类来调用 类名.静态方法名()。
+                    在静态成员中this引用类本身,非常适合作为实例对象的工厂函数生成实例对象。
+
+                </p>
+            </div>
+        </div>
+        <h3>3、js对象属性的描述对象</h3>
+		<div>
+			JavaScript 提供了一个内部数据结构,用来描述对象属性的特性以及控制它的行为,比如该属性是否可写、可修改、可删除、可遍历等等。
+			这个内部数据结构就称为“属性描述对象”(attributes object)。js对象的每个属性都有自己对应的属性描述对象,用来保存该属性的一些元信息。
+            分为两类:数据属性和访问器属性。
+            <h4>1.数据属性</h4>
+            <div>
+                它包含一个保存属性值的位置value。具体如下:
+                {
+                    value: 123,该属性的属性值,默认为undefined。
+                    writable: 是一个布尔值,表示属性值(value)是否可改变,默认直接定义在对象的属性都是true可改变。
+                    enumerable: 是一个布尔值,表示该属性是否可枚举/遍历,默认直接定义在对象的属性都是true可枚举。
+                    configurable: 是一个布尔值,表示属性的可配置性是否能被delete删除并重新定义,默认直接定义在对象的属性都是true可删除配置。
+                }
+            </div>
+            <h4>2.访问器属性</h4>
+            <div>
+                它不能和value、writable这两个特性一起出现,主要是使用获取(getter)和设置(setter)函数。
+                {
+                    enumerable: false,是一个布尔值,表示该属性是否可枚举/遍历,默认false不可枚举。
+                    configurable: false,是一个布尔值,表示属性的可配置性,默认false不可删除配置。
+                    get: undefined,是一个函数,表示该属性的取值函数(getter),默认为undefined。
+                    set: undefined,是一个函数,表示该属性的存值函数(setter),默认为undefined
+                }
+            </div>
+            可以通过Object.defineProperty()方法给对象新增或修改属性并设置属性描述对象,接收三个参数:要添加属性的对象,添加的属性名称,属性描述对象。
+                Object.defineProperty(obj,name,{writable:false,value:'zhangsan'}),给obj对象添加了一个只读name属性值为'zhangsan'。
+            可以通过Object.defineProperties(),复数形式通过多个描述符一次定义多个属性,接收两个参数:要添加属性的对象,另一个属性描述对象。
+                Object.defineProperties(obj,{
+                    name:{
+                        value:'zhangsan'
+                    },
+                    age:{
+                        writable:false
+                    }
+                })
+			可以通过Object.getOwnPropertyDescriptor()方法获取一个对象指定属性的属性描述对象,接收两个参数属性所在对象和要取其属性描述对象的属性名,返回指定属性对应的属性描述对象。
+                let descriptor = Object.getOwnPropertyDescriptor(obj,name),descriptor就是一个属性对应的描述对象。
+            可以通过ES8新增的Object.getOwnPropertyDescriptors()方法,复数形式就是调用Object.getOwnPropertyDescriptor()方法并将所有返回值放到一个对象中返回。就接收一个参数:要取属性的对象。
+            注意:默认情况下所有直接定义在对象上的属性的writable、enumerable、configurable值都是true 即可写可读可删除可配置。
+            而使用Object.defineProperty()和Object.defineProperties()方法添加的默认writable、enumerable、configurable值为false。
+		</div>
+        <h3>4、js对象常见的静态方法</h3>
+        <div>
+            所谓静态方法就是指部署在Object对象自身的方法,比较常见常用的如下:
+            原型链相关方法
+                Object.create() 该方法可以指定原型对象和属性,返回一个新的对象。
+                Object.getPrototypeOf() 获取对象的Prototype对象。
+            对象属性模型的相关方法
+                Object.defineProperty() 通过描述对象,定义某个属性。
+                Object.defineProperties() 通过描述对象,定义多个属性
+                Object.getOwnPropertyDescriptor() 获取某个属性的描述对象
+                Object.getOwnPropertyDescriptors() 获取某个对象所有属性的描述对象
+            对象属性迭代的相关方法
+                Object.keys()
+                Object.getOwnPropertyNames()
+                Object.values()
+                Object.entries()
+                Object.fromEntries()方法是Object.entries()的逆操作  ,用于将一个键值对数组转为对象。该方法的一个用处是配合URLSearchParams对象  ,将查询字符串转为对象。Object.fromEntries(new URLSearchParams('foo=bar&baz=qux'))
+            控制对象状态的方法
+                Object.freeze() 冻结一个对象。
+            其它方法
+                Object.assign()方法用于对象的合并  ,将源对象(source)的所有可枚举属性  ,复制到目标对象(target)。
+        </div>
+        <h3>5、js对象常见的实例属性和方法</h3>
+        <div>
+            定义在Object.prototype对象上的属性和方法它们称为实例属性和方法。所有Object的实例对象都继承了这些方法。
+            Object实例对象的方法,主要有以下六个。
+                Object.prototype.valueOf()  返回当前对象对应的值。
+                Object.prototype.toString()  返回当前对象对应的字符串形式,默认情况下返回类型字符串。
+                Object.prototype.toLocaleString()  返回当前对象对应的本地字符串形式。
+                Object.prototype.hasOwnProperty()  判断某个属性是否为当前对象自身的属性,还是继承自原型对象的属性。
+                Object.prototype.isPrototypeOf()  判断当前对象是否为另一个对象的原型。
+                Object.prototype.propertyIsEnumerable()  判断某个属性是否可枚举。
+            Object.prototype.toString()方法使用最多用来判断一个变量的数据类型。
+            属性:
+                construtor 指向用于创建当前对象的构造函数,即Object()构造函数。
+        </div>
+        <h3>6、js面向对象编程</h3>
+        <div>
+            <h4>1.面向对象概述</h4>
+            <div>
+                面向对象编程(Object Oriented Programming,缩写为 OOP)是目前主流的编程范式。
+                它将真实世界各种复杂的关系,抽象为一个个对象,然后由对象之间的分工与合作,完成对真实世界的模拟。
+                每一个对象都是功能中心,具有明确分工,可以完成接受信息、处理数据、发出信息等任务。对象可以复用,通过继承机制还可以定制。
+                而继承是面向对象编程中讨论最多的话题,一般有接口继承和实现继承两种方式,ECMAScript中只支持实现继承,而且是通过上面说的原型链实现的。
+            </div>
+            <h4>2.js实现继承的方法</h4>
+            <div>   
+                <h5>1.原型链继承</h5>
+                <p>
+                    每一个构造函数都有一个原型对象prototype,原型对象中都有constructor属性指回构造函数,而实例也有[[Prototype]]特性称为隐式原型属性也指向原型对象。
+                    那如果这个原型对象是另一个构造函数生成的实例对象呢?,这时它本身也有[[Prototype]]特性即隐式原型属性,它也是指向另一个原型对象。这样一层一层也就有了继承的样子了。
+                    也就是父类 new 出来的实例赋值给子类型的原型对象。
+                    子类.prototype = new 父类();,这种改变原型对象的指向之后 子类.prototype 上的constructor属性也被修改成了 父类()。
+                    而且,子类要重写父类的方法或者新增方法都要在原型赋值之后再添加到子类的原型上。
+                    另一个问题是如果父类原型中包含了引用类型的值时,那么父类的所有实例对象都会共享,而实例对象又被赋值给了另一个子类的原型对象,这就导致实例属性变成了原型属性。
+                    第二个问题是子类型在实例化时是不能给父类型的构造函数传参的。 
+
+                </p>
+                <h5>2.对象冒充继承</h5>
+                <p>
+                    为了解决原型包含引用值导致的继承问题以及不能向父类构造函数传参的问题,就可以使用对象冒充继承方法(也叫对象伪装/经典继承)。
+                    基本思路是:在子类构造函数内调用父类构造函数,通过call()或apply()方法以新创建的对象作为上下文执行构造函数并传入参数。
+                    相当于子类对象上运行了父类构造函数中的所有初始化代码,就会让子类实例具有父类实例的属性,这时原型上同名的属性会被遮蔽。
+                    但是冒充构造函数继承也有问题:只能访问定义在构造函数中定义方法因此函数不能重用,也就是子类不能访问父类原型上定义的方法。
+
+                </p>
+                <h5>3.组合继承</h5>
+                <p>
+                    有时候也叫伪经典继承,它是综合了原型链继承和对象冒充继承将两者的优点集中起来的一种继承方法。
+                    基本思路是:使用原型链继承原型上的属性和方法,使用对象冒充继承实例属性和传参。
+                    它解决了原型链继承和对象冒充继承的不足,是JavaScript中使用最多的继承方式。而且也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
+                    组合继承也存在效率问题:父类构造函数始终会被调用两次,第一次是父类实例赋值给子类原型时,第二次是子类构造函数内冒充父类时。
+                    
+                </p>
+                <h5>4.原型式继承</h5>
+                <p>
+                    即使不定义构造函数也可以通过原型实现对象之间的信息共享:
+                    function object(o){
+                        function F(){}
+                        F.prototype = o
+                        return new F()
+                    }
+                    通过创建一个临时的构造函数将传入的对象赋值给这个临时构造函数的原型,然后返回这个临时类型的一个原型。
+                    本质是对传入对象的一次浅拷贝。如果你有一个对象,想在这个对象的基础上再创建一个新的对象。你就可以使用原型式继承。
+                    ECMAScript5中增加了 Object.create() 方法将原型式继承的概念规范化,也就是用来代替这个object这个函数。
+                    Object.create(新对象原型的对象,{})接收两个参数,作为新对象原型的对象,给新对象自身定义额外属性的对象和Object.defineProperties()方法第二个参数一样的对象。
+                    生成的新对象以给定的对象为原型并继承它所有的属性和方法。
+                    Object.create()实际上也可以看作是对object()的再封装,只是把它挂载在了Object上。
+                    if (typeof Object.create !== 'function') {
+                        Object.create = function (obj) {
+                          function F() {}
+                          F.prototype = obj;
+                          return new F();
+                        };
+                      }
+                </p>
+                <h5>5.寄生式继承</h5>
+                <p>
+                    和原型式继承类似,基本思路是另外创建一个实现继承的函数,以某种方式增强对象,然后再返回这个对象。
+                    有点类似工厂模式,可以说是对原型式继承的一种封装。
+                    function createObj(o){
+                        let clone = object(o);//通过调用函数创建一个新对象
+                        clone.sayHi = function(){//以某种方式增强这个新对象
+                            console.log('hi')
+                        }
+                        return clone;//返回这个对象
+
+                    }
+                    es5提供了Object.create(新对象原型的对象,{})方法之后当然是应该使用它来替换object(o)函数。
+                    let person = {
+                        name:"zhangsan",
+                        friends:["lisi","wangwu","maliu"]
+                    }
+                    function createAnothor(original){
+                        let clone = Object.create(original);
+                        clone.sayHi = function(){
+                            console.log(`hi`)
+                        }
+                        return clone;
+                    }
+                    // 继承
+                    let anothor = createAnothor(person);
+                    console.log(anothor.name)//zhangsan
+                    anothor.sayHi()//hi
+                    它跟原型式继承一样适合只关注对象,而不在乎类型和构造函数的场景。缺点是类似构造函数因为是在方法里添加函数难以重用。
+                </p>
+                <h5>6.寄生式组合继承</h5>
+                <p>
+                    它是通过冒充构造函数继承属性,使用混合式原型链继承方法。
+                    基本思路是不再通过调用父类构造函数赋值给子类原型,而是使用寄生式继承获取父类原型的一个副本来赋值给子类原型。
+                    即使用寄生式继承来继承父类原型,然后将返回的新对象赋值给子类原型。
+                    关键是寄生式继承函数 inheritPrototype(),接收两个参数,子类构造函数和父类构造函数。
+                    函数内部第一步就是使用原型式继承创建父类原型的一个副本并赋值给子类原型。
+                    第二步是重新指定子类原型上的constructor属性为子类自己,解决由于重写原型导致默认constructor丢失的问题。
+                    第二步是因为Object.create()方法生成的对象,继承了它的原型对象的构造函数,所以要重新指定。
+                    function Box(age){
+                        this.names=['wang','pan','Hello']
+                        this.age=age;
+                    }
+                    Box.prototype.run = function(){
+                        return this.names  +','+  this.age +','+ '父类原型run方法运行中....';
+                    };
+                
+                    function Desk(age){
+                        //对象冒充,继承实例属性
+                        Box.call(this,age);
+                    }
+                    //不再使用这个方法
+                    // Desk.prototype = new Box();
+                    // 使用寄生式继承
+                    function inheritPrototype(subType,superType){
+                        // 子类原型等于父类原型的一个副本
+                        subType.prototype = Object.create(superType.prototype);//创建对象
+                        subType.prototype.constructor = subType;//重新指定constructor属性,增强对象
+                    }
+                    // 继承
+                    inheritPrototype(Desk,Box);
+                    Desk.prototype.sayAge = function(){
+                        return this.age
+                    };
+                    let desk1 = new Desk(23);
+                    desk1.names.push('zhangsan')
+                    console.log(desk1.names)//[ "wang", "pan", "Hello", "zhangsan" ]
+                    console.log(desk1.run());//wang,pan,Hello,zhangsan,23,父类原型run方法运行中....
+                    console.log(desk1.sayAge());//23
+                    console.log(desk1 instanceof Desk)//true
+                    console.log(desk1 instanceof Box)//true
+                    console.log(desk1 instanceof Object)//true
+                    let desk2 = new Desk(27);
+                    console.log(desk2.names)// [ "wang", "pan", "Hello" ]
+                    console.log(desk2.run());//wang,pan,Hello,27,父类原型run方法运行中....
+                    console.log(desk2.sayAge());//27
+
+                    最终只调用了一次父类构造函数,而且跟组合式继承一样也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
+                    可以说这个继承方式是引用类型继承的最佳模式了。
+                </p>
+                <h5>7.ECMAScript6类继承</h5>
+                <p>
+                    ECMAScript5中使用了多种方法来模拟类似于类的行为,但是每种方法都有自己的问题和妥协。所以实现继承的代码也显得非常冗长和混乱。
+                    而在ECMAScript6引入类定义之后继承是非常方便的,它是原生支持类继承机制的。
+                    支持单继承,使用 extends 关键字来实现继承,它会继承了父类的所有属性和方法。
+                        子类必须在constructor方法中使用super()方法调用父类构造函数,否则新建实例时会报错。这是因为子类自己的this对象,必须先通过父类的构造函数完成塑造,
+                    继承得到与父类所有的实例属性和方法,然后再对其进行加工,加上子类自己的实例属性和方法。
+                    如果不调用super方法,子类就得不到this对象。而且子类this要在super()之后引用否则报错。
+                    语法:
+                    class 子类名 extends 父类名{
+                        constructor(x,y,z){
+                            super(x,y)//继承父类实例属性和方法 相当于 super.constructor()
+                            父类.prototype.constructor.call(this)
+                            this.z = z
+                        }
+                        addChild(){
+                            return this.z
+                        }
+                        //在静态方法中
+                        static sub(){
+                            super.sub();
+                        }
+                    }
+                    注意:es6中为类构造函数和静态方法都添加了一个内部特性[[HomeObject]],它是一个指针指向定义该方法的对象。
+                    而super始终会定义为这个特性的原型。
+                    所以super只能在子类的类构造函数和静态方法中使用,要么使用它调用构造函数,要么使用它调用静态方法。
+                    需要给父类构造函数传参就手动传入,子类声明了constructor方法,就必须在其中调用super()。
+                </p>
+                <h5>8.多重继承</h5>
+                <p>
+                    JavaScript 不提供多重继承功能,即不允许一个对象同时继承多个对象。但是,可以通过变通方法,实现这个功能。
+                    主要是通过Object.assign()方法实现的。
+                </p>
+            </div>
+        </div>
+    </div>
+<!-- js -->
+<script>
+window.onload = function (){
+/*js对象的创建方式*/
+    //1,使用new运算符创建对象并操作属性
+    // var obj = new  Object();
+    // console.log(typeof obj)//object
+    // obj.name='王耿';//向对象中添加属性name
+    // obj.age=23;//添加属性age
+    // console.log(obj);//{ name: "王耿", age: 23 }
+    // console.log(obj.name);//"王耿"
+    // console.log(obj.age);//23
+    // obj.name="蔵青安";//修改属性
+    // console.log(obj.name);//"蔵青安"
+    // delete obj.name;//删除属性
+    // console.log(obj);//{ age: 23 }
+    
+    //2,字面量创建的方法
+    // var  obj={
+    // 	name :'王耿', 
+    // 	age:23,
+    // 	run:function(){
+    // 		return '123';
+    // 		//匿名函数
+    // 	}
+    // };
+    // //两种输出方式
+    // console.log(obj.name);
+    // obj.name="巧巧"
+    // obj.gender = "female"
+    // console.log(obj);//{ name: "巧巧", age: 23, run: run(), gender: "female" }
+    // console.log(obj.name);//巧巧
+    // console.log(obj["name"]);//巧巧
+    // console.log(obj.run());
+
+    // 3,使用工厂函数的方法创建对象
+    // function creatPerson(){
+    // 	var obj = new Object();
+    // 	//添加属性
+    // 	obj.name= "孙悟空";
+    // 	obj.age = 24;
+    // 	obj.gender = "男";
+    // 	obj.sayName = function (){
+    // 		console.log(this.name);
+    // 	};
+    // 	return obj;//返回创建的对象
+    // }
+    // var obj = creatPerson();//这就是一个用函数创建的对象但是对象的属性值都写死了不好,
+    // console.log(obj);//{ name: "孙悟空", age: 24, gender: "男", sayName: sayName() }
+    // console.log(obj.name);//"孙悟空"
+    // console.log(obj.age);//24
+
+    //改进:定义形参,这样在调用时可以传入不同的实参。
+    // function creatPerson(name,age,gender){
+    // 	var obj = new Object();
+    // 	//添加属性
+    // 	obj.name= name;
+    // 	obj.age = age ;
+    // 	obj.gender = gender ;
+    // 	obj.sayName = function (){
+    // 		console.log(this.name);
+    // 	};
+    // 	return obj;//返回创建的对象
+    // }
+    // var obj = creatPerson("王",24,"男");//调用时传入不同的值
+    // console.log(obj);//{ name: "王", age: 24, gender: "男", sayName: sayName() }
+    // console.log(obj.name);//"王"
+    // console.log(obj.age);//24
+
+    //4,自定义构造函数创建对象
+    // function Person(name,age){
+    // 	this.name =  name;//这里的this就是每次新创建出来的对象,这样传什么值就建什么name。
+    // 	this.age = age;
+    // 	this.sayName = function(){
+    // 		console.log(this.name);
+    // 	};
+    // }
+    // var per = new Person("王耿",24);
+    // console.log(per)//{ name: "王耿", age: 24, sayName: sayName() }
+    // console.log(per.name)//"王耿"
+    // console.log(per.age)//24
+    // per.name = "蔵青安"
+    // console.log(per.name)//"蔵青安"
+    
+    // 5类创建
+    // class Person {
+    //     constructor(name,age){
+    //         this.name = name;
+    //         this.age = age
+    //     }
+    //     sayName(){
+    //         console.log(this.name)
+    //     }
+    // }
+    // const person = new Person("王耿",24)
+    // console.log(person)//Object { name: "王耿", age: 24 }
+    // console.log(person.name)//王耿
+    // console.log(person.age)//24
+    // person.sayName()//王耿
+
+    //es5生成实例对象
+    // function MathHandle(x,y) {
+    //     this.x = x
+    //     this.y = y
+    // }
+    //方法写在原型对象上
+    // MathHandle.prototype.add = function(){
+    //         // 引用静态方法
+    //         MathHandle.show()
+    //     return this.x + this.y
+    // }
+    // // 静态方法(实例方法)
+    // MathHandle.show = function(){
+    //     console.log('我是静态方法')
+    // }
+    // //创建实例对象
+    // var m = new MathHandle(3,2)
+    // console.log(m.add())//5
+    // console.log(m)//Object { x: 3, y: 2 }
+    // console.log(MathHandle)//function MathHandle(x, y)
+    // console.log(typeof MathHandle)//function
+    // console.log(MathHandle.name)//MathHandle
+
+    // es6生成实例对象
+    // 定义一个私有变量
+    // let _age = 25
+    // class MathHandle{
+    //     constructor(x,y){
+    //         this.x = x
+    //         this.y = y
+    //     }
+    //     get age(){
+    //         return _age
+    //     }
+    //     set age(value){
+    //         if(value < 30 && value > 25){
+    //             _age = value
+    //         }
+    //     }
+    //     static show(){
+    //         console.log('我是类的静态方法')
+    //     }
+    //     add(){
+    //         MathHandle.show()
+    //         return this.x + this.y
+    //     }
+    // }
+    // // 创建实例对象
+    // const m = new MathHandle(3,2)
+    // console.log(m.add())//5
+    // console.log(m.age)//25
+    // m.age = 28
+    // console.log(m.age)//28
+    // console.log(m)//Object { x: 3, y: 2 }
+    // console.log(MathHandle)//class MathHandle { constructor(x, y) }
+    // console.log(typeof MathHandle)//function
+    // console.log(MathHandle.name)//MathHandle
+    // console.log(MathHandle === MathHandle.prototype.constructor)//true
+
+/*js对象属性的描述对象*/
+    // let person = {};
+    // Object.defineProperty(person,"name",{
+    //     writable:true,
+    //     value:"zhangsan"
+    // })
+    // console.log(person.name)//zhangsan
+    // person.name = "lisi"
+    // console.log(person.name)//lisi
+
+    // let book = {
+    //     year_:2021,
+    //     edition:1
+    // };
+    // Object.defineProperty(book,"year",{
+    //     get:function(){
+    //         return this.year_;
+    //     },
+    //     set:function(newValue){
+    //         if(newValue > 2019){
+    //             this.year_ = newValue;
+    //             this.edition += newValue - 2017
+    //         }
+    //     }
+    // })
+    // book.year = 2022;
+    // console.log(book.edition)
+
+    // let descriptor = Object.getOwnPropertyDescriptor(book,"year")
+    // let descriptors = Object.getOwnPropertyDescriptors(book,)
+    // console.log(descriptor)
+    // console.log(descriptors)
+
+/*枚举对象的属性*/
+    // function Person(){}
+    // Person.prototype.name ="zhangsan";
+    // Person.prototype.age = 27;
+    // Person.prototype.gender = "male";
+    // Person.prototype.city = "guangzhou";
+    // Person.prototype.sayName = function(){
+    //     console.log(this.name)
+    // };
+    // let person = new Person();
+    // person.name = "lisi";
+    // person.age = 22;
+    // person.gender = "female";
+    // // for in
+    // let arr = []//定义一个数组接收遍历的对象属性 
+    // for(let i in person){
+    //     arr.push(i)
+       
+    // }
+    // console.log('arr is',arr)//arr is Array(5) [ "name", "age", "gender", "city", "sayName" ]
+    // const result = Object.keys(person)
+    // console.log('result is',result)//result is Array(3) [ "name", "age", "gender" ]
+    // const otherResult = Object.getOwnPropertyNames(person)
+    // console.log('otherResult is',otherResult)//result is Array(3) [ "name", "age", "gender" ]
+    // // es8
+    // const valusResult = Object.values(person)
+    // console.log('valusResult is',valusResult)//valusResult is Array(3) [ "lisi", 22, "female" ]
+    // const entriesResult = Object.entries(person)
+    // console.log('entriesResult is',entriesResult)//entriesResult is[[ "name", "lisi" ],[ "age", 22 ],[ "gender", "female" ]]
+
+    // 复制对象
+    // let target = {product:'电器',price:200}
+    // let source = {color:'red',weight:100}
+    // Object.assign(target,source)
+    // console.log(target)
+    // console.log(source)
+    // //对象变数组
+    //  // 对象和数组之间的转换
+    // const obj = {a:1,b:2,c:3,d:"my"}
+    // // 转成[{text:1,value:'a'},{text:2,value:'b'},{text:3,value:'c'},{text:4,value:'d},]
+    // console.log('对象转成数组方法:',Object.entries(obj))
+    // //Object.entries方法转变成: [["a",1],["b",2],["c",3],["d","my"]]
+    // const ret = Object.entries(obj).map( v => {
+    //     return {text:v[1],value:v[0]}
+    // })
+    // console.log(ret)
+    // //再将ret数组变回obj格式
+    // // 使用reduce方法
+    // const robj1 = ret.reduce((sum,v) => {
+    //     //这里v就是数组里的每一项了即里面的一个对象。
+    //     sum[v.value] = v.text
+    //     return sum
+    // },{})
+    // console.log(robj1)
+
+ /*js对象的增强语法*/
+    // let username5 = "zangqingan";
+    // let age5 = 24;
+    // let obj5 ={
+    //     username5:username5,
+    //     age5:age5,
+    //     getName:function(){
+    //         return this.username5;
+    //     }
+    // }
+    // console.log(obj5);//Object { username: "zangqingan", age: 24, getName: getName() }
+    // console.log(obj5.getName());//zangqingan
+
+    // // es6写法
+    // let username6 = "qiaoqiao";
+    // let age6 = 22;
+    // let obj6 ={
+    //     username6,
+    //     age6,
+    //     getName(){
+    //         return this.username6;
+    //     }
+    // }
+    // console.log(obj6);//Object { username6: "qiaoqiao", age6: 22, getName: getName() }
+    // console.log(obj6.getName());//qiaoqiao
+
+    // let obj1 = { a: 1, b: 2 };
+    // let obj2 = { name:"wang",...obj1, c: 3 }; 
+    // let obj3 = { ...obj1,name:"wang"};
+    // console.log('obj1 is',obj1)//{ a: 1, b: 2 }
+    // console.log('obj2 is',obj2)//{ name: "wang", a: 1, b: 2, c: 3 }
+    // console.log('obj3 is',obj3)// { a: 1, b: 2, name: "wang" }
+
+
+ /*js对象new操作符实现*/
+    // function Student(name,age,gender){
+    //     this.name = name
+    //     this.age = age
+    //     this.gender = gender
+
+    // }
+    // 使用new运算符初始化一个实例
+    // const student1 = new Student('zhangsan',27,'male')
+    // console.log('new student is',student1)//new student is Object { name: "zhangsan", age: 27, gender: "male" }
+    
+    // new手动实现,出入一个构造函数和形参
+    // function myNew(Fn, ...args) {
+    //     // 1.创建一个空对象
+    //     let obj = {}        // let obj = null
+    //     // 2.对象的隐式原型指向构造函数的显示原型
+    //     obj.__proto__ = Fn.prototype // Object.setPrototypeOf(obj, Fn.prototype)
+    //     // 3.绑定obj的this到构造函数的this
+    //     let result = Fn.apply(obj, args)
+    //     return result instanceof Object ? result : obj
+    // }
+    // const student2 = myNew(Student,'madongmei',27,'female')
+    // console.log('myNewstudent is',student2)
+    // myNewstudent is Object { name: "madongmei", age: 27, gender: "female" }
+
+    // 改进
+    // function myNew2(Fn, ...args){
+    //     // 判断第一个参数传入不是函数报错
+    //     if(typeof Fn !== 'function'){
+    //         throw 'myNew2 function the first param must be a function';
+    //     }
+    //     // 创建一个新的对象并且新对象的原型是传入的构造函数原型
+    //     // 此时 newObj = {},newObj.__proto__ = Fn.prototype
+    //     const newObj = Object.create(Fn.prototype)
+    //     // 重新绑定this
+    //     const result = Fn.apply(newObj,args)
+    //     // 返回创建的对象
+    //     return result instanceof Object ? result : newObj
+
+    // }
+    // const student3 = myNew2(Student,'马六',32,'male')
+    // console.log('myNew2student is',student3)
+    // myNew2student is Object { name: "马六", age: 32, gender: "male" }
+
+ /*js对象拷贝*/
+    // 浅拷贝
+    // function clone(obj){
+    //     let newobj = {}
+    //     for(let i in obj){
+    //         newobj[i] = obj[i]
+    //     }
+    //     return newobj
+    // }
+    // const goods = {
+    //     name:'普通酒',
+    //     category:'酒水',
+    //     weight:'100kg',
+    //     items:{
+    //         childName:'葡萄酒',
+    //         price:20,
+    //         children:{
+    //             age:40,
+    //             city:'hangzhou'
+    //         },
+    //         ary:['甘肃','宁夏','陕西']
+            
+    //     }
+    // }
+    // const result = clone(goods)
+    // console.log('result is',result)//result is Object { name: "普通酒", category: "酒水", weight: "100kg" }
+
+    // 深拷贝
+    // function deepClone(obj){
+    // 	if(typeof obj === 'object'){
+    // 		let newobj = {}
+    // 		for(let i in obj){
+    // 			// 把属性值递归循环
+    // 			newobj[i] = deepClone(obj[i])
+    // 		}
+    // 		return newobj
+    // 	}else{
+    // 		return obj
+    // 	}
+    // }
+    // const resultdeep = deepClone(goods)
+    // console.log('resultdeep is',resultdeep)
+
+    // 考虑数组,添加一个三元判断
+    // function deepclonewitharray(target) {
+    //     if (typeof target === 'object') {
+    //         let cloneTarget = Array.isArray(target) ? [] : {};
+    //         for (const key in target) {
+    //             cloneTarget[key] = deepclonewitharray(target[key]);
+    //         }
+    //         return cloneTarget;
+    //     } else {
+    //         return target;
+    //     }
+    // };
+    // const deepresultwitharray = deepclonewitharray(goods)
+    // console.log('deepresultwitharray is',deepresultwitharray)
+
+ /*js对象继承*/
+/*1.原型链继承*/
+    //Box()构造,被继承的函数叫做超类型（父类,基类）
+    // function Box(){
+    //     this.name = '张三';
+    // }
+    // Box.prototype.sayName = function (){
+    //     console.log(`我是父类原型上定义的方法${this.name}`)
+    // }
+    // //Desk()构造,继承的函数叫做子类型（子类,派生类）
+    // function Desk(){
+    //     this.age = 23;
+    // }
+    // // 实现继承 Box
+    // Desk.prototype = new Box();
+    // // 必须在原型赋值之后才能添加或重写方法
+    // Desk.prototype.deskTalk = function (){
+    //     console.log('hello desk')
+    // }
+    // let desk = new Desk();
+    // console.log('desk.age is',desk.age);
+    // console.log('desk.name is',desk.name);//继承来的属性
+    // desk.sayName();//继承来的方法
+    // function Table(){//Table()构造
+    //     this.level='aaaaaa';
+    // }
+    // Table.prototype = new Desk();
+    // let table= new Table();
+    // console.log('table.name is',table.age);//继承了Desk的age
+    // console.log('table.name is',table.name);//继承了Box的name
+    // table.sayName();//继承来的方法
+
+/*2.对象冒充继承*/
+    //使用对象冒充继承,只能继承构造函数里的信息,不能继承原型中的。解决传参问题
+    // function Box(name,age){
+    //     this.name = name;
+    //     this.age = age;
+    //     this.family = ['哥哥','姐姐','弟弟',];
+    //     this.sayHi = function(){
+    //         console.log(`hi${this.name}`)
+    //     }
+    // }
+    // Box.prototype.family = '家庭';
+    // Box.prototype.sayName = function(){
+    //     console.log(`hello${this.name}`)
+    // };
+
+    // function Desk(name,age){
+    //     //对象冒充继承且可以给父类构造函数传参
+    //     Box.call(this,name,age);
+    // }
+    // let desk1 = new Desk('wang',23);
+    // desk1.family.push("妹妹");
+    // console.log(desk1.family)//[ "哥哥", "姐姐", "弟弟", "妹妹" ]
+    // console.log(desk1.name)//'wang'
+    // desk1.sayHi()//只能访问构造函数内的方法
+    // desk1.sayName()//desk1.sayName is not a function
+    // console.log(desk1.age)//23
+    // let desk2 = new Desk('qiao',22);
+    // console.log(desk2.family)// [ "哥哥", "姐姐", "弟弟" ]
+    // console.log(desk2.name)//'qiao'
+    // console.log(desk2.age)//22
+    // desk2.sayHi()//只能访问构造函数内的方法
+    // desk2.sayName()//desk2.sayName is not a function
+
+/*3.组合继承*/
+//组合继承:原型链+借用构造函数的模式,解决了构造问题,传参问题
+    // function Box(age){
+    //     this.name=['wang','pan','Hello']
+    //     this.age=age;
+    // }
+    // Box.prototype.run = function(){
+    //     return this.name  +  this.age +  '运行中....';
+    // };
+
+    // function Desk(age){
+    //     //对象冒充,继承实例属性
+    //     Box.call(this,age);
+    // }
+    // //原型链继承,继承原型方法
+    // Desk.prototype = new Box();
+    // Desk.prototype.sayAge = function(){
+    //     return this.age
+    // };
+    // let desk1 = new Desk(23);
+    // desk1.name.push('zhangsan')
+    // console.log(desk1.name)//[ "wang", "pan", "Hello", "zhangsan" ]
+    // console.log(desk1.run());//wang,pan,Hello23运行中....
+    // console.log(desk1.sayAge());//23
+
+    // let desk2 = new Desk(27);
+    // console.log(desk2.name)// [ "wang", "pan", "Hello" ]
+    // console.log(desk2.run());//wang,pan,Hello27运行中....
+    // console.log(desk2.sayAge());//27
+
+    // console.log(desk1 instanceof Desk)//true
+    // console.log(desk1 instanceof Box)//true
+    // console.log(desk1 instanceof Object)//true
+
+    // console.log(Object.prototype.isPrototypeOf(Box))
+    // console.log(Box.prototype.isPrototypeOf(desk1))
+    // console.log(Desk.prototype.isPrototypeOf(desk1))
+
+/*4.原型式继承*/
+    // let person = {
+    //     name:"zhangsan",
+    //     friends:["lisi","wangwu","maliu"]
+    // }
+    // // 原型式继承
+    // function object(obj){
+    //     function F() {};
+    //     F.prototype = obj;
+    //     return new F();
+    // }
+    // let objectPerson = object(person)
+    // let anothorPerson1 = Object.create(person,{
+    //     name:{
+    //         value:'anothor1'
+    //     }
+    // })
+    // anothorPerson1.friends.push("rob")
+    // let anothorPerson2 = Object.create(person,{
+    //     name:{
+    //         value:'anothor2'
+    //     }
+    // })
+    // anothorPerson2.friends.push("bab")
+    // console.log(person.friends)// [ "lisi", "wangwu", "maliu", "rob", "bab" ]
+
+/*5.寄生式继承*/
+    // let person = {
+    //     name:"zhangsan",
+    //     friends:["lisi","wangwu","maliu"]
+    // }
+    // function createAnothor(original){
+    //     let clone = Object.create(original);
+    //     clone.sayHi = function(){
+    //         console.log(`hi`)
+    //     }
+    //     return clone;
+    // }
+    // // 继承
+    // let anothor = createAnothor(person);
+    // console.log(anothor.name)//zhangsan
+    // anothor.sayHi()//hi
+
+/*6.寄生式组合继承*/
+    // function Box(age){
+    //     this.names=['wang','pan','Hello']
+    //     this.age=age;
+    // }
+    // Box.prototype.run = function(){
+    //     return this.names  +','+  this.age +','+ '父类原型run方法运行中....';
+    // };
+
+    // function Desk(age){
+    //     //对象冒充,继承实例属性
+    //     Box.call(this,age);
+    // }
+    // //不再使用这个方法
+    // // Desk.prototype = new Box();
+    // // 使用寄生式继承
+    // function inheritPrototype(subType,superType){
+    //     // 子类原型等于父类原型的一个副本
+    //     subType.prototype = Object.create(superType.prototype);//创建对象
+    //     subType.prototype.constructor = subType;//重新指定constructor属性,增强对象
+    // }
+    // // 继承
+    // inheritPrototype(Desk,Box);
+    // Desk.prototype.sayAge = function(){
+    //     return this.age
+    // };
+    // let desk1 = new Desk(23);
+    // desk1.names.push('zhangsan')
+    // console.log(desk1.names)//[ "wang", "pan", "Hello", "zhangsan" ]
+    // console.log(desk1.run());//wang,pan,Hello,zhangsan,23,父类原型run方法运行中....
+    // console.log(desk1.sayAge());//23
+    // console.log(desk1 instanceof Desk)//true
+    // console.log(desk1 instanceof Box)//true
+    // console.log(desk1 instanceof Object)//true
+    // let desk2 = new Desk(27);
+    // console.log(desk2.names)// [ "wang", "pan", "Hello" ]
+    // console.log(desk2.run());//wang,pan,Hello,27,父类原型run方法运行中....
+    // console.log(desk2.sayAge());//27
+
+/*7.ECMAScript类继承*/
+    // es6继承
+    // class Person{
+    //     constructor(name,age){
+    //         this.name = name;
+    //         this.age = age;
+    //     }
+    //     showName(){
+    //         console.log("调用父类的方法:",this.name,this.age);
+    //     }
+    // }
+    // let person = new Person('zangqingan',24);
+    // console.log(person);//Object { name: "zangqingan", age: 24 }
+    // person.showName()//调用父类的方法: zangqingan 24
+
+    // //子类,使用extends继承父类
+    // class Studend extends Person{   
+    //     constructor(name,age,salary){
+    //         super(name,age);//继承父类实例属性并给父类传参
+    //         this.salary =salary;
+    //     }
+    //     //重写继承来的一般方法
+    //     showName(){
+    //         console.log("调用子类重写的方法：",this.name,this.age,this.salary);
+    //     }
+    // }
+    // let studend = new Studend('wanggeng',24,100);
+    // console.log(studend);//Object { name: "wanggeng", age: 24, salary: 100 }
+    // //子类使用继承来的方法
+    // studend.showName();//调用子类重写的方法： wanggeng 24 100
+
+/*8.多重继承*/
+    // function M1() {
+    //     this.hello = 'hello';
+    // }
+    // function M2() {
+    //     this.world = 'world';
+    // }
+    // function S() {
+    //     M1.call(this);
+    //     M2.call(this);
+    // }
+    // 继承 M1
+    // S.prototype = Object.create(M1.prototype);
+    // // 继承链上加入 M2
+    // Object.assign(S.prototype, M2.prototype);
+    // // 指定构造函数
+    // S.prototype.constructor = S;
+    // let s = new S();
+    // console.log( s.hello )// 'hello'
+    // console.log( s.world )// 'world'
+
+
+
+
+
+
+
+
+}
+</script>
+</body>
+</html>

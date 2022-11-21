@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript内置JSON对象</title>
+</head>
+<body>
+    <h3>1、JSON对象概述</h3>
+    <div>
+        <h4>1.JSON定义</h4>
+        <div>
+            JSON 格式(JavaScript Object Notation 的缩写)是一种用于数据交换的文本格式,2001年由 Douglas Crockford 提出,目的是取代繁琐笨重的 XML 格式。
+            所以说JSON就是一种通用的数据格式,就是一个特殊格式的字符串,这个字符串可以被任意一门语言识别并转换为自己语言对应的对象。
+
+            JSON本质就是一个字符串值,JSON语法支持3中类型的值
+            分类
+                简单值:字符串、数值、布尔值和null都可以在JSON中出现,不过一般是使用比较复杂的数据结构,其中会包含简单值。
+                JSON对象{},属性名都必须使用双引号包围起来。
+                    {
+                        "name":"zhangsan",
+                        "age":29
+                    }
+                JSON数组[],数组的值可以是任意类型包括简单值、对象、数组
+                    [
+                        {
+                            "name":"zhangsan",
+                            "age":29
+                        },
+                        {
+                            "name":"zhangsan",
+                            "age":29
+                        }
+                    ]
+            JSON 对值的类型和格式的规定:
+                1.原始类型的值只有四种:字符串、数值(必须以十进制表示)、布尔值和null且用双引号括起来。
+                2.复合类型的值只能是数组或对象
+                3.字符串必须使用双引号表示,不能使用单引号。
+                4.对象的键名必须放在双引号里面。
+                5.数组或对象最后一个成员的后面,不能加逗号。
+        
+        </div>
+        <h4>2.JSON对象</h4>
+        <div>   
+           JSON语法跟JavaScript类似,是JavaScript语法的子集,所以eval()方法可以解析、解释JSON并将其作为JavaScript对象和数组返回。
+           所以在ECMAScript 5中增加了内置全局对象 JSON 对象,用来处理解析 JSON 格式数据。
+        </div>
+    </div>
+    <h3>2、JSON对象常见的静态方法</h3>
+    <div>
+        在ECMAScript 5引入JSON对象后,它有两个方法分别用来将JavaScript对象序列化为JSON字符串,以及将JSON字符串解析为原生的JavaScript对象。
+        <h4>1.序列化选项JSON.stringify()</h4>
+        <div>
+            JSON.stringify(),接收一个JavaScript对象将其序列化为JSON字符串,默认情况下输出的是不包括空格和缩进的JSON字符串
+            let book = {
+                title:"一本书",
+                authors:[
+                    "zhangsan",
+                    "lisi"
+                ],
+                edition:4,
+                year:2022
+            }
+            //序列化
+            let jsonText = JSON.stringify(book);
+            //默认输出
+            {"title":"一本书","authors":[ "zhangsan","lisi" ],"edition":4,"year":2022}
+
+
+        </div>
+        <h4>2.解析选项 JSON.parse()</h4>
+        <div>
+            JSON.parse(),接收一个JSON字符串将其解析成一个JavaScript对象。
+            如果传入的字符串不是有效的 JSON 格式,JSON.parse()方法将报错。
+            let bookCopy =JSON.parse(jsonText);
+            注意它解析返回的对象和原对象是两个完全不同的对象,只是它们拥有相同的属性和值罢了。
+        </div>
+    </div>
+
+
+<!-- js -->
+<script>
+window.onload = function(){
+    //创建一个对象,对象的属性名可以用引号引起来也可以不引
+    var obj = {
+        name:"xiaowang",
+        age:24,
+        gender:"男"
+
+    };
+
+    //json对象
+    var jsonobj = '{"name":"xiaowang","age":24,"gender":"男"}';
+    //json数组
+    var jsonarr = '[1,2,3,"true",null]';
+    //es5提供的两个方法,用来转换json字符串和json对象
+    //将json字符串(对象)转换为js中的对象
+    //js中提供了一个工具类,就叫JSON。它能将json转换为js对象,也可以将js对象转换为json。
+    //这个对象在ie7及以下不支持,如果需要使用插件。
+
+    //json字符串转换为js对象：JSON.parse(json);
+    //参数是一个json字符串
+    var o = JSON.parse(jsonobj);
+    console.log(o);
+
+    //js对象转JSON字符串：JSON.stringify(obj);
+    //参数是一个js对象
+    var str = JSON.stringify(obj);
+    console.log(str);// '{"name":"xiaowang","age":24,"gender":"男"}'
+
+};
+</script>
+</body>
+</html>

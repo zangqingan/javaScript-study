@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript-DOM接口练习：</title>
+    <style>     
+     
+    </style>
+</head>
+<body>
+    <p id="outside" style="width:150px;height:130px;color:aqua;background-color:cadetblue;">所有 DOM 节点对象都是继承自 Node 接口，拥有一些共同的属性和方法。这是 DOM 操作的基础。</p>
+    <div id="box">
+        我是父级div
+        <h3>我h3标题</h3>
+        <p id="inside">
+            我是div里的p
+        </p>
+    </div>
+<!-- js -->
+<script>
+    let outside = document.getElementById("outside")
+    let box = document.getElementById("box")
+    let inside = document.getElementById("inside")
+    console.log("document文档节点的节点类型值为：",document.nodeType)
+    console.log("document文档节点的节点名为：",document.nodeName)
+    console.log("HTML元素节点的节点类型值为：",outside.nodeType)
+    console.log("HTML元素节点的节点名为：",outside.nodeName)
+    console.log("outside节点的第一个子节点的节点类型值为：",outside.firstChild.nodeType)
+    console.log("outside节点的第一个子节点的节点名e为：",outside.firstChild.nodeName)
+    console.log("outside节点的第一个子节点的节点值为：",outside.firstChild.nodeValue)
+    console.log("outside节点的兄弟节点名为：",outside.nextElementSibling.nodeType)
+    // NodeList接口和HTMLCollection接口
+    let plist = document.querySelectorAll('p')
+    console.log("我是NodeList实例对象",plist)//NodeList [ p#outside, p#inside ]
+    console.log("我是NodeList实例对象",typeof plist)//object
+    let phlist = document.getElementsByTagName("p")
+    console.log("我是HTMLCollection实例对象",phlist)//HTMLCollection { 0: p#outside, 1: p#inside, length: 2, … }
+    console.log("我是HTMLCollection实例对象",typeof phlist)//object
+
+    // 创建一个新的p插入到div中
+    let p = document.createElement("p")
+    let ptext = document.createTextNode("我是新创建的p的内容")
+    // let pattr = document.createAttribute("class")
+    // pattr.value = "pnewattr"
+    // p.setAttributeNode(pattr)
+    // 或者使用下面的方法是等价的。
+    p.setAttribute("class","newp")
+    p.appendChild(ptext)
+    box.appendChild(p)
+
+    // element节点
+    console.log("outside的innerHTML",outside.innerHTML)
+    console.log("outside的outerHTML",outside.outerHTML)
+    // element.style
+    console.log("outside的行内样式",outside.style)// CSS2Properties(4) { width → "150px", height → "130px", color → "aqua", "background-color" → "cadetblue" }
+    console.log("outside的行内样式",outside.style.width)// 150px
+    console.log("outside的行内样式",outside.style.height)// 130px
+    console.log("outside的行内样式",outside.style.color)// aqua
+    console.log("outside的行内样式",outside.style.backgroundColor)// cadetblue
+    // 修改
+    outside.style.width = "250px"
+    outside.style.height = "250px"
+    outside.style.color = "blue"
+    outside.style.backgroundColor = "red"
+    // 通过element节点对象操作属性节点对象
+    console.log("outside的所有属性集合",outside.attributes)//NamedNodeMap [ id="outside", style="width: 250px; height: 250px; color: blue; background-color: red;" ]
+    console.log("outside的元素的id是：",outside.id)//outside
+
+
+</script>
+</body>
+</html>

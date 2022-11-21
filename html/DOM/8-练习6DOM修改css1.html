@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js修改css样式</title>
+    <style type="text/css">
+        #box{
+            width: 200px;
+            height: 200px;
+            background-color:red;
+            border:1px solid black; 
+            padding: 10px;
+        }
+    
+    </style>
+</head>
+<body>
+    <button id="btn">点我修改样式</button>
+    <button id="btn1">点我查看内联样式</button>
+    <button id="btn2">点我查看当前样式</button>
+    <button id="btn3">点我查看其它样式</button>
+    <br><br>
+    <div id="box"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //获取按钮
+    var btn = document.getElementById("btn");
+    var btn1 = document.getElementById("btn1");
+    var btn2 = document.getElementById("btn2");
+    var btn3 = document.getElementById("btn3");
+    //获取box
+    var box = document.getElementById("box");
+    //给按钮绑定事件设置样式
+    btn.onclick  = function(){
+        // alert("hello");
+        //js修改css样式语法
+        // 元素对象.style.样式名 = "样式值"；
+        //注意：css样式名中含有”-“的在js中是不合法的，变成驼峰命名法即可。
+        //通过style属性设置的样式都是内联样式。
+        //修改宽度
+        box.style.width = "300px";
+        //修改高度
+        box.style.height = "500px";
+        //修改背景颜色
+        box.style.backgroundColor = "yellow";
+
+    };
+    //btn1读取样式
+    btn1.onclick  = function(){
+        // alert("hello");
+        //js读取css样式语法
+        // 元素对象.style.样式名 ；
+        //读取的也是内联样式，内联没有就没有，不会读取外联的。
+        //读取宽度
+        console.log("内联样式",box.style.width);
+        //读取高度
+        console.log("内联样式",box.style.height);
+        //读取背景颜色
+        console.log("内联样式",box.style.backgroundColor );
+    };
+    
+    //读取元素的当前样式
+    btn2.onclick  = function(){
+        // alert("hello");
+        //语法：元素对象.currentStyle.样式名；只读
+        //读取的是当前元素正在显示的样式，不一定是内联或样式表的。而是当前显示的。没有显示默认值。
+        //这个属性只有ie支持，其他浏览器都不支持。
+        //读取宽度
+        // console.log(box.currentStyle.width)
+        //读取高度
+        // console.log( box.currentStyle.height)
+        //读取背景颜色
+        // console.log(box.currentStyle.backgroundColor )
+
+        //在其他浏览器中使用：getComputedStyle(参数1,参数2)这个方法来获取元素的当前样式。
+        //这个一个window方法可以直接使用，ie9以上也支持。ie8及以下不支持。只读
+        //参数:
+        //1.要获取样式的元素对象
+        //2.可以传递一个伪元素，一般都传null。
+        //返回值是一个对象，这个对象封装了当前元素对应的样式。
+        //获取样式：对象.样式名；没有设置获取实际的值而不是默认值。
+        // var obj = getComputedStyle(box,null);
+        // console.log(obj);
+
+        //获取某个样式
+        // console.log(getComputedStyle(box,null).width);
+        // console.log(getComputedStyle(box,null).height);
+        // console.log(getComputedStyle(box,null).backgroundColor);
+
+        //定义一个函数兼容所有浏览器，用来获取元素当前样式
+        //obj:要获取样式的元素对象。
+        //name:要获取的样式名。
+        function getStyle(obj,name){
+            //有这个对象就使用没有就用另一个
+            if(window.getComputedStyle){
+                //name是一个变量使用[]的方法
+                return  getComputedStyle(obj,null)[name];
+            }else{
+                //ie8及以下的方式
+                return obj.currentStyle[name];
+            } 
+            //使用三元运算符
+            // return window.getComputedStyle?getComputedStyle(obj,null)[name]:obj.currentStyle[name];
+        }
+        console.log(getStyle(box,"width"));
+        console.log(getStyle(box,"height"));
+        console.log(getStyle(box,"backgroundColor"));
+
+    };
+
+    //读取元素的其它常用样式
+    btn3.onclick  = function(){
+        // alert("hello");
+        //获取元素的可见宽高：clientWidth，clientHeight
+        //不带单位px，返回的都是数字可以直接计算。
+        //返回的是内部的宽高==元素的宽高 + padding;
+        //只读属性，修改通过style属性修改。
+        console.log("获取元素的可见宽:元素的宽高 + padding",box.clientWidth);
+        console.log("获取元素的可见高:元素的宽高 + padding",box.clientHeight);
+
+        //获取元素的整个宽高，offsetWidth，offsetHeight。比clientWidth，clientHeight多了一个边框
+        //不带单位px，返回的都是数字可以直接计算。
+        //返回的是内部的宽高==元素的宽高 + padding + border;
+        console.log("获取整个元素的宽 + padding + 边框",box.offsetWidth);
+        console.log("获取整个元素的高 + padding + 边框",box.offsetHeight);  
+    };   
+};
+</script>
+</body>
+</html>

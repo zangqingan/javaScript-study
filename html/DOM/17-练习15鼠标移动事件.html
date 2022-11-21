@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠标移入事件控制灯泡的发光</title>
+</head>
+<body>
+    <p>
+        这里使用了鼠标点击事件mousedown和mouseup
+        本质是点击图片时换了一张(即改变img的src属性)而不是真的发光
+    </p>
+    <img src="../../images/dark.gif" alt="灯泡" id="deng">
+    <p>鼠标点击灯泡会变亮</p>
+<!-- js -->
+<script>
+window.onload = function(){
+    // // 鼠标点击时的事件
+    var deng = document.getElementById("deng");
+    deng.onmousedown = function(){
+        deng.src = "../../images/light.png";
+    };
+    // 鼠标释放时还原
+    deng.onmouseup = function(){
+        deng.src = "../../images/dark.gif";
+    };
+
+
+};
+
+</script>
+</body>
+</html>

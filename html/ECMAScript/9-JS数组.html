@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript数组</title>
+</head>
+<body>
+    <h3>1、js数组概述</h3>
+    <div>
+        <h4>1.数组的定义</h4>
+        <div>
+            数组也是一个对象(js内置对象),也是用来存储一些值的(任意数据类型的值)。
+            不同在于数组是按次序排列使用数字作为索引来操作元素(元素就是对象中的属性值,也即数组中的每一个数据项),
+            索引(index)是从0开始的整数相当于对象的属性名(用来区分元素,每一个元素都有一个唯一的索引)。
+            即:索引值:元素值。而对象是:属性名:属性值。
+            数组中的元素可以是任意的数据类型,也可以是对象,函数,数组等。但是建议存放同一种数据类型。
+            而且也是符合对象的特性的能随时增加元素。
+            使用typeof运算符返回如下:typeof arr //object 。所以说数组本质上也是一个对象。
+            数组对象都有一个length属性,表示数组的元素个数即数组的长度。arr.length。
+            数组空位:当数组的某个位置是空元素,即两个逗号之间没有任何值,我们称该数组存在空位(hole)。
+            es6之后的方法将它当成存在的元素值为undefined,但是es5之前很怪异。所以实际开发中要避免使用数组空位。
+
+        </div>
+        <h4>2.数组元素的操作</h4>
+        <div>
+            <h5>1.元素的增删改查</h5>
+            <p>
+                数组元素通过:数组名[index]进行增删改查。
+                向数组增加元素:
+                    语法:数组对象[下标/索引] = 值;
+                    arr[0] = 10;
+                修改数组中的元素:
+                    语法:语法:数组对象[下标/索引] = 新值;
+                    arr[0] = 22;
+                读取某个数组的元素:不存在时返回undefined。
+                    语法:数组对象[下标/索引]
+                    arr[0]
+                删除使用delete命令删除一个数组成员,会形成空位,并且不会影响length属性。
+                    delete a[1];
+                    a[1] // undefined
+            </p>
+            <h5>2.数组元素的遍历</h5>
+            <p>
+                1.for in 循环同样适用于数组,毕竟数组只是一种特殊对象。区别是for...in不仅会遍历数组所有的数字键,还会遍历非数字键。
+                所以不推荐使用for...in遍历数组,可以直接使用for循环或者while循环
+                    var a = [1, 2, 3];
+                    a.foo = true;
+                    for (var key in a) {
+                    console.log(key);
+                    }
+                    // 0
+                    // 1
+                    // 2
+                    // foo
+
+                    // for循环
+                    for(var i = 0; i < a.length; i++) {
+                        console.log(a[i]);
+                    }
+
+                    // while循环
+                    var i = 0;
+                    while (i < a.length) {
+                        console.log(a[i]);
+                        i++;
+                    }
+
+                    2.因为数组本身也是对象因此也继承了Object.keys()、Object.values()、Object.entries()这三个es6中新增的迭代器方法。
+                    不过它是在Array的原型上重写遮蔽了Object原型上的,所以它们应该是 Array.prototype.keys()/.values()/.entries()。
+                    keys()返回数组索引
+                    values()返回数组元素
+                    entries()返回数组索引和对应的元素
+                    它们返回的都是迭代器,可以使用 Array.from()转换成数组实例。
+
+                    3.
+
+
+
+            </p>
+            <h5>3.数组的增强语法</h5>
+            <p>
+                1.展开/剩余运算符 ...rest/...spread
+                    扩展运算符(spread)是三个点(...),它好比 rest 参数的逆运算,将一个数组转为用逗号分隔的参数序列。
+                    console.log(...[1, 2, 3])
+                    // 1 2 3
+                    function push(array, ...items) {
+                        array.push(...items);
+                      }
+                      
+                      function add(x, y) {
+                        return x + y;
+                      }
+                      const numbers = [4, 38];
+                      add(...numbers) // 42
+                可以代替apply方法,将数组转为函数的参数。
+                    // ES5 的写法
+                    function f(x, y, z) {
+                        // ...
+                    }
+                    var args = [0, 1, 2];
+                    f.apply(null, args);
+
+                    // ES6 的写法
+                    function f(x, y, z) {
+                        // ...
+                    }
+                    let args = [0, 1, 2];
+                    f(...args);直接展开
+                应用Math.max()方法,简化求出一个数组最大元素的写法。
+                    // ES5 的写法
+                    Math.max.apply(null, [14, 3, 77])
+                    // ES6 的写法
+                    Math.max(...[14, 3, 77])
+                    // 等同于
+                    Math.max(14, 3, 77);
+                可以将字符串直接展开转换成数组
+                    [...'hello']
+                    // [ "h", "e", "l", "l", "o" ]
+            </p>
+            <h5>4.数组类型的检测方法</h5>
+            <p>
+                1.instanceof操作符在只有一个网页(即一个全局作用域)时依然能识别数组, value instanceof Array;
+                2.Object.prototype.toString.call(value)也能判断value值是什么,数组返回[object Array]。
+                3.Array.isArray(value),返回一个布尔值检测一个值是否是数组。
+            </p>
+        </div>
+    </div>
+    <h3>2、数组的创建方式</h3>
+    <div>
+        <h4>1.构造函数创建</h4>
+        <div>
+            使用Array()构造函数,因为它本身也是一个对象。给构造函数传参可以作为数组中的元素,只传一个数时表示数组的长度。
+            语法:let arr = new Array();
+        </div>
+        <h4>2.数组字面量创建</h4>
+        <div>
+            也可以使用数组字面量创建一个数组,数组字面量是在中括号[]内包含逗号分隔的元素列表。
+            语法:let arr = []; 实际上是var arr = new Array();的语法糖
+            和对象一样的在使用字面量方法创建时都不会调用构造函数。
+        </div>
+        <h4>3.Array静态方法</h4>
+        <div>
+            es6新增了两个Array的静态方法也能用于创建数组
+            <h5>1.Array.from()</h5>
+            <p>
+                用于将一个类数组对象和可遍历对象转换为真正的数组,所谓可遍历对象就是任何可迭代的对象,类数组对象就是有一个length属性和可索引元素的结构。
+                常见:函数的arguments对象,以及大多数 DOM 元素NodeList集,还有字符串。
+                它是用来代替ECMAScript5中将类数组对象转换成数组的slice方法: 
+                    var arr = Array.prototype.slice.call(arrayLike);
+                    var arr = Array.prototype.slice.apply(arrayLike);
+                    ==> var arr = Array.from(arrayLike)
+                比如可以把一个字符串拆分成单个字符数组
+                    Array.from("matt") //["m","a","t","t"]
+                比如把集合或者映射转换成一个数组
+                    const m = new Map().set(1,2).set(3,4)
+                    const s = new Set().add(1).add(2).add(3).add(4)
+                    Array.from(m) //[[1,2],[3,4]]
+                    Array.from(s) //[1,2,3,4]
+                比如对一个现有数组执行就是浅拷贝返回一个一模一样的新数组。
+                    const arr1 = [1,2,3,4]
+                    const arr2 = Array.from(arr1)
+                    arr1 //[1,2,3,4]
+                    arr1 === arr2 // false
+                比如函数的arguments对象
+                    function getArgsArray(){
+                        //es5
+                        let argsArr = Array.prototype.slice.call(arguments)
+                        //es6
+                        let argsArr = Array.from(arguments)
+                        return argsArr;
+                    }
+                    getArgsArray(1,2,3,4) //[1,2,3,4]
+                比如NodeList 对象
+                    let ps = document.querySelectorAll('p');
+                    Array.from(ps).filter(p => {
+                      return p.textContent.length > 100;
+                    });
+                还可以接受一个函数作为第二个参数,作用类似于数组的map()方法,用来对每个元素进行处理,将处理后的值放入返回的数组。
+                Array.from(arrayLike, x => x * x); 等价于 Array.from(arrayLike).map(x => x * x);
+                如取出一组 DOM 节点的文本内容:
+                    let spans = document.querySelectorAll('span.name');
+                    // es5的map()
+                    let names1 = Array.prototype.map.call(spans, s => s.textContent);
+                    // Array.from()
+                    let names2 = Array.from(spans, s => s.textContent)
+                    // Array.from().map()
+                    let names2 = Array.from(spans).map(s => s.textContent)
+            </p>
+            <h5>2. Array.of()</h5>
+            <p>
+                将一组参数转换成数组,这个方法的主要目的,是弥补数组构造函数Array()的不足。
+                即因为参数个数的不同会导致构造函数Array()的行为有差异问题。
+                基本上可以用来替代Array()或new Array(),并且不存在由于参数不同而导致的重载。它的行为非常统一。
+                它总是返回参数值组成的数组。如果没有参数,就返回一个空数组。
+                    Array.of(1,2,3,4,5) // [1,2,3,4,5]
+                    Array.of() // []
+                    Array.of(undefined) // [undefined]
+                    Array.of(1) // [1]
+                    Array.of(1, 2) // [1, 2]
+            </p>
+        </div>
+    </div>
+    <h3>3、常见Array静态属性和方法</h3>
+    <div>
+        1.Array.isArray()
+        2.Array.from()
+        3.Array.of()
+    </div>
+    <h3>4、常见Array实例属性和方法</h3>
+    <div>
+        定义在Array()构造函数的原型上的方法,所以每个数组对象都可以使用:数组对象.方法名()。
+        当方法返回的还是一个数组时可以以链式继续调用其它方法。
+        <h4>1.转换方法</h4>
+        <div>
+            所有对象都有的3个方法,由Object对象继承过来的,有些会在自己原型上重写覆盖。
+            valueOf() //返回当前数组对象本身
+            toString() //返回数组元素对应字符串使用逗号分隔的字符串,即每个元素调用toString()方法后返回的值。
+            toLocaleString() //返回本地格式数组元素组成的字符串
+            如果想使用其它分隔符号使用join()
+            join()方法接收一个参数作为分隔符,将所有数组成员连接为一个字符串返回。如果不提供参数,默认用逗号分隔。
+
+            四个方法都不改变原数组。
+        </div>
+        <h4>2.迭代器方法</h4>
+        <div>
+            用于检索数组内容的三个方法,返回的是迭代器,所以要使用Array.from()方法转换一下。
+            keys()返回数组索引
+            values()返回数组元素
+            entries()返回数组索引和对应的元素
+
+            三个方法也不改变原数组。
+        </div>
+        <h4>3.栈和队列方法</h4>
+        <div>
+            ecmascript为数组提供了一种让数组的行为类似栈和队列数据结构的方法。
+            栈是一种后进先出的数据结构,数据的插入和删除都是在栈顶操作的。
+            队列是一种先进先出的数据结构,在队尾添加插入数据,在队列开头删除数据。
+            在数组尾部操作:
+            push()方法可以接受任意数量的参数,并逐个添加到数组的末尾,返回修改后数组最新的长度。
+            pop()方法从数组的末尾移除一个或多个元素,减少数组的length值,返回被删除的元素。
+            在数组头部操作:
+            unshift()向数组的开头添加一个或多个元素,返回修改后数组的长度。
+            shift()方法从数组的开头移除一个或多个元素,返回被删除的元素。
+
+            使用push()和pop()结合就构成了“后进先出”的栈结构,即在栈顶插入删除数据。
+            使用shift()和push()方法就可以把数组当成队列来使用,即在数组头部获取数据,在数组尾部添加数据。
+            使用unshift()和pop()方法就可以反方向把数组当成队列使用,即在数组头部添加数据,在数组尾部获取数据。
+
+            四个方法都会改变原数组。
+        </div>
+        <h4>4.排序方法</h4>
+        <div>
+            数组中有两个方法对数组元素进行重新排序。
+            reverse()方法逆向排序原数组元素,但是不够灵活所有有了sort()方法。
+            sort(callback)方法对数组元素进行排序,直接修改原数组。传入一个回调函数决定如何排序。
+            默认sort()方法按照升序重新排列数组元素,可以根据传入的比较函数设置排列顺序。
+            升序比较函数:适用大多数数据类型。
+            function compare(a,b){
+                if(a < b ){
+                    return -1;
+                }else if(a > b ){
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }
+            降序只需要把返回值-1和1交换一下即可。
+            还可以通过for循环手动实现各种排序算法。
+            
+
+            两个方法都改变原数组。
+        </div>
+        <h4>5.操作方法</h4>
+        <div>
+            对数组中的元素进行的各种操作方法。
+            concat(数组对象/数组元素)方法,连接两个或多个数组,返回一个新的数组。
+            
+            slice(参数1,参数2),可以基于当前数组获取指定区域元素,返回一个新的数组。
+            参数1:截取开始位置的索引(必选),包含开始索引。
+            参数2:截取结束位置的索引(可选),不包含结束索引,没有结束索引表示截取到末尾。
+            所以slice()/slice(0)表示复制了一份原数组。
+            索引为负数时,从后往前计算,-1表示最后一个元素以此类推。
+            它有一个重要应用就是将类似数组的对象转为真正的数组。
+                Array.prototype.slice.call({ 0: 'a', 1: 'b', length: 2 })
+                Array.prototype.slice.call(document.querySelectorAll("div"));
+                Array.prototype.slice.call(arguments);
+
+            最强大的操作方法 splice(参数1,参数2,参数3),可用于删除原数组的一部分成员,并可以在删除的位置添加新的数组成员,返回值是被删除的元素。
+            注意该方法会改变原数组。
+            参数1:表示开始删除位置的索引位置
+            参数2:表示删除的元素个数
+            参数3:可以传递一些新的元素进数组删除元素的位置中。
+            删除: 只传递参数1、参数2两个就会从指定位置开始删除指定的元素个数。返回值是删除元素组成的数组。
+            插入: 传入参数1、参数2、参数3共三个参数,其中参数2为0表示要删除的元素个数为 0,也就是不删除,以此达到插入的效果。返回一个空数组。
+            替换: 传入参数1、参数2、参数3共三个参数,参数2不为0即可,会在删除元素位置插入参数3提供的内容。
+
+            concat()、slice()都返回新数组,原数组不变
+            splice()直接改变原数组。
+        </div>
+        <h4>6.迭代方法</h4>
+        <div>
+            ECMAScript为数组定义了5个迭代方法: array.every(),array.some(),array.forEach(),array.filter(),array.map()它们本质上都是对for循环的增强改进。
+            以上方法:
+                1.每个方法都接收两个参数:参数1是一个回调函数,参数2是可选的作为函数运行上下文的作用域对象一般不填。
+                参数1回调函数callback,在数组调用时数组中的每个元素都会执行这个回调函数一次。
+                参数接收3个:数组元素element、数组元素对应索引index、调用数组本身。
+                function(element,index,arr){
+                    element用于测试的当前值,即当前数组中的每一个元素(每一项),必选。
+                    index用于测试的当前值的索引,即当前数组中的每一个元素对应的下标,可选。
+                    arr当前调用方法的数组,可选。
+                }
+                使用箭头函数:(element,index,arr) => {
+
+                }
+                2.都不改变调用它们的数组。
+
+            1.every(): 对数组中的每一项都运行传入的函数,如果对每一项传入函数都返回true,则这个方法返回true。否则为false。
+
+            2.some(): 对数组中的每一项运行给定函数,如果至少有1个元素通过了被提供的函数测试则返回 true,所有元素都没有通过返回false。
+
+            3.forEach(): 对数组的每个元素按照升序执行一次给定的函数,这个方法没有返回值即undefined。
+            本质上和for循环一样,就是遍历一次数组。
+
+            4.filter(): 用来过滤原数组的内容,函数返回true的项会组成一个新的数组返回,常用来筛选满足给定条件的元素。
+
+            5.map(): 和filter()类似,创建一个新数组,其结果是该数组中的每个元素都调用一次提供的函数后的返回值,常用来创建一个与原数组元素一一对应的新数组。
+            
+        </div>
+        <h4>7.归并方法</h4>
+        <div>
+            ECMAScript为数组提供了reduce()方法和reduceRight()方法依次处理数组的每个成员,最终累计为一个值。也就是将数组变成一个单一的返回值。
+            这两个方法也是会遍历数组的。
+            它们的差别是:
+            reduce()是从左到右处理（从第一个成员到最后一个成员）,
+            reduceRight()则是从右到左（从最后一个成员到第一个成员）,其他完全一样。
+            都接收两个参数:参数1归并函数,参数2归并起点的初始值可选。
+            array.reduce(function(prev,cur,index,arr){
+                //操作
+                
+            },prev的初始值)
+            这个方法有点像map()方法不过回调函数多了一个累加器参数,数组每一个通过回调函数的元素都会加到累加器里。
+            第一次执行时累加器默认为数组的第一个成员,以后每次执行时都是上一轮的返回值。
+            最后也是返回这个累加器,还可以指定第二个参数为累加器的初始值。
+
+        </div>
+        <h4>8.搜索方法</h4>
+        <div>
+            ECMAScript为数组提供了两类搜索数组的方法:按严格相等搜索、按断言函数搜索
+            <h5>1.按严格相等搜索</h5>
+            <p>
+                1. indexOf(),返回给定参数元素在数组中第一次出现的位置,如果没有出现则返回-1。
+                2. lastIndexOf(),返回给定元素在数组中最后一次出现的位置,如果没有出现则返回-1。
+                3. includes() ECMAScript7 新增的方法,返回一个布尔值,表示某个数组是否包含给定的元素值。有就返回true。
+                它们都接收两个参数:参数1要查找的元素,参数2可选的起始搜索位置。
+                indexOf()和includes()是从数组前头开始向后搜索,而lastIndexOf()是从数组末尾开始向前搜索。
+
+                没有includes()方法之前,使用indexOf方法检查一个数组中是否包含某个值。
+                if (arr.indexOf(el) !== -1) {
+                    // ...
+                }
+
+            </p>
+            <h5>2.按断言函数搜索</h5>
+            <p>
+                1. find(),返回第一个符合条件的数组元素。
+                2. findIndex(),返回第一个符合条件的数组元素的索引,如果所有成员都不符合条件则返回-1
+                它们都接收一个断言函数:跟迭代方法一样,每一个元素都会调用一次这个函数。
+                断言函数接收3个参数:(数组中的元素,元素索引,数组本身) => {
+                    //执行某些操作
+                }
+                注意:它们找到一个匹配项后,就不会再继续向下搜索了。
+            </p>
+        </div>
+        <h4>9.复制和填充方法</h4>
+        <div>
+            ECMAScript6新增的两个方法
+            1.copyWithin(target,start,end),将指定位置start的成员复制到target位置(会覆盖原有成员),然后返回当前数组。修改当前数组。
+            三个参数都应该是数值,如果不是会自动转为数值。参数2和参数3是可选的。包括起始位置不包括终止位置。
+
+            2.fill(填充内容,填充的起始位置,填充的结束位置),使用给定的填充内容填充一个数组。
+            参数2和参数3是可选的,它是直接修改调用数组的内容不会改变大小。所以原数组是改变了的。
+            fill方法用于空数组的初始化非常方便。数组中如果已有的元素会被全部抹去。
+        </div>
+        改变原数组:7个 
+            push()
+            pop()
+            unshift()
+            shift()
+            reverse()
+            sort()
+            splice()
+        不改变原数组:3个
+            slice()
+            concat()
+            join()
+    </div>
+
+<!-- js -->
+<script>
+window.onload = function(){
+/*数组Array的创建方法*/
+    //使用new运算符
+    // var box= new Array('王耿','23','嘉兴');
+    // console.log(box);
+    // console.log(typeof box);//object
+    // box[0] = 123;
+    // console.log(box[0]);
+    // console.log(box.length)
+    //数组字面量的创建方法
+    // var box=['王耿','23','嘉兴'];
+    // console.log(box);
+    // console.log(box[0]);
+    // console.log(box.length);
+
+/*数组增强语法*/
+    //rest 逆运算-展开运算符
+    // function sum(x=1,y=2,z=3){
+    //     return x+y+z
+    // }
+    // let data = [4,20,1]
+    // //es5
+    // console.log('es5使用数组下标',sum(data[0],data[1],data[2],data[3]))
+    // console.log('es5使用apply方法',sum.apply(this,data))
+    // //es6
+    // console.log('es6使用展开运算符',sum(...data))
+
+    // // 剩余rest
+    // const teamRest = ['易建联','郭艾伦','翟小川','赵继伟','周琦'];
+    // const [captain1,assistant1,...players1] = teamRest
+    // console.log(captain1,assistant1,players1)
+
+    // //扩展spread
+    // const captain2 ='易建联'
+    // const assistant2 = '郭艾伦'
+    // const players2 =['翟小川','赵继伟','周琦']
+    // const teamSpread = [captain2,assistant2,...players2]
+    // console.log('teamSpread:',teamSpread)
+
+    // push函数,将一个数组添加到另一个数组的尾部
+    // ES5的 写法
+    // let arr1 = [0, 1, 2];
+    // let arr2 = [3, 4, 5];
+    // Array.prototype.push.apply(arr1, arr2);
+    // console.log(arr1)
+
+    // // ES6 的写法
+    // let arr1 = [0, 1, 2];
+    // let arr2 = [3, 4, 5];
+    // arr1.push(...arr2);
+    // console.log(arr1)//[ 0, 1, 2, 3, 4, 5 ]
+
+/*数组元素的遍历*/
+    // 用for循环
+    // var arr = ["孙悟空","猪八戒","沙悟净"];
+    // // 正向遍历
+    // for(var i =0 ;i < arr.length; i++){
+    // 	console.log(arr[i]);
+    // }
+    // // 反向遍历
+    // for(var i =arr.length-1 ;i>=0 ; i--){
+    // 	console.log(arr[i]);
+    // }
+
+    // const a = ["foo","zhangsan","lisi","bar"];
+    // const aKeys =a.keys() 
+    // const arrKeys =Array.from(a.keys()) 
+    // const arrValues =Array.from(a.values()) 
+    // const arrEntries =Array.from(a.entries()) 
+    // console.log(aKeys)//Array Iterator {  }
+    // console.log(arrKeys)//Array(4) [ 0, 1, 2, 3 ]
+    // console.log(arrValues)//Array(4) [ "foo", "zhangsan", "lisi", "bar" ]
+    // console.log(arrEntries)//Array(4) [[ 0, "foo" ],[ 1, "zhangsan" ], [ 2, "lisi" ], [ 3, "bar" ] [ 3, "bar" ]]
+
+/*数组常见的实例方法*/
+    //转换方法 toLocaleString().toString(),valueOf()三个
+    // var box= ['王耿',23,'嘉兴'];
+    // console.log( box.valueOf());//Array(3) [ "王耿", 23, "嘉兴" ]
+    // console.log(box.toString());// "王耿,23,嘉兴"
+    // console.log(box.toLocaleString());// "王耿,23,嘉兴"
+    // console.log(box.join());// "王耿,23,嘉兴"
+    // console.log(box.join('|'));// "王耿|23|嘉兴"
+    // console.log(box);//Array(3) [ "王耿", 23, "嘉兴" ]
+
+    //栈和队列方法:四个 push() pop() unshift() shift() 
+    // var box=['蔵青安',23,'计算机'];
+    // var pr = box.push("浙江");
+    // console.log('push方法返回值是修改后的数组长度',pr);//4
+    // console.log(box)//['蔵青安',23,'计算机','浙江'] 原数组改变
+
+    // var pp = box.pop();
+    // console.log('pop方法返回值是被删除的元素',pp);//'浙江'
+    // console.log(box)//['蔵青安',23,'计算机'] 原数组改变
+
+    // var ur = box.unshift("小王");
+    // console.log('unshift方法返回值是修改后的数组长度',ur);//4
+    // console.log(box);//["小王", "蔵青安", 23, "计算机" ] 原数组改变
+
+    // var sr = box.shift();
+    // console.log('unshift方法返回值是被删除的元素',sr );//"小王"
+    // console.log(box);// [ "蔵青安", 23, "计算机" ] 原数组改变
+
+
+    //排序方法:两个reverse() sort(callback)
+    // var box1=[1,2,3,4,5];
+    // console.log(box1.reverse());//[ 5, 4, 3, 2, 1 ]
+
+    // 使用for循环实现反转数组中的元素
+    // var arr = [12,1,2,3,4]
+    // for (let i = 0; i < arr.length/2; i++) {
+    //     var temp = arr[i]
+    //     arr[i] = arr[arr.length-i-1]
+    //     arr[arr.length-i-1] = temp
+    // }
+    // console.log(arr)
+
+    // var box2=[4,1,7,3,9,2];
+    // console.log(box2.sort());//[ 1, 2, 3, 4, 7, 9 ]从小到大排序
+    // console.log(box2);//[ 1, 2, 3, 4, 7, 9 ]
+
+    // 使用for循环对数组中的元素进行各种排序
+    // 冒泡排序
+    // var arr = [12,122,2,31,4]
+    // for (let i = arr.length-1; i >0 ; i--) {
+    //     for (let j =0 ; j < i; j++){
+    //             if(arr[j]>arr[j+1]){
+    //             var temp = arr[j]
+    //             arr[j] = arr[j+1]
+    //             arr[j+1] = temp
+    //         }
+    //     }  
+    // }
+    // console.log(arr)
+
+    // 选择排序
+    // var arr = [2,22,52,311,4]
+    // for(var i = 0;i<arr.length;i++){
+    //     for(var j=i+1;j<arr.length;j++){
+    //         //判断相邻两个那个大,然后交换位置
+    //         if(arr[j]<arr[i]){
+    //             var temp = arr[j]
+    //             arr[j]=arr[i]
+    //             arr[i]=temp
+    //         }
+    //     }
+    // }
+    // console.log(arr)
+
+
+    //操作方法 concat() slice() splice()
+    // var box=['王耿',23,'嘉兴'];//当前数组
+    // var box2=[1,6,12];
+    // var result = box.concat(box2);//参数是数组对象
+    // console.log(box);// "王耿", 23, "嘉兴"
+    // console.log(box2);// 1, 6, 12 
+    // console.log(result);// "王耿", 23, "嘉兴", 1, 6, 12 
+    // var result1 = box.concat("浙江","杭州");//参数是数组元素
+    // console.log(box);// "王耿", 23, "嘉兴"
+    // console.log(result1);// "王耿", 23, "嘉兴", "浙江", "杭州" 
+
+    // var box=['王耿',23,'嘉兴',123];//当前数组
+    // console.log(box);// "王耿", 23, "嘉兴", 122。原数组不变
+    // var result = box.slice(0,2);//定义一个变量接收返回值
+    // console.log(result);//"王耿", 23
+    // let copyOne = box.slice()
+    // console.log('复制一份',copyOne)//Array(4) [ "王耿", 23, "嘉兴", 123 ]
+
+    // 删除元素
+    // var box=['王耿',23,'嘉兴',123,22];//当前数组
+    // var result = box.splice(0,2);//返回的是删除元素组成的数组。
+    // console.log(box);//23, "嘉兴", 123, 22 。原数组改变
+    // console.log(result);// "王耿", 23。返回被删除的两个元素
+
+    //插入元素
+    // var box=['王耿',23,'嘉兴',123,22];//当前数组
+    // var result = box.splice(1,0,"浙江","巧巧");
+    // console.log(box);// Array(7) [ "王耿", "浙江", "巧巧", 23, "嘉兴", 123, 22 ]
+    // console.log(result);// Array []
+
+    //替换:删除元素并添加新的元素
+    // var box=['王耿',23,'嘉兴',123,22];//当前数组
+    // var result = box.splice(1,2,"浙江","巧巧");//从1位置开始删除2个元素,即删除 23, "嘉兴"。然后在开始索引插入新的元素。
+    // console.log(box);// Array(5) [ "王耿", "浙江", "巧巧", 123, 22 ]
+    // console.log(result);//  Array [ 23, "嘉兴" ]。返回被删除元素组成的数组
+
+    // 求数组元素的和,平均值,最大值,最小值
+    // var arr = [12,1,2,3,4]
+    // var sum = 0
+    // for (let i = 0; i < arr.length; i++) {
+    //      sum += arr[i];
+    // }
+    // console.log(sum)
+    // var avg = sum / arr.length
+    // console.log(avg)
+    // var max = arr[0];
+    // for (let i = 0; i < arr.length; i++) {
+    //     if(arr[i]>max){
+    //         max=arr[i]
+    //     }  
+    // }
+    // console.log(max)
+
+    // 搜索方法
+    // var a = ['a', 'b', 'c','a'];
+    //indexOf() 
+    // const result1 = a.indexOf('b') 
+    // console.log('indexOf找到返回:',result1)// 1
+    // const result2 =  a.indexOf('y') 
+    // console.log('indexOf找不到返回:',result2)// -1
+
+    // lastIndexOf()
+    // const lastResult1 = a.lastIndexOf('a') 
+    // console.log('lastIndexOf找到返回:',lastResult1)// 3
+    // const lastResult2 =  a.lastIndexOf('y') 
+    // console.log('lastIndexOf找不到返回:',lastResult2)// -1
+
+    //includes() 结果是布尔值
+    // var i = arr.includes(5)
+    // console.log('includes方法返回：',i)
+    // console.log('原数组：',arr)
+
+    // const people = [
+    //     {name:"zhangsan",age:30,gender:"male"},
+    //     {name:"lili",age:22,gender:"female"},
+    //     {name:"qiaoqiao",age:24,gender:"female"},
+    //     {name:"xiaowang",age:27,gender:"male"},
+    //     {name:"coco",age:18,gender:"female"}
+    // ]
+    // const result = people.find((value, index, arr) => {
+    //     return value.age > 22;
+    // }) // 10
+    // console.log('result is',result)//result is Object { name: "zhangsan", age: 30, gender: "male" }
+    // const resultIndex = people.findIndex((value, index, arr) => {
+    //     return value.age < 23;
+    // }) // 10
+    // console.log('resultIndex is',resultIndex)//resultIndex is 1
+
+    // 复制和填充方法
+    // const arr = ['a', 'b', 'c']
+    // arr.fill(7)
+    // console.log("arr is",arr)//Array(3) [ 7, 7, 7 ]
+    // const newArr = new Array(3).fill('hello')
+    // console.log("newArr is",newArr)//newArr is Array(3) [ "hello", "hello", "hello" ]
+
+    // const arr = ["zhangsan", 2, 3, "hello", 5]
+    // arr.copyWithin(1, 3, 4)// 将3号位复制到0号位
+    // console.log("arr is",arr)//arr is Array(5) [ "hello", 2, 3, "hello", 5 ]
+
+/*迭代方法*/
+    // var arr = [12,3,44,5,23]
+    // every() 结果是布尔值
+    // var e = arr.every(function (value) {
+    //     return value>5
+    // })
+    // 箭头函数
+    // var e = arr.every(value =>  value>5)
+    // console.log('every方法返回',e)//every方法返回： false
+    // console.log('原数组',arr)//原数组不变： Array(5) [ 12, 3, 44, 5, 23 ]
+
+    // //some() 结果是布尔值
+    // var s = arr.some(value => value>5)
+    // console.log('some方法返回',s)//some方法返回 true
+    // console.log('原数组',arr)//原数组不变： Array(5) [ 12, 3, 44, 5, 23 ]
+
+    //forEach方法
+    // arr.forEach(function(value,index,obj){
+    //  //在函数里执行某些操作。
+    // 	console.log(value);
+    // 	console.log(index);
+    // 	console.log(obj);
+    // });
+
+    //filter() 结果是一个新数组
+    // var farr = arr.filter(value => value >10 )
+    // console.log('filter方法返回',farr)//filter方法返回 Array(3) [ 12, 44, 23 ]
+    // console.log('原数组',arr)//原数组 Array(5) [ 12, 3, 44, 5, 23 ]
+
+    //map() 结果是一个新数组
+    // var marr = arr.map(value => value * 2 )
+    // console.log('map方法返回',marr)//map方法返回 Array(5) [ 24, 6, 88, 10, 46 ]
+    // console.log('原数组',arr)//原数组 Array(5) [ 12, 3, 44, 5, 23 ]
+
+/*归并方法*/
+    // let arr = [23,12,7,3,9];
+    // // 对数组所有项求和
+    // let sum = arr.reduce((prev,cur,index,arr) => {
+    //     return prev + cur
+    // })
+    // console.log(sum)//54
+    // console.log(typeof sum)//number
+
+    // let Rsum = arr.reduceRight((prev,cur,index,arr) => {
+    //     return prev + cur
+    // })    
+    // console.log(Rsum)//54
+    // console.log(typeof Rsum)//number
+
+/*小练习*/
+    //练习1:数组去重问题
+    // var arr =[1,2,3,7,3,3,2,4,1,4];
+    // for(var i=0; i<arr.length;i++){//遍历
+    // 	// 获取当前元素后面的元素
+    // 	for(var j=i+1;j<arr.length;j++){
+    // 		// 判断两个元素的值是否相等
+    // 		if(arr[i]==arr[j]){
+    // 			// 相等删除后面的
+    // 			arr.splice(j,1);
+    // 			// 这个是给数组排序了
+    // 			arr.sort(function(a,b){
+    // 				return a-b;
+    // 			});
+    // 			// 删除一个元素后,这个元素的后面的元素会自动补位这时候已经不再比较这个位置了,
+    // 			// 所以应该再比较一次这个位置防止出现漏网之鱼。
+    // 			j--;
+    // 		}
+    // 	}
+    //	//外层输出	
+    // 	console.log(arr[i]);
+    // }
+
+    // 练习2:对象和数组之间的转换
+    // const obj = {a:1,b:2,c:3,d:4}
+    // //转成[{text:1,value:'a'},{text:2,value:'b'},{text:3,value:'c'},{text:4,value:'d},]
+    // console.log('对象转成数组方法：',Object.entries(obj))
+    // const ret = Object.entries(obj).map( v => {
+    //     return {text:v[1],value:v[0]}
+    // })
+    // console.log(ret)
+
+    // //再将ret数组变回obj格式使用reduce方法
+    // const obj1 = ret.reduce((sum,v) => {
+    //     //这里v就是数组里的每一项了即里面的一个对象。
+    //     sum[v.value] = v.text
+    //     return sum
+    // },{})
+    // console.log(obj1)
+
+    // 练习3:对象和数组复杂结构相互转换
+    let obj  = {
+        name:['张三','李四','王五'],
+        age:[43,27,22],
+        city:['杭州','上海','长沙']
+    }
+    // 预期
+    let arr = [
+        {name:'张三',age:43,city:'杭州'},
+        {name:'李四',age:27,city:'上海'},
+        {name:'王五',age:22,city:'长沙'},
+    ]
+    // console.log(Object.values(obj)[0].length) 
+    // console.log(Object.keys(obj)) 
+    // const result = Array.from({length:10})//对应长度的空数组
+    const result = Array.from({length:10}).map( (value,index) => {
+        // console.log(value,index)
+        return Object.keys(obj).reduce( (sum,key) => {
+            console.log(obj[key][index])
+            sum[key] = obj[key][index]
+            return sum
+        },{})
+        
+    })
+    console.log(result)
+    // function changeObj2(data){
+    //         res.push(Object.keys(data).reduce((sum,key) => {
+    //             sum[key] = data[key][i]
+    //             return sum
+    //         },{}))
+    // }
+    // console.log(changeObj2(obj2))
+
+    // function changeObj(data){
+    //     let res = []
+    //     for (let i=0;Object.values(data)[0].length>i;i++){
+    //         res.push(Object.keys(data).reduce((sum,key) => {
+    //             sum[key] = data[key][i]
+    //             return sum
+    //         },{}))
+    //     }
+    //     return res
+    // }
+    // console.log(changeObj(obj2))
+
+    // let res = []
+    // for (let i=0;Object.values(obj)[0].length>i;i++){
+    //     res.push(Object.keys(obj).reduce((sum,key) => {
+    //         sum[key] = obj[key][i]
+    //         return sum
+    //     },{}))
+    // }
+    // console.log(res)
+
+    // let res = []
+    // for (let i=0;Object.values(obj)[0].length>i;i++){
+    //     let o = {}
+    //     Object.keys(obj).forEach( r => {
+    //         o[r] = obj[r][i]
+
+    //     })
+    //     res.push(o)
+    // }
+    // console.log(res)
+
+    // let redata = new Array();
+    // for (let i=0;obj.name.length>i;i++){
+    //     redata.push({
+    //         "name":obj.name[i],
+    //         "age":obj.age[i],
+    //         "city":obj.city[i]
+    //     });
+    // }
+    // console.log(redata)
+
+   
+}
+</script>
+</body>
+</html>

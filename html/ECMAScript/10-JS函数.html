@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript函数</title>
+</head>
+<body>
+    <h3>1、js函数概述</h3>
+    <div>
+        <h4>1.js函数的定义</h4>
+        <div>
+            在js里函数本质上也是一个对象,每一个函数都是 Function类型的实例,和其它对象不同的是函数可以在js程序中的任意位置调用执行。<br>
+            即它可以封装一些功能语句放到一个代码块内在需要时可以反复执行这些代码块。此外函数还能接受输入的参数,不同的参数会返回不同的值。<br>
+            函数的执行方法: 函数名() 这样代码块中的内容就会按照顺序依次执行即一行一行的从上往下执行。<br>
+            函数体里也可以执行其它函数,执行自己时就是递归,执行别人就是回调。实际开发中避免使用递归,使用了要注意添加条件防止陷入死循环,消耗栈内存。<br>
+        </div>
+        <h4>2.函数名</h4>
+        <div>
+            因为函数名本质上是保存指向函数对象的指针,所以跟其它保存对象指针的变量具有相同的行为。
+            也就是说一个函数是可以有多个名称的,也可以作为参数传给另一个函数,或者在一个函数中返回另一个函数。
+            只要可以使用变量的地方,函数名同样可以使用。
+            function sum(a,b){
+                return a+b;
+            }
+            let anothorSum = sum;
+            console.log(sum(2,8))
+            console.log(anothorSum(2,8))
+            sum = null;切断是是sum变量和函数的联系,因为保存的是指针不会影响到其它变量。
+            console.log(anothorSum(4,8))//依然可以使用。
+        </div>
+        <h4>3.函数的参数</h4>
+        <div>
+            当希望函数内部的代码块的某些值由外部数据改变时(即函数体里的是动态的)就可以传入参数,这种外部数据就叫参数。
+            js函数的参数分为形参和实参两种。
+            <h5>1. 形式参数简称形参</h5>
+            <p> 
+                在函数定义时的圆括号中声明的就是形参(即要传入的变量类型),在函数体中作为变量使用。
+                语法:function foo(形参1名,形参2名,...,形参n名){} 
+                形参个数大于等于0,逗号隔开。可以通过函数对象的length属性来获取函数定义形参的个数:foo.length
+                声明了形参就相当于在函数内部声明了对应的变量但是没有赋值,即 var 形参名;
+            </p>
+            <h5>2.实际参数简称实参</h5>
+            <p>
+                在函数调用时实际在圆括号中传入的参数(即真正传入的变量)。
+                语法:foo(实参1名,实参2名,...,实参n名)
+                实参会赋值给函数中对应的形参(按顺序),实参可以是任意数据类型。
+                
+                ECMAScript函数在被浏览器解析器时是不会检查实参的类型和数量,多余的实参不被赋值,少了则是undefined。
+                这是因为参数在内部表现为一个数组,实际上是用一个类数组对象 arguments对象 来接收函数执行时传入的实参。
+                类数组所以可以通过下标访问即通过arguments[i]访问,arguments.length可以获得实际传给函数的实参个数。
+                注意: ECMAScript中所有的参数都是按值传递的,如果传对象那就是这个对象的引用值。
+            </p>
+            <h5>3.形参默认值</h5>
+            <p>
+                es5时不能直接为函数的参数指定默认值,只能采用 || 运算符的形式,或者判断参数是否 === undefined。
+                如果是则说明没传这个参数,那就给它赋一个值。
+                即：
+                    if(name === undefined){
+                        name = 默认值
+                    }
+                   name = (typeof name !== "undefined") ? name:'zhangsan';
+                或者”
+                    a = a || '默认值'
+
+                ES6 之后允许为函数的参数设置默认值,即直接使用等号=写在参数定义的后面。
+                当一个函数不传入实参时就会使用默认的形参值 语法：形参名=默认形参值
+                手动传入undefined也相当于没有传值,而且默认参数只在函数被调用时才会求值。
+                function Point(x=1,y=2){
+                    this.x = x;
+                    this.y = y;
+                }
+                let point = new Point();//没传使用默认的
+            </p>
+            <h5>4.参数扩展与收集</h5>
+            <p>
+                ES6 引入 rest 参数（形式为...变量名）也叫三点运算符/展开/剩余运算符。使用它可以非常简洁地操作和组合集合数据。
+                如果是用于获取函数未知的多余参数并把它们放到一个数组中,(...rest)就是收集剩余参数操作
+                如果数组已知那就是展开运算符了,即它会把数组中的元素转为用逗号分隔的参数序列对应到函数的形参上。(...spread)
+
+                它是用来代替arguments变量的,它比arguments更加的灵活。
+                arguments是一个伪数组,不具备一些数组的方法,如forEach(),需要使用Array.prototype.slice.call(value)先将其转为数组
+                而rest参数搭配的变量就是一个真数组。
+                注意,作为收集rest 参数时之后不能再有其他参数（即只能是最后一个参数）,否则会报错。
+            </p>
+        </div>
+        <h4>4.函数体</h4>
+        <div>
+            圆括号之后的花括号括起来的就是函数体,函数体内的代码在函数执行时会一行一行依次执行下去,一般会有一个返回值。
+            在函数体中使用return关键字声明,如果不写return或return后面无值,则函数执行后返回undefined。
+            任何函数可以在任何时间使用 return 语句来返回任何东西。
+                语法:return 表达式;(return 后面表达式的值被计算并作为函数的返回值,可以是任意类型的值:数字,字符串,对象,函数等。)
+            可以定义一个变量来接收这个返回值:var result = foo();
+            注意: return 后面的语句将不会再继续执行,即函数会停止执行并退出。
+            return是可选的,最佳实践是要么有返回值,要么就不返回值。
+            函数体内有两个特殊的对象
+            <h5>1.arguments对象</h5>
+            <p>
+                一个类数组对象,用来获取函数调用时传入的所有参数。箭头函数声明的是没有的。
+                它有一个callee属性,是一个指向的是arguments对象所在的函数的指针。
+                应用是可以实现函数逻辑和函数名的解耦。
+                var f = function () {
+                    console.log(arguments.callee === f);
+                }
+                f() // true
+                经典应用是阶乘函数:
+                function factorial(num){
+                    if(num <=1){
+                        return  1;
+                    }else{
+                        return num*factorial(num-1)
+                    }
+                }
+                函数逻辑和函数名紧耦合,不利于维护。
+                function factorial(num){
+                    if(num <=1){
+                        return  1;
+                    }else{
+                        return num*arguments.callee(num-1)
+                    }
+                }
+            </p>
+            <h5>2.this</h5>
+            <p>
+                就是我们变量作用域是的执行上下文,在函数里this引用的是把函数当成方法调用的那个上下文对象。
+                箭头函数没有自己的this。this的作用是在函数内部指代当前的函数运行环境即函数的执行上下文。
+                函数调用方式不同,this指向也不同。但是可以确定的是this 永远指向最后调用它的那个对象。
+                一般情况如下:
+                    以普通函数的形式调用时,this永远就是window
+                    以对象方法的形式调用时,this就是调用这个方法的那个对象
+                    以构造函数调用,this就是新实例化创建的那个对象。
+                    使用函数对象的call(),apply(),bind()调用时可以指定一个对象作为第一个参数,此时这个对象成为函数执行的this。
+                    foo.call(obj,1,2,3)实参依次传递,逗号隔开。立即执行
+                    foo.apply(obj,[1,2,3])实参以数组的形式传递。立即执行
+                    foo.bind(obj)() 返回一个新函数,再加()才会立即执行。
+            </p>
+            <h5>3.new.target</h5>
+            <p>
+                ECMAScript 中的函数既可以作为构造函数实例化一个新对象,也可以当作普通函数调用。
+                ECMAScript6 增加了new.target属性用来检测一个函数是否使用new关键字调用的。
+                普通函数调用返回 undefined,构造函数调用返回被调用的构造函数。
+            </p>
+            
+        </div>
+    </div>
+    <h3>2、js函数的创建方法</h3>
+    <div>
+        <h4>1.使用Function()构造函数</h4>
+        <div>
+            因为函数本质上也是一个对象且都是 Function类型的实例,所以可以使用这个方法,但实际开发中很少用。
+            语法:var foo = new Function();可以接收任意多个字符串参数,最后一个始终会被当成函数体
+            函数调用执行:foo()
+        </div>
+        <h4>2.使用函数声明来创建</h4>
+        <div>
+            Function Declaration 使用function关键字的声明方式,function命令后面是函数名,函数名后面是一对圆括号,里面是传入函数的参数,函数体放在大括号里面,最后不用添加分号。
+            如果同一个函数被多次声明后面的声明就会覆盖前面的声明,也就是说ECMAScript函数没有重载。
+            语法:function 函数名([形参1,形参2]){
+                这里写要封装的代码(也叫函数体)
+            }
+            实际上是var foo = new Function();的语法糖
+            函数调用执行:函数名()
+            函数声明方式创建的函数存在提升,它会被在任何代码执行之前先读取函数声明到执行上下文中。
+        </div>
+        <h4>3.使用函数表达式来创建</h4>
+        <div>
+            Function Expression 它与函数声明是等价的,即先声明一个匿名函数然后赋值给一个变量来保存函数对象的引用地址。
+            语法:var 变量名 = function([形参1,形参2]){
+                这里写要封装的代码(函数体)
+            };
+            函数调用执行:变量名()
+            注意:函数名要符合js标识符命名规则,函数末尾有分号因为它也算是初始化赋值语句的一种,重复声明后面的覆盖前面的。
+        </div>
+        <h4>4.箭头函数方式创建</h4>
+        <div>
+            Arrow function ES6 允许使用“胖箭头”(=>),(对应瘦箭头是'->')定义函数,所有叫做箭头函数一般用来定义匿名函数、回调函数简化操作使用。
+            声明函数时与函数表达式的形式很像。
+            基本语法 : (形参) => {函数体}
+            形参:
+                没有参数,圆括号不能省略,充当占位符: () => console.log("aaa");
+                一个参数,可以省略圆括号: i => i+2;
+                两个参数及以上,不能省略圆括号: (i,j) => i+j;
+            函数体:
+                一条语句可以不使用大括号,且默认自动返回紧跟着的第一条语句的结果,隐式返回。
+                多条语句必须使用大括号包围起来,需要手动return返回需要的内容。
+            const sum = (a,b)  => {
+                return a + b;
+            };
+            
+            特点:函数写法更加简洁,没有自己的 this也没有prototype属性,且箭头函数的this不是在调用的时候决定的,而是在定义的时候处在的函数对象就是它的this。
+            即箭头函数的this看外层是否有函数,有,则箭头函数的this就是外层函数的this,没有就是window(一级一级往外找)。
+            不可以使用arguments对象,该对象在函数体内不存在,用 rest 参数代替。也不能使用super、new.target。
+            函数返回值可以被隐式返回(即不适用return关键字)
+            不能用作构造函数,这就是说不能够使用new命令,否则会抛出一个错误。
+        </div>
+    </div>
+    <h3>3、js函数常用的属性和方法</h3>
+    <div>
+        <h4>1.只读name属性</h4>
+        <div>
+            ECMAScript6的所有函数都有一个只读的name属性,它返回函数的名字,用处是可以获取参数函数的名字。
+            function f1() {}
+            f1.name // "f1"
+            如果是通过函数表达式定义的函数,那么name属性返回变量名。
+            var f2 = function () {};
+            f2.name // "f2"
+            如果是使用构造函数创建的,则返回"anonymous"
+            var f3 = new  Function()
+            f3.name // "anonymous"
+
+        </div>
+        <h4>2.prototype属性</h4>
+        <div>
+            每个函数都有的一个属性,指向的是Function类型的原型上。
+        </div>
+        <h4>3.length属性</h4>
+        <div>
+            函数也有一个length属性,它返回函数预期传入的参数个数,即函数定义时形参的个数。
+            指定默认值之后将返回没有指定默认值的参数个数。
+            function f(a, b) {}
+            f.length // 2
+            它提供了一种机制,判断定义时和调用时参数的差异,以便实现面向对象编程的“方法重载”(overload)。
+        </div>
+        <h4>4.toString()方法</h4>
+        <div>
+            函数的toString()方法返回函数的源码的字符串形式,包含换行符在内。
+            function f() {
+                a();
+                b();
+                c();
+            }
+            f.toString()
+            // function f() {
+            //  a();
+            //  b();
+            //  c();
+            // }
+            对于那些原生的函数,toString()方法返回function (){[native code]}。
+        </div>
+        <h4>5.call()方法</h4>
+        <div>
+            fn.call(参数1,参数2,参数3,...),以指定的this值来调用函数。即会设置调用函数时函数体内的this对象值为传入的参数1中的this值。
+            参数1:函数内this的值一个对象。
+            参数2-参数n:逐个传递给被调用函数的参数。
+            var obj = {};
+            var f = function () {
+                return this;
+            };
+            f() === window // true
+            f.call(obj) === obj // true
+        </div>
+        <h4>6.apply()方法</h4>
+        <div>
+            fn.apply(参数1,参数2),以指定的this值来调用函数。即会设置调用函数时函数体内的this对象值为传入的参数1中的this值。
+            参数1:函数内this的值一个对象。
+            参数2:参数数组或者参数类数组对象。
+
+        </div>
+        <h4>7.bind()方法</h4>
+        <div>
+            fn.call(参数1,参数2,参数3,...),以指定的this值来调用函数。即会设置调用函数时函数体内的this对象值为传入的参数1中的this值。
+            参数1:函数内this的值一个对象。
+            参数2-参数n:逐个传递给被调用函数的参数。
+            传参和call()方法一样,但是返回的是一个新的函数实例所以要执行还要加()。
+        </div>
+        <h4>8.call,apply,bind三者比较</h4>
+        <div>
+            call,apply都是立即执行函数且调用它们的必须是一个函数 Function。区别在于第二个参数call是一个一个逐个传入,apply是传入一个数组或类数组对象。
+            bind是返回一个新的函数实例,想要执行则要手动调用 bind()()
+            也就是说:call和apply改变了函数的this上下文后便执行该函数,而bind则是返回改变了上下文后的函数。
+            使用它们的好处是可以将任意对象设置为任意函数的this,这样对象不用关心自己有没有这个方法。可以冒充别人调用,所以这也叫对象冒充。
+
+            简单理解就是:
+                那个函数调用了这3个方法,这个函数体内的 this(也就是函数执行上下文) 就会变成call,apply,bind指定的this。
+            比如说有一个猫类它有一个吃鱼的方法,如果这时有一条狗也想吃鱼,但是自己没有吃鱼的方法怎么办呢?狗冒充猫借用猫的吃鱼方法即可。
+            那么狗就可以通过猫的吃鱼方法满足自己想吃鱼的愿望。
+
+            猫.fish().call(狗,各种鱼1,各种鱼2)
+            猫.fish().apply(狗,[各种鱼1,各种鱼2])
+            猫.fish().bind(狗,[各种鱼1,各种鱼2])()
+
+            注意:普通模式下,不指派或者指派null,undefined时函数执行上下文this都是window全局上下文。
+        </div>
+    </div>
+    <h3>4、函数的其它知识点</h3>
+    <div>
+        <h4>1.匿名函数</h4>
+        <div>
+            所谓匿名函数就是没有名字的函数,单独的匿名函数是无法运行的。也叫兰姆达函数。
+            通常把匿名函数赋值给一个变量,这也是函数表达式声明的形式。不然就直接调用
+            function(){
+                return 'wang';//
+            }
+            var  box = function(){
+                return 'wang';
+            };
+            box();//wang
+        </div>
+        <h4>2.立即执行的函数表达式</h4>
+        <div>
+            声明后立即执行的匿名函数又被称为立即执行的函数表达式(IIFE,Immediately Invoked Function Expression)。
+            即函数在定义之后会立即被调用执行,且一般只执行一次即执行后立即销毁,所以函数名也可以不写。
+            
+            它的原理是如果function关键字出现在行首一律解释成语句,所以函数定义后立即调用的解决方法就是不要让function出现在行首,让引擎将其理解成一个表达式。
+            最简单的处理,就是将其放在一个圆括号里面。因为js会把()小括号内的内容当成一个表达式。
+
+            语法1:对函数声明用()括起来,再加一个()就会立即执行。
+                (function (形参){
+
+                })(实参); 
+            语法2:对函数声明和执行都用()括起来。
+                (function (形参){
+
+                }(实参)); 
+            
+            推而广之,任何让js解释器以表达式来处理函数定义的方法,都能产生同样的效果,比如下面几种写法都是IIFE。 
+                !function () { /* code */ }();
+                ~function () { /* code */ }();
+                -function () { /* code */ }();
+                +function () { /* code */ }();
+
+            意义:函数都有自己的执行上下文,匿名函数也一样。所以对匿名函数使用这种立即执行的函数表达式就会有一个独立的执行上下文,可以避免外部访问或修改立即执行函数里的变量。
+            这在ECMAScript5还没块级作用域时是非常有用的,可以使用IIFE来模拟块级作用域,这也是闭包的由来。
+            (function (){
+                for(var i = 0;i 《= 10;i++){
+                    console.log(i)
+                }
+            })()
+            console.log(i)//访问不到,会抛出错误。
+
+            也就是IIFE目的有两个:
+                一是不必为函数命名,避免了污染全局变量。
+                二是 IIFE 内部形成了一个单独的作用域,可以封装一些外部无法读取的私有变量。
+            当然在ECMAScript6之后,IIFE就没那么必要了,因为已经原生支持块级作用域了。
+        </div>
+        <h4>3.闭包</h4>
+        <div>
+            理解闭包,首先必须理解变量作用域。在es5时只有全局作用域和函数作用域,函数内部可以直接读取全局变量,而全局是不能读取函数作用域内的。
+            根据作用域链的知识可知,在一个函数内再定义一个函数即可访问到这个函数里的内容,再把这个函数返回出去也就变相的可以访问函数内的变量了。
+            这时因为内层的闭包函数使用着外部函数的变量,导致变量不能从内存释放,外层函数提供的运行环境也不会被清除。
+
+            
+            闭包(closure),就是指那些引用了另一个函数作用域中变量的函数。它通常是使用嵌套函数实现的。
+            所以本质上闭包还是一个函数,是一个可以访问另一个函数作用域里变量的函数。
+            闭包的最大用处有两个:
+                一个是可以读取外层函数内部的变量。
+                另一个就是让这些变量始终保持在内存中,即闭包可以使得它诞生环境一直存在。
+
+            常见的使用场景:函数作为另一个函数的返回值或参数时。
+            创建方法:
+                函数内部return一个匿名函数就形成了一个闭包。
+                function box(){
+                    var name = 'zhangsan';
+                    return function (){//闭包函数返回box()局部变量
+                        return name;
+                    }
+                }
+                定义一个立即执行函数也是形成了一个闭包。
+                function box(){
+                    var name = 'zhangsan';
+                    (function (){
+                        return name;
+                    })(name)
+                }
+            每运行一次都会产生一个新的闭包,所以内存的开销是很大的,有内存泄漏的风险,是所以不要滥用。
+        </div>
+        <h4>4.尾调用优化</h4>
+        <div>
+            ECMAScript6规范新增了一项内存管理优化机制,让JavaScript引擎在满足条件时可以重用栈帧。
+            这项优化非常适合"尾调用"(Tail Call)就是指某个函数的返回值是执行另一个函数。
+            function f(){
+                return g();
+            }
+        </div>
+        <h4>5.函数的严格模式</h4>
+        <div>
+            严格模式对函数也有一些限制:
+            必须使用var关键字声明变量,
+            禁止自定义的函数中的this指向window,
+            创建了eval作用域(能解析字符串中的js代码),
+            对象不能有重名的属性。
+            不能使用eval或arguments作为函数名称或函数参数。
+            es6之后默认严格模式。
+        </div>
+    </div>
+    
+
+<!-- js -->
+<script>
+window.onload = function(){
+/*函数定义的方法*/
+    // 1:new运算符创建。
+    // var fun1 = new Function();
+    // console.log(fun1);
+    // console.log(typeof fun1);//function
+    // var fun2 = new Function("alert('hello js function')");
+    // fun2();//弹窗 hello js function
+
+    //2:使用函数声明
+    // function box1(){//函数的声明不带参数
+    // 	alert('我只有被调用才能执行');
+    // }
+    // box1();
+    // function box2(name,age){//函数的声明带参数
+    // 	alert('你的姓名是:'+ name +',年龄为'+age);
+    // }
+    // box2('王耿',23);
+
+    //3:使用函数表达式来创建
+    // var b = function(){
+    // 	alert('我只有被调用才能执行');
+    // };
+    // b();
+
+    //4:和上面等价的 箭头函数写法
+    // let b = () => console.log("我是箭头函数");
+    // b();
+
+/*函数参数*/
+    // 默认参数
+    // // es5
+    // function test5(x,y){
+    //     x = x || '我是默认值x'
+    //     y = y || '我是默认值y'
+    //     return x + y
+    // }
+    // console.log(test5('wang+'))//wang+我是默认值y
+    // //es6
+    // function test6(x,y='我是默认值y'){
+    //     return x + y
+    // }
+    // console.log(test6('wu+'))//wu+我是默认值y
+
+    // 获取形参的个数
+    // function max(x,y){
+    // 	return x > y ? x:y;
+    // }
+    // console.log(max.length)//2
+
+    // 获取实参的个数
+    // function box(){
+    // 	return arguments.length;//返回这个数组的长的即传进来的参数的个数。
+    // 	// return arguments[0]+'|'+arguments[1]+'|'+arguments[2]+'|'+arguments[3]+'|'
+    // }
+    // var result = box ('王耿',23,'计算机');
+    // console.log(result);//3
+
+    // arguments
+    // function funa(a,b){
+    //     console.log(arguments);//是一个对象Arguments { 0: 2, 1: 20, … }
+    //     // es5
+    //     // Array.prototype.slice.call(arguments).forEach(function(item,index){
+    //     //     console.log(item,index);
+    //     // });
+    //     // es6
+    //     Array.from(arguments).forEach(function(item,index){
+    //         console.log(item,index);
+    //     });
+
+    // }
+    // funa(2,20);
+
+    //利用 rest 参数改写数组push方法
+    // let arr = []
+    // function push(arr,...rest){
+    //     console.log('参数都放到一个数组rest里了',rest)
+    //     rest.forEach(value => {
+    //         arr.push(value)
+    //         // console.log(item)
+    //     })
+    // }
+    // push(arr,1,24,32,12,22)
+    // console.log(arr)
+    
+    // //rest 逆运算-展开
+    // function sum(x=1,y=2,z=3){
+    //     return x+y+z
+    // }
+    // let data = [4,20,1]
+    // //es5
+    // console.log('es5使用数组下标',sum(data[0],data[1],data[2],data[3]))
+    // console.log('es5使用apply方法',sum.apply(this,data))
+    // //es6
+    // console.log('es6使用展开运算符',sum(...data))
+
+/*函数返回值*/
+    //无return或return后无值,返回undefined
+    // function box(){
+    //     return 
+    // }
+    // var  result = box();
+    // console.log(result);//undefined
+
+    // return 返回字符串
+    // function box(){
+    //     console.log('我是return前面的语句我会被执行')
+    //     return '我是被调用执行后用return返回的值';//return表示把这句字符串返回出来了,
+    //     console.log('我是return后面的语句我不会被执行')//浏览器会报错
+    // }
+    ////变量result的值就是函数的执行结果,即函数的返回值是什么,result的值就是什么
+    // var  result = box();
+    // console.log(result);
+
+    //return 返回字符串
+    // function box(name,age ){//有参数
+    // 	return '你的姓名是:'+ name +',年龄为:'+age ;//表示吧这句字符串返回出来了,
+    // }
+    // var  result = box('王耿',23);
+    // console.log(result);
+
+/*call,apply,bind方法:*/
+    // apply()
+    // function sum(num1,num2){
+    //     return num1 + num2;
+    // }
+    // function applySum1(num1,num2){
+    //     return sum.apply(this,arguments)//传入类数组对象
+    // }
+    // function applySum2(num1,num2){
+    //     return sum.apply(this,[num1,num2])//传入数组
+    // }
+    // //call
+    // function callSum3(num1,num2){
+    //     return sum.call(this,num1,num2)//逐个传入
+    // }
+    // //bind
+    // function bindSum4(num1,num2){
+    //     return sum.bind(this,num1,num2)//逐个传入
+    // }
+    // // 普通函数调用,所以this = window对象。
+    // console.log(applySum1(10,10)) //20 
+    // console.log(applySum2(10,10)) //20
+    // console.log(callSum3(10,10)) //20 
+    // console.log(bindSum4(10,10)()) //20 
+    
+    // const cat = {
+    //     name:'猫',
+    //     fish(...args){
+    //         console.log(`吃传进来的${args}`)
+    //     }
+    // }
+    // const dog = {
+    //     name:'狗',
+    // }
+    // // 对象冒充 call,apply是没有返回值的直接执行,
+    // cat.fish.call(dog,'鲈鱼','草鱼')//吃传进来的鲈鱼,草鱼
+    // cat.fish.apply(dog,['鲈鱼','草鱼','黄辣丁','鲑鱼'])//吃传进来的鲈鱼,草鱼,黄辣丁,鲑鱼
+    // cat.fish.bind(dog,'鲈鱼','草鱼','青鱼')()//吃传进来的鲈鱼,草鱼,黄辣丁,鲑
+
+/*函数作用域:*/
+    //全局作用域:
+    // var a= 10;
+    // console.log(a);
+    // console.log(window.a);//这两个是一样的,不过这里window对象一般不写。
+    // function fun(){
+    // 	console.log("我是fun函数");
+    // }
+    // fun();
+    // window.fun();//一样的
+    //函数作用域:
+    // var a =  20;
+    // function fun(){
+    // 	var b = 10;
+    // 	console.log(a);//可以访问全局的a
+    // 	// var a = "我是函数里的a"
+    // 	// console.log(a);//就近原则,一层一层往外找。
+    // }
+    // fun();
+    // console.log(b);//访问不到局部的b报错。
+    //声明提前:
+    // alert(box(1,2));//在函数声明前调用
+    // function box (num1,num2){
+    // 	return num1+num2;//普通函数定义
+    // }
+    // alert(box(1,2));//提前调用报错
+    // var box = function(num1,num2){
+    // 	return num1+num2;//变量初始化定义
+    // };
+    //练习
+    // var a = 123;
+    // function fun(){
+    // 	alert(a);
+    // }
+    // fun();//123
+
+    // var a = 123;
+    // function fun(){
+    // 	alert(a);
+    // 	var a = 456;
+    // }
+    // fun();//undefined
+    // alert(a);//123
+
+    // var a = 123;
+    // function fun(){
+    // 	alert(a);
+    // 	a = 456;
+    // }
+    // fun();//123
+    // alert(a);//456
+
+    // var a = 123;
+    // function fun(a){
+    // 	alert(a);
+    // 	a = 456;
+    // }
+    // fun();//undefined
+    // alert(a);//123
+
+    // var a = 123;
+    // function fun(a){
+    // 	alert(a);
+    // 	a = 456;
+    // }
+    // fun(123);//123
+    // alert(a);//123
+
+/*函数的其它知识点*/
+    
+    //六.立即执行函数。
+    // (function(){
+    //     console.log('我是对函数声明使用()括起来的立即执行函数')
+    // })();
+
+    // (function(){
+    //     console.log('我是对函数声明和函数执行都使用()括起来的立即执行函数')
+    // }());
+
+    // var foo = function (){
+    //     console.log('我是对匿名函数表达式使用()括起来的立即执行函数')
+    // }();
+    //闭包(closure)
+    // function myfun(){
+    // 	var mynum = 10;
+    // 	function showNum(){
+    // 		alert(mynum);
+    // 	}
+    // 	return showNum();//这里返回的是shownum函数的执行结果即,弹框输出mynum。
+    // }
+    // var  otherfun = myfun();
+    // myfun();
+
+    
+
+/*小练习*/
+    /*练习1:定义一个函数,判断一个数是不是偶数,是返回true,不是返回false。*/
+    // function isOu(x){
+    //     // if(x%2==0){
+    //     // 	return true;
+    //     // }else{
+    //     // 	return false;
+    //     // }
+    //     // 直接返回
+    // 	return x%2==0;
+    // }
+    // var result = isOu(12);
+    // console.log(result);
+
+    /*练习2:定义一个函数,根据半径(半径可变形参)计算一个圆的面积,并返回计算结果.*/
+    // function county(r){
+    // 	return 3.14*r*r;
+    // }
+    // var  result = county(1);
+    // console.log(result);
+
+    /*练习3:定义一个函数,可以在控制台中输出一个人的信息,name,age,gender,address。封装在对象中。*/
+    // function printInfo(obj){
+    // 	return ("我是"+ obj.name + "我的年龄是" + obj.age + "我是" + obj.gender + "我住在" + obj.address);
+    // }
+    // var wang = {
+    //     name:"蔵青安",
+    //     age:24,
+    //     gender:"男人",
+    //     address:"中国"
+    // }
+    // var result = printInfo( wang);
+    // console.log(result)
+
+    /*练习4:定义一个函数,传入n(n为正整数),计算1-n之间值的和 */
+    // function add(n){
+    //     var sum = 0
+    //     for(var i=1;i<=n;i++){
+    //         sum+=i
+    //     }
+    //     return sum
+    // }
+    // var result = add(5)
+    // console.log(result)
+
+    /*练习5:定义一个函数,传入一个数组,对数组元素反转*/
+    // function reverseArr(arr){
+    //     for(var i=0;i<arr.length/2;i++){
+    //         var temp = arr[i]
+    //         arr[i]=arr[arr.length-1-i]
+    //         arr[arr.length-1-i] = temp
+    //     }
+    // }
+    // var a = [11,22,33,44,55]
+    // console.log(reverseArr(a))
+
+    /*练习6:定义一个函数,传入一个数组,对数组元素进行排序*/
+    // 选择排序
+    // function sortArr(arr){
+    //     for(var i = 0;i<arr.length;i++){
+    //         for(var j=i+1;j<arr.length;j++){
+    //             //判断相邻两个那个大,然后交换位置
+    //             if(arr[j]<arr[i]){
+    //                 var temp = arr[j]
+    //                 arr[j]=arr[i]
+    //                 arr[i]=temp
+    //             }
+    //         }
+    //     }
+    // }
+    // var arr = [10,2,34,11,5]
+    // sortArr(arr)
+    // console.log(arr)
+
+    // Bubble Sort
+    // var arr = [10,2,34,11,5]
+    // function bubArr(arr){
+    //     for (let i = arr.length-1; i >0 ; i--) {
+    //         for (let j =0 ; j < i; j++){
+    //                 if(arr[j]>arr[j+1]){
+    //                 var temp = arr[j]
+    //                 arr[j] = arr[j+1]
+    //                 arr[j+1] = temp
+    //             }
+    //         }  
+    //     }
+    // }
+    // bubArr(arr)
+    // console.log(arr)
+
+    // 箭头函数实现数组的选择排序
+    // let sortArr = arr => {
+    //     for(let i =0;i <arr.length;i++){
+    //         for(let j = i+1;j<arr.length;j++){
+    //             if(arr[j]<arr[i]){
+    //                 let temp 
+    //                 temp = arr[j]
+    //                 arr[j] = arr[i]
+    //                 arr[i] = temp
+    //             }
+    //         }
+    //     }
+    // }
+    // let sa = [22,12,4,45,3,1]
+    // sortArr(sa)
+    // console.log(sa)
+     
+    // // 冒泡排序
+    // let buArr = arr =>{
+    //     for(let i = arr.length-1;i>0;i--){
+    //         for(let j=0;j<i;j++){
+    //             if(arr[j]>arr[j+1]){
+    //                 let temp
+    //                 temp = arr[j]
+    //                 arr[j] = arr[j+1]
+    //                 arr[j+1] = temp
+    //             }
+    //         }
+    //     }
+    // }
+    // let ba = [50,4,8,1,33,45,5]
+    // buArr(ba)
+    // console.log('ba冒泡排序后',ba)
+
+    /*练习7:定义一个函数,传入一个数字,求对应的斐波那契数列
+    斐波那契数列指的是这样一个数列:这个数列从第3项开始,每一项都等于前两项之和。
+    1,1,2,3,5,8,13,21,34,55,89,144.。。。
+    */
+    // function fibo(n){
+    //     // 使用循环
+    //     if(n<2) return 1
+    //     var fiboNumOne = 1
+    //     var fiboNumTwo = 1
+    //     var sum = fiboNumOne+fiboNumTwo
+    //     for(var i = 2;i<n;i++){
+    //         fiboNumOne = fiboNumTwo
+    //         fiboNumTwo = sum
+    //         sum = fiboNumOne+fiboNumTwo
+    //     }
+    //     return sum
+    //     使用递归
+    //     return n < 2 ? n:fibo(n-1)+fibo(n-2);
+    // }
+    // console.log(fibo(10))
+
+    //使用递归
+    // function fibo(num) {
+    //     if (num === 0) return 0;
+    //     if (num === 1) return 1;
+    //     return fibo(num - 2) + fibo(num - 1);
+    // }
+
+    // //改进递归
+    // function fibo(num) {
+    //     if (num === 0) return 0;
+    //     if (num === 1) return 1;
+    //     return arguments.callee(num - 2) + arguments.callee(num - 1);
+    // }
+    // //改进递归
+    // function fibo(num) {
+    //     return n < 2 ? n:arguments.callee(num - 2) + arguments.callee(num - 1);
+    // }
+
+    /*练习8:创建一个函数计算三个数的和*/
+    // function count(a,b,c){
+    // 	// alert(a+b+c);
+    // 	// 把三个数的和返回
+    // 	var d = a+b+c;
+    // 	return d;
+    // }
+    // var result = count(1,1,1);
+    // console.log(result);
+
+    /*练习9:定义一个函数判断一个数是不是偶数,是返回true,否返回false*/
+    // function isOu(num){
+    // 	if(num%2 == 0){
+    // 		return true ;
+    // 	}else{
+    // 		return false;
+    // 	}
+        // 	return num%2 == 0;
+    // }
+    // var result = isOu(2);
+    // console.log(result);
+
+    /*练习10:定义一个函数,根据半径计算一个圆的面积并返回面积的结果*/
+    // function radius(r){
+    // 	return 3.14*r*r;
+    // }
+    // var result = radius(2);
+    // console.log(result);
+
+    /*练习11:定义一个函数可以在控制台输出一个人的信息*/
+    // function send(name,age,gender,address){
+    // 	console.log("我是"+name+"我的年龄是"+age+"我的性别是"+gender+"我住在"+address);
+    // }
+    // send("孙悟空",18,"男","花果山");
+    // 当参数很多时可以封装到一个对象中传递
+    // function send(obj){
+    // 	console.log("我是"+obj.name+"我的年龄是"+obj.age+"我的性别是"+obj.gender+"我住在"+obj.address);
+    // }
+    // var obj = {
+    // 	name:"孙悟空",
+    // 	age:18,
+    // 	gender:"男",
+    // 	address:"花果山"
+    // }
+    // send(obj);
+
+   
+    
+    
+}
+</script>
+</body>
+</html> 

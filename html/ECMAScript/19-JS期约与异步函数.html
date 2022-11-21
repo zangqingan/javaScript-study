@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript期约与异步函数</title>
+</head>
+<body>
+    <div>
+        <h3>1、期约Promise</h3>
+        <div>
+            <h4>1.Promise概述</h4>
+            <div>
+                ECMAScript5中异步编程的解决方法是回调函数和事件,在异步操作很多时会形成回调地狱非常的麻烦。
+                ECMAScript6 新增了Promise引用类型,将异步操作以更加优雅地同步的流程表达出来,避免了层层嵌套的回调函数问题。
+                Promise它是一种异步程序执行的机制,可以理解为一个容器,里面保存(约定了)了未来某个将要发生的事件(通常是一个异步操作如实现超时处理,处理Ajax请求等。)。
+                Promise对象的特点:自身的状态不受外界影响,而是通过异步操作的结果修改自身的状态。而且一旦状态改变,就不会再变。
+                在new生成promise实例对象时,promise实例对象的状态为pending:即表示刚初始化待定状态。此时promise对象的值为undefined。
+                然后根据异步操作的返回结果,在内部的执行器函数中修改promise的状态:只有两种可能
+                    异步操作成功的结果会使用 resolve(data)方法 将promise对象的状态从pending变为fulfilled,并将结果data返回到 then()方法的第一个回调函数中。此时promise对象的值为resolve()方法中传递的参数
+                    异步操作失败的结果会使用 reject(error)方法 将promise对象的状态从pending变为rejected,并将错误信息error返回到 then()方法的第二个回调函数中。此时promise对象的值为reject()方法中传递的参数
+
+                所以promise是一个有状态的对象有以下三个状态:
+                    待定pending:初始化时的状态
+                    兑现fullfilled(有时候也叫resolved):成功
+                    拒绝rejected:失败
+            </div>
+            <h4>2.Promise创建方法</h4>
+            <div>
+                ECMAScript6新增的引用类型Promise,它是一个构造函数,用来生成promise实例对象。
+                初始化时必须传入一个执行器函数(executor)作为参数,不然会报错。
+                如果调用resolve函数和reject函数时带有一个参数,那么它们的这个参数会被传递给then()方法的回调函数的唯一参数。
+                其中resolve传递解决值也就是成功是的值,reject传递失败值也就是拒绝的理由。
+                创建promise实例对象步骤:
+                1. 初始化,接受一个执行器函数作为参数,该函数的两个参数又分别函数是resolve()和reject(),由js引擎提供用来改变promise实例的状态。
+                let promise = new  Promise((resolve,reject) => {
+                    //初始化promise状态为pending
+                    console.log('111')
+                    //执行异步操作,通常是发送Ajax请求,如开启定时器。
+                    setTimeout(() => {
+                        console.log('333')
+                        //根据异步任务的 返回结果来修改promise的状态
+                        //异步任务执行成功
+                        // resolve();//调用这个函数就会自动修改promise的状态为fullfilled(成功的状态)
+                        //异步任务执行成失败
+                        reject('哈哈');//调用这个函数就会自动修改promise的状态为rejected(失败的状态)
+                    },2000);
+                    if(异步操作成功){
+                        resolve(value);//修改promise的状态为fullfilled,并把结果传出去到 .then()方法的第一个回调函数中。
+                    }else{
+                        reject(errmsg);//修改promise的状态为rejected
+                    }
+                    
+                });
+                
+                2. 调用 promise.then(回调函数1,回调函数2)分别指定resolved状态和rejected状态的回调函数。
+                回调函数1,说明异步操作成功并把结果返回,指定resolved状态。
+                回调函数2,说明异步操作失败并把错误信息返回,指定rejected状态。
+                这两个回调函数都接受Promise对象传出的值作为参数。
+                promise.then((data) => {
+                    //成功的回调
+                    console.log('成功了');
+                },(error) => {
+                    //失败的回调
+                    console.log(error,'失败了');
+                });
+                
+            </div>
+            <h4>3.Promise对象常用静态方法</h4>
+            <div>
+                <h5>1.Promise.resolve()</h5>
+                <p>
+                    有时需要将现有对象转为 Promise 对象,给Promise.resolve()方法传入这个对象就可以将其转换成一个期约。
+                    Promise.resolve()方法允许调用时不带参数,直接返回一个resolved状态的 Promise 对象。
+                    语法:
+                    const p = Promise.resolve('Hello');
+                    // 等同于
+                    const p = new Promise((resolve, reject) => resolve('Hello'))
+                    p.then(function (s) {
+                        console.log(s)// Hello
+                    });
+                    
+                </p>
+                <h5>2.Promise.reject()</h5>
+                <p>
+                    Promise.reject(new Error('message'))方法返回一个状态为rejected的 Promise 实例并抛出一个异步错误。
+                    注意:这个错误不能被try/catch语句捕获,而是通过then()方法的第二个函数参数接收,或者promise的catch()方法里的函数参数。
+                    语法:
+                    const p = Promise.reject('出错了');
+                    // 等同于
+                    const p = new Promise((resolve, reject) => reject('出错了'))
+                    p.then(null, function (s) {
+                        console.log(s) // 出错了
+                    });
+                   
+                </p>
+                 <h5>3.Promise.all()</h5>
+                 <p>
+                    将多个期约实例组合包装成一个新期约的静态方法,接收一个promise对象实例组成的可迭代对象,返回一个新期约。
+                    所有的成功后返回一个arr到then中。
+                    const p = Promise.all([p1, p2, p3]);
+                    p的状态由p1、p2、p3决定,分成两种情况。
+                    只有p1、p2、p3的状态都变成fulfilled,p的状态才会变成fulfilled,此时p1、p2、p3的返回值组成一个数组,传递给p的回调函数。
+                    只要p1、p2、p3之中有一个被rejected,p的状态就变成rejected,此时第一个被reject的实例的返回值,会传递给p的回调函数。
+                    let p = Promise.all([
+                        Promise.resolve('zhangsan'),
+                        Promise.resolve(12),
+                        Promise.resolve()
+                    ])
+                    p.then(values => {
+                        console.log('values is',values)//Array(3) [ "zhangsan", 12, undefined ]
+                    })
+                </p>
+                <h5>4.Promise.race()</h5>
+                <p>
+                    接收一个promise对象实例组成的可迭代对象,返回一个新期约。竞速模式有一个成功就返回了.
+                    const p = Promise.race([p1, p2, p3]);
+                    只要p1、p2、p3之中有一个实例率先改变状态,p的状态就跟着改变。那个率先改变的 Promise 实例的返回值,就传递给p的回调函数。
+                    let p = Promise.race([
+                        Promise.resolve('zhangsan'),
+                        Promise.resolve(12),
+                        Promise.resolve()
+                    ])
+                    p.then(values => {
+                        console.log('values is',values)//values is zhangsan
+                    })
+                </p>
+            </div>
+            <h4>4.Promise对象常用实例方法</h4>
+            <div>
+                期约实例的方法是连接外部同步代码与内部异步代码之间的桥梁。这些方法可以访问到异步操作返回的数据,处理期约成功和失败时的结果,连续链式调用对期约求值等。
+                <h5>1.then()</h5>
+                <p>
+                    then()方法:由Thenable接口定义的,作用是为 Promise 实例对象添加状态改变时对应的回调函数。
+                    返回的是一个新的Promise实例(注意,不是原来那个Promise实例),因此可以采用链式写法继续调用。即then方法后面再调用另一个then方法。
+                    then()方法接收两个参数:都是可选的。
+                        第一个参数是resolved状态的回调函数,即期约resolved()后执行。
+                        第二个参数是rejected状态的回调函数,即期约rejected()后执行。
+                        二个回调函数又接收唯一的参数,一个是resolved()返回的解决值,一个是rejected()返回的拒绝理由。
+                    注意:传入非函数类型的参数会被静默忽略,不传resolved处理程序应给个null避免在内存中创建多余的对象。
+                    语法:
+                    const p2 = new Promise(function (resolve, reject) {
+                        if (this.status === 200) {
+                            resolve(this.response);
+                        } else {
+                            reject(new Error('this.statusText'));
+                        }
+                    })
+                    p2.then(function(json) {
+                            console.log('Contents: ' + json);
+                        }, function(error) {
+                        console.error('出错了', error);
+                    });
+                    //不传resolved处理程序应给个null
+                    p2.then(null,error => console.error('出错了', error);)
+
+                    注意:then()方法是一个微任务,会放到任务队列里的。而不是立即执行,这被称为"非重入"特性。
+                    事实上"非重入"特性适用于then(),catch(),finally()这三个方法的函数参数。
+                </p>
+                <h5>2.catch()</h5>
+                <p>
+                    catch()方法用于指定期约发生错误时的回调函数,也返回一个新的期约。只接收一个参数rejected状态的回调函数,即期约rejected()后执行。 
+                    本质上是 then(null, rejection) 或 then(undefined, rejection)的别名。它捕获的是 reject,不能捕获throw抛出的错误。
+                    // 写法一
+                    const p = new Promise(function(resolve, reject) {
+                        try {
+                            throw new Error('test');
+                        } catch(e) {
+                            reject(e);
+                        }
+                    });
+                    p.catch(function(error) {
+                        console.log(error);
+                    });
+
+                    // 写法二
+                    const p = new Promise(function(resolve, reject) {
+                        reject(new Error('test'));
+                    });
+                    p.catch(function(error) {
+                        console.log(error);
+                    });
+                    注意:Promise 对象的错误具有“冒泡”性质,会一直向后传递,直到被捕获为止。
+                    一般来说,不要在then()方法里面定义 Reject 状态的回调函数(即then的第二个参数),总是使用catch方法。
+                    因为可以捕获前面then方法执行中的错误,也更接近同步的写法(try/catch)。
+                </p>
+                <h5>3.finally()</h5>
+                <p>
+                    ES2018引入了 finally()方法 指定不管 Promise 对象最后状态如何,都会执行的回调函数。
+                    不接受任何参数,这意味着没有办法知道,前面的 Promise 状态到底是fulfilled还是rejected。
+                    说明它是与promise状态无关的,不依赖于 Promise 的执行结果,而是用来作一些其它操作比如添加清理代码。
+                    也返回一个新的期约,
+                    promise
+                    .then(result => {···})
+                    .catch(error => {···})
+                    .finally(() => {···});
+                </p>
+            </div>
+            <h4>5.Promise对象和回调函数的区别</h4>
+            <div>
+                主要是写法的不同,promise可以让回调函数划分出来在 then方法中执行实现解耦。
+                和异步函数的区别,本质上异步函数是promise的语法糖,在底层编译之后会自动转化为promise的写法。
+                es5:
+                    getAjax(url,res => {})
+                es6:
+                    getAjax(url).then(res => {})
+                es7:
+                    async function getAjax(){
+                        const res = await getAjax(url)
+                    }
+            </div>
+            <h4>6.Promise对象实现的原理</h4>
+            <div>
+                在 then()方法里的回调并不会立即执行,而是把回调对象存放到一个队列里。
+                当异步操作结束结果返回时顺带执行这个回调。
+            </div>
+            <h4>7.Promise应用</h4>
+            <div>
+                封装Ajax网络请求,获取图片资源等
+            </div>
+        </div>
+        <h3>2、异步函数</h3>
+        <div>
+            <h4>1.异步函数概述</h4>
+            <div>
+                异步函数也称为"async/await",是ES2017规范新增的,是ES6期约在ECMAScript函数中的应用。
+                旨在真正意义上的解决异步回调的问题,即用同步流程方式写异步操作代码。 
+            </div>
+            <h4>2.异步函数创建方法</h4>
+            <div>
+                异步函数就是在普通函数前面加上 async关键字 其实还是一个函数.本质是生成器(Generator)函数的语法糖(在原有的基础上更好)。
+                async函数就是将生成器Generator 函数的星号(*)替换成async,将yield替换成await,仅此而已。
+                语法:可在函数声明,函数表达式,箭头函数和方法上使用。
+                使用像普通函数一样直接调用执行即可。
+                async function fun(){ await 异步操作；如发送请求}
+                let foo = async function(){}
+                let foo = async () => {}
+                class Foo{
+                    async foo(){}
+                }
+
+                特点:
+                    1,不需要像generator一样去调用next方法,遇到异步操作await等待,当前异步操作完成就往下执行。
+                    2,异步函数返回的总是一个promise对象,可以使用then方法进行下一步操作。
+                    3,async取代generator函数的 * ,await取代yield。
+                    4,语义上更加明确,使用简单。
+                    5,return语句返回的值,会成为then方法回调函数的参数。
+
+                await 关键字可以暂停异步函数代码的执行,等待的是一个promise对象,只能在async 函数内部使用。如果不是 Promise 对象,就直接返回对应的值。
+                它跟then()的"非重入"特性一样,会阻塞代码执行,最好把await命令放在try...catch代码块中。
+                async function foo(){
+                    console.log('1')
+                    await null;
+                    console.log('2')
+                }
+                console.log('3')
+                foo()
+                console.log('4')
+                //执行顺序:3,1,4,2
+                这是因为遇到await关键字后浏览器会将它放到异步的任务队列里,同时记录暂停相关信息,foo()函数退出执行,
+                等主线程中所有的同步代码执行完成,轮询任务队列将异步任务放到主线程中恢复foo函数的执行。
+
+                async函数内部return语句返回的值,会成为then方法回调函数的参数。
+                注意:还是改变不了js单线程异步的本质,只是写法上看着像同步。
+            </div>
+        </div>
+    </div>
+<!-- js -->
+<script>
+/*常用静态方法*/
+    // const p1 = Promise.resolve('Hello');
+    // // 等同于
+    // const p2 = new Promise((resolve, reject) => resolve('Hello'))
+    // p1.then(function (s) {
+    //     console.log(s)// Hello
+    // });
+    // p2.then(function (s) {
+    //     console.log(s)// Hello
+    // });
+    
+    // const r1 = Promise.reject('出错了');
+    // // 等同于
+    // const r2 = new Promise((resolve, reject) => reject('出错了'))
+    // r1.then(null, function (s) {
+    //     console.log('Promise.reject',s) // Promise.reject 出错了
+    // });
+    // r2.then(null, function (s) {
+    //     console.log('new Promise',s) // new Promise 出错了
+    // });
+    // r2.catch(function (s) {
+    //     console.log('catch',s) // catch 出错了
+    // });
+
+    // let p = Promise.all([
+    //     Promise.resolve('zhangsan'),
+    //     Promise.resolve(12),
+    //     Promise.resolve()
+    // ])
+    // p.then(values => {
+    //     console.log('values is',values)//Array(3) [ "zhangsan", 12, undefined ]
+    // })
+
+    // let p = Promise.race([
+    //     Promise.resolve('zhangsan'),
+    //     Promise.resolve(12),
+    //     Promise.resolve()
+    // ])
+    // p.then(values => {
+    //     console.log('values is',values)//values is zhangsan
+    // })
+
+/*promise和回调函数比较*/
+    //es5 一个jsonp函数
+    // function loadScript(src,callback){
+    //     let script = document.createElement('script')
+    //     script.src = src
+    //     script.onload = function(){
+    //         callback(src)
+    //     }
+    //     document.body.appendChild(script)
+    // }
+    // function test(name){
+    //     console.log(name)
+    // }
+    // // 回调地狱
+    // loadScript('../js/1.js',function(script){
+    //     loadScript('../js/2.js',function(script){
+    //         loadScript('../js/3.js',function(script){
+        
+    //         })
+    //     })
+    // })
+
+    //es6
+    // function loadScript(src){
+    //     return new Promise((resolve,reject) => {
+    //         let script = document.createElement('script')
+    //         script.src = src
+    //         script.onload = () => resolve(src)
+    //         script.onerror = (err) => reject(err)
+    //         document.body.appendChild(script)
+    //     })
+    // }
+    // //调用
+    // loadScript('../js/1.js')
+    //     .then(() => {
+    //         loadScript('../js/2.js')
+    //     })
+    //     .then(() => {
+    //         loadScript('../js/3.js')
+    //     })
+
+    // const p1 = () => {
+    //     const promise = new Promise((resolve,reject) => {
+    //         setTimeout(() => {
+    //             resolve('打发打发')
+    //         },1000)
+    //     })
+    // }
+    // const p2 = () => {
+    //     const promise = new Promise((resolve,reject) => {
+    //         setTimeout(() => {
+    //             resolve(2)
+    //         },3000)
+    //     })
+    // }
+    // Promise.race([p1(),p2()]).then((value) => {
+    //     console.log(value)
+    // })
+
+/*微任务即非重入特性说明*/
+    // let syn;
+    // let p = new Promise((resolve,reject) => {
+    //     syn = function () {
+    //         console.log('1.准备执行resolve')
+    //         resolve()
+    //         console.log('2.resolve执行完成返回')
+    //     };
+    // })
+    // p.then(() => console.log('3.then方法执行'))
+    // syn();
+    // console.log('4.最外面打印')
+    // 实际输出顺序
+    // 1.准备执行resolve
+    // 2.resolve执行完成返回
+    // 4.最外面打印
+    // 3.then方法执行
+
+    // console.log('1.script start')
+    // async function foo1(){
+    //    console.log('2.foo1 start')
+    //    await foo2()
+    //    console.log('3.foo1 end')
+    // }
+    // async function foo2(){
+    //     new  Promise((resolve,reject) => {
+    //         console.log('4.foo2 start')
+    //         setTimeout(function(){
+    //             resolve();
+    //             console.log('5.foo2 setTimeout')
+    //         },2000);
+    //     });
+    //     console.log('6.foo2 end')
+    // }
+    // foo1()
+    // console.log('7.script end')
+    // 执行顺序如下:
+    // 1.script start
+    // 2.foo1 start
+    // 4.foo2 start
+    // 6.foo2 end
+    // 7.script end
+    // 3.foo1 end
+    // 5.foo2 setTimeout
+
+/*小练习*/ 
+    //定义一个获取新闻列表数据的功能函数
+    // function getNews(url){
+    //     let promise = new Promise((resolve,reject) => {
+    //         //初始化
+    //         //执行异步操作
+    //         let xmlHttp = new XMLHttpRequest();
+    //         //绑定监听readyState
+    //         xmlHttp.onreadystatechange = function(){
+    //             if(xmlHttp.readyState === 4 && xmlHttp.status == 200){
+    //                 //请求成功
+    //                 console.log(xmlHttp.responseText);
+    //                 const data = xmlHttp.responseText
+    //                 //修改状态
+    //                 resolve(data);
+    //             }else{
+    //                 //请求失败
+    //                 //修改状态
+    //                 reject('暂时没有最新的新闻内容');
+    //             }
+    //         };
+    //         //open,设置请求的方式以及url
+    //         xmlHttp.open('GET',url);//url不写死
+    //         //发送
+    //         xmlHttp.send();
+    //     });
+    //     return promise ;//返回
+    // }
+
+    // getNews().then((data) => {
+    //     //成功的回调
+    //     console.log(data);
+    // },(error) => {
+    //     //失败的回调
+    //     console.log(error);
+        
+    // })
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

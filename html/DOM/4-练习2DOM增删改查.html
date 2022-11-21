@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript-DOM增删改查练习1</title>
+    <style>     
+        ul{
+            list-style-type: none;
+        }
+        #total{
+        margin-left: 300px;
+        float: left;
+        width: 400px;
+        height: 500px;
+
+        }
+        .inner{
+            border: 1px solid #000;
+            width: 400px;
+            height: 350px;
+            
+        }
+        .inner li{
+            background-color: #99ff99;
+            border-style: solid;
+            border-width: 1px;
+            float: left;
+            margin: 5px;
+            padding: 5px;
+        }
+        .inner1{
+            margin-top: 10px;
+            border-style: solid;
+            border-width: 1px;
+            height: 80px;
+        }
+        #btnlist{
+            width: 400px;
+            /* background-color:black; */
+            margin-left: 750px;
+            width: 400px;
+            height: 400px;
+
+        }
+        #btnlist button{
+            width: 400px;
+            margin: 5px 0;
+        }
+        .box{
+            width:1100px;
+            height: 50px;
+            line-height: 50px;
+            margin: 0 auto ;
+            clear: both;
+            text-align: center;
+            border: 1px solid #99ff99;
+        }
+    </style>
+</head>
+<body>
+    <p style="text-align: center;">
+        DOM操作的一般步骤
+        1.先获取要操作的dom对象，使用document节点对象提供的方法
+        如：getElementById,getElementsByClassName, getElementsByName,getElementsByTagName
+        2.获取想要的内容或修改样式，使用element节点对象的 innerHTML属性，style属性等。
+        新增元素，元素属性，文本等，使用Node接口提供的createElement()，createTextNode(),appendChild()等方法。
+    </p>
+    <div id="total">
+        <div class="inner">
+            <!-- city -->
+            <p>你喜欢哪个城市</p>
+            <ul id="city">
+                <li id="bj">北京</li>
+                <li>上海</li>
+                <li>广州</li>
+                <li>杭州</li>
+            </ul>
+            <br><br>
+            <!-- game -->
+            <p>你喜欢哪款单机游戏</p>
+            <ul id="game">
+                <li>红警</li>
+                <li>实况</li>
+                <li>魔兽</li>
+                <li>极品飞车</li>
+            </ul>
+            <br>
+            <br>
+            <!-- system -->
+            <p>你手机的操作系统是什么</p>
+            <ul id="phone">
+                <li>IOS</li>
+                <li id="android">Android</li>
+                <li>Windows Phone</li>
+            </ul>
+        </div>
+        <!-- gender -->
+        <div class="inner1">
+            Gender:
+            <input type="radio" name="gender" value="male">Male          
+            <input type="radio" name="gender" value="female">Female<br>
+            Name:<input type="text" id="username" name="uname" value="123">     
+        </div>
+    </div>
+    <!-- 通过按钮来操作上面的#total div -->
+    <div id="btnlist">
+        <button id="btn1"> btn1 查找#bj节点 </button>
+        <button id="btn2">btn2 查找所有的li节点</button>
+        <button id="btn3">btn3 查找name=gender的所有节点</button>
+        <button id="btn4">btn4 查找#city下所有li节点</button>
+        <button id="btn5">btn5 返回#city的所有子节点</button>
+        <button id="btn6">btn6 返回#phone的第一个子节点</button>
+        <button id="btn7">btn7 返回#bj的父节点</button>
+        <button id="btn8">btn8 返回#android的前一个兄弟节点</button>
+        <button id="btn9">btn9 返回#username的value属性值</button>
+        <button id="btn10">btn10 设置#username的value属性值</button>
+        <button id="btn11">btn11 返回#bj的文本</button>   
+    </div>
+    
+    <div class="box">
+        <div>我是box中的div</div>
+    </div>
+<!-- js -->
+<script>
+// 重复代码过多考虑封装在一个全局函数中
+function myClick(btnid,fun){
+    var btn = document.getElementById(btnid);
+    btn.onclick = fun;
+        
+}
+window.onload = function(){
+    // 查找#bj节点，先获取到这个节点并绑定响应事件(函数)
+    var btn1 = document.getElementById("btn1");
+    btn1.onclick = function(){
+        var bj = document.getElementById("bj");
+        alert(bj);
+    }; 
+    // 查找所有的li节点
+    var btn2 = document.getElementById("btn2");
+    btn2.onclick = function(){
+        var lis = document.getElementsByTagName("li");
+        //lis是一个类数组对象，遍历并输出里面的内容
+        for(var i=0;i < lis.length; i++){
+            alert(lis[i].innerHTML);
+        }
+    };
+    // 查找属性name的值为gender的所有节点
+    var btn3 = document.getElementById("btn3");
+    btn3.onclick = function(){
+        var gender = document.getElementsByName("gender");
+        // alert(gender.length);
+        // 遍历出来
+        for (var i = 0; i < gender.length; i++) {
+                alert(gender[i].value);
+        }
+    };
+    // 查找#city下所有li节点
+    var btn4 = document.getElementById("btn4");
+    btn4.onclick = function(){
+        var lis  = document.getElementById("city").getElementsByTagName("li");
+        for(var i = 0; i < lis.length; i++ ){
+            alert(lis[i].innerHTML);
+        }
+    };
+    // 返回#city的所有子节点,childNodes属性当前节点的所有子节点（空格换行当成文本节点）
+    var btn5 = document.getElementById("btn5");
+    btn5.onclick = function(){
+        var city = document.getElementById("city");
+        var cns = city.childNodes;
+        for(var i = 0; i < cns.length; i++ ){
+            alert(cns[i].innerHTML);
+        }
+    };
+    
+    //调用封装函数的方法，返回#phone的第一个子节点
+    myClick("btn6",function(){
+        var phone = document.getElementById("phone");
+        var pf = phone.firstChild;
+        alert(pf.innerText);
+    });
+    // 返回#bj的父节点
+    myClick("btn7",function(){
+        var bj = document.getElementById("bj");
+        var bjp = bj.parentNode;
+        alert(bjp.innerHTML);
+    });
+    // 返回#android的前一个兄弟节点(也可能获取空格)
+    myClick("btn8",function(){
+        var android = document.getElementById("android");
+        var pan = android.previousElementSibling;
+        alert(pan.innerHTML);
+    });
+    // btn9 返回#username的value属性值
+    myClick("btn9",function(){
+        var username = document.getElementById("username");
+        alert(username.value);
+    });
+    // btn10 设置#username的value属性值
+    myClick("btn10",function(){
+        var username = document.getElementById("username");
+        username.value = "我是新设置的值";
+        alert(username.value);
+    });
+    // btn11 返回#bj的文本
+    myClick("btn11",function(){
+        var bj = document.getElementById("bj");
+        alert(bj.innerHTML);
+    });
+    
+    var box = document.querySelector(".box");
+    console.log(box.innerHTML);//<div>我是box中的div</div> 
+};
+</script>
+</body>
+</html>

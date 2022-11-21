@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JavaScript迭代器与生成器</title>
+</head>
+<body>
+    <div>
+        <h3>1、迭代器Iterator</h3>
+        <div>
+            iterator是一种接口机制,为各种不同的数据结构提供统一的简便的访问机制,
+            即只要数据结构上部署了Symbol.iterator接口,就可以使用for of遍历数据结构中的成员。
+            一种数据结构只要部署了 Iterator 接口,我们就称这种数据结构是“可遍历的”(iterable)。   
+            工作原理：
+                创建一个指针对象(遍历器对象),指向数据结构的起始位置。
+                第一次调用next()方法,指针自动指向数据结构的第一个成员。
+                接下来不断的调用next()方法,指针会一直往后移动,直到最后一个元素。
+                每次调用next()方法返回的是一个包含value和done的对象(value：当前成员的值,done：布尔值表示是否遍历完)
+                遍历结束时value= undefined,done=false.
+
+            原生具备 Iterator 接口的数据结构如下,它们都可以直接使用for of 循环。
+                Array
+                Map
+                Set
+                String
+                TypedArray
+                函数的 arguments 对象
+                NodeList 对象
+                扩展运算符(...)也会调用默认的 Iterator 接口。
+
+            for...of循环,作为遍历所有数据结构的统一的方法,部署了 Iterator 接口就可以使用。
+            
+        </div>
+        <h3>2、生成器Generator</h3>
+        <div>
+            es6提供的解决异步编程的方法之一。
+            generator函数是一个状态机,内部封装了不同状态的数据
+            用来生成遍历器对象
+            可暂停函数(惰性求值),yield可暂停,next方法可启动,每次返回的是yield后面的表达式结果。
+            特点：
+            1.function与函数名之间有一个星号,
+            2.内部用yield表达式来定义不同的状态。
+            例如：
+            function*generatorExample(){
+                let result = yield 'hello';//状态值为hello
+                yield 'generator';//状态值为generator 
+            }
+            3.generator函数返回的是指针对象(iterator),而不会执行函数内部逻辑。
+            4.调用next方法函数内部逻辑开始执行,遇到yield表达式停止,返回yield后面的值
+            5.再次调用next方法会从上一次停止时的yield处开始,直到最后。
+            6.yield语句 返回结果通常为undefined,
+        </div>
+
+
+    </div>
+<script>
+window.onload = function(){
+/*迭代器*/
+    //iterator的逻辑
+    function myIterator(){//iterator接口
+        let nextIndex = 0;//纪录指针的位置
+        return {
+            //遍历器对象
+            next:function(){
+                return nextIndex < arr.length?{value:arr[nextIndex++],done:false}:{value:undefined,done:true};
+            }
+        }
+    }
+    // 定义一个数组
+    let arr = [1,4,66,'zang'];
+    let iteratorobj = myIterator(arr);
+    console.log(iteratorobj.next());
+    console.log(iteratorobj.next());
+
+
+    //数组实例
+    for(let i of arr){
+        console.log(i);
+    }
+    
+    //字符串实例
+    let str = 'asdfgh';
+    for (let i of str) {
+        console.log(i);
+    }
+
+    //arguments对象
+    function fun(){
+        for (let i of arguments) {
+            console.log(i);
+        }
+    }
+    fun(1,2,6);
+
+
+
+    //es6提供的解决异步编程的方法之一。
+        //generator函数是一个状态机,内部封装了不同状态的数据
+        //用来生成遍历器对象
+        //可暂停函数(惰性求值),yield可暂停,next方法可启动,每次返回的是yield后面的表达式结果。
+        //特点：
+        /*
+            1,function与函数名之间有一个星号,
+            2,内部用yield表达式来定义不同的状态。
+            例如：
+            function*generatorExample(){
+                let result = yield 'hello';//状态值为hello
+                yield 'generator';//状态值为generator 
+            }
+            3,generator函数返回的是指针对象(iterator),而不会执行函数内部逻辑。
+            4,调用next方法函数内部逻辑开始执行,遇到yield表达式停止,返回yield后面的值
+            5,再次调用next方法会从上一次停止时的yield处开始,直到最后。
+            6,yield语句 返回结果通常为undefined,
+        */
+ 
+        //对象的Symbol.iterator属性,指向一个遍历器对象。
+        let obj = {name:'zang',age:24};
+        obj[Symbol.iterator] = function* myTest(){
+            yield 1;
+        }         
+        console.log(obj);
+        console.log(typeof obj);
+}
+</script>
+</body>
+</html>

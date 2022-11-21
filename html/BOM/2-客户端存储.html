@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>客户端存储</title>
+</head>
+<body>
+    <h3>1、概述</h3>
+    <div>
+        随着web应用程序的出现,直接在客户端也就是浏览器上存储用户信息的需求也随之出现。
+        所以JavaScript也必须有方法能把用户信息保存在客户端,这也就是客户端存储的概念。
+    </div>
+    <h3>2、cookie</h3>
+    <div>
+        <h4>1.概述</h4>
+        <div>
+            我们知道 HTTP 协议是不带有状态的,当 web 服务器向浏览器发送 web 页面时,在连接关闭后,服务端不会记录用户的信息。
+            但是有时候有些请求需要区分状态记住是谁在请求web 页面,也就是当浏览器从服务器上请求 web 页面时,就可以通过设置cookie 附带用户信息字符串,把属于该页面的 cookie 添加到该请求中。
+            请求发送到服务器端时就可以获取用户信息了,然后根据不同用户信息让服务器返回不一样的响应。
+            本质上:Cookie 是服务器保存在浏览器的一小段文本信息,一般大小不能超过4KB。
+            在最开始服务器在响应HTTP请求时,通过发送 Set-Cookie HTTP响应头信息给客户端返回cookie。
+            如:
+                HTTP/1.0 200 OK
+                Content-type: text/html
+                Set-Cookie: yummy_cookie=choco
+                Set-Cookie: tasty_cookie=strawberry
+            然后,浏览器在接收到响应后会把这些cookie存储起来,之后每次向服务器发出请求时,就会在HTTP请求头Cookie自动附上这段信息发回给服务器用来向服务器说明自己是谁。
+            如:
+                GET /index.js HTTP/1.1
+                Cookie:yummy_cookie=choco
+                Other-header:other-header-value
+
+            Cookie 主要是用来保存会话信息区分用户,以下是一些主要用途。
+                对话(session)管理:保存登录状态、购物车等需要记录的信息。
+                个性化信息:保存用户的偏好,比如网页的字体大小、背景色等等。
+                追踪用户:记录和分析用户行为。
+
+            注意:Cookie 不是一种理想的客户端储存机制。它的容量很小(4KB),缺乏数据操作接口,而且会影响性能。
+            客户端储存应该使用 Web Storage API 或者IndexedDB。
+            只有那些每次请求都需要让服务器知道的信息,才应该放在 Cookie 里面。
+            而且这些消息也不能是重要的或敏感的信息,因为cookie保存的环境并不安全。
+
+            在JavaScript中处理cookie是比较麻烦的,因为接口过于简单,只有document.cookie属性用于创建、读取、及删除当前网页的 Cookie。
+            读取的时候,它会以字符串的方式返回当前网页的所有Cookie,格式:cookie1=value; cookie2=value; cookie3=value;前提是该 Cookie 不能有HTTPOnly属性。
+            写入的时候格式和Set-Cookie格式一样,Cookie 的值必须写成key=value的形式。
+            所有名值对都是经过URL编码的所以要使用 decodeURIComponent()方法解码。
+                document.cookie="cookie名=cookie值; expires=cookie过期时间; path=/cookie路径;domain=cookie域;secure";
+                document.cookie="username=John Doe; expires=Thu, 18 Dec 2043 12:00:00 GMT; path=/";
+            删除一个现存 Cookie 的唯一方法,是设置它的expires属性为一个过去了的日期。
+
+        </div>
+        <h4>2.cookie的组成</h4>
+        <div>
+            每个 Cookie 在浏览器中都有以下几方面的元数据构成。
+            <h5>1.名称name</h5>
+            <p>
+                Cookie 的名字,一个唯一标识cookie的名称,不区分大小写。不过实际实践中最好区分,cookie名必须经过URL编码。
+            </p>
+            <h5>2.值value</h5>
+            <p>
+                存储在cookie里的字符串值(真正的数据写在这里面),也必须经过URL编码。
+            </p>
+            <h5>3.域domain</h5>
+            <p>
+                cookie有效的所属域(默认为当前域名),发送到这个域的所有请求都会包含对应的cookie。
+                domain 属性只能是当前域名或者当前域名的上级域名,但设为上级域名时,不能设为顶级域名或公共域名。
+                不遵守规则浏览器会拒绝设置这个cookie。
+            </p>
+            <h5>4.路径path</h5>
+            <p>
+                请求URL中包含这个路径才会把cookie带上发送给服务器(默认为当前网址),不然即使同一个域也不带上cookie。
+                比如:
+                    Path属性是/,那么请求/docs路径也会包含该 Cookie。
+            </p>
+            <h5>5.过期时间expires</h5>
+            <p>
+                表示什么时候删除cookie(超过这个时间会失效),默认是浏览器会话结束关闭浏览器后就删除所有cookie。
+                它的值是 UTC 格式,可以使用toUTCString()进行格式转换。
+
+            </p>
+            <h5>6.安全标志secure</h5>
+            <p>
+                设置之后浏览器只有在使用SSL安全连接的情况(即加密协议HTTPS)下才会把cookie发送到服务器
+                比如:
+                    https://www.wang520.com会发送cookie,而 http://www.wang520.com不会发送cookie。
+            </p>
+            <h5>7.只读HttpOnly</h5>
+            <p>
+                只能在服务器端读取,浏览器里Cookie变为只读无法通过JavaScript获取到cookie的值。
+                主要是document.cookie属性、XMLHttpRequest对象和 Request API 都拿不到该属性。
+                这样就防止 Cookie 被脚本恶意读取篡改。
+            </p>
+        </div>
+        <h4>3.cookie的生成与发送</h4>
+        <div>
+            事实上Cookie 是由 HTTP 协议生成,也主要是供 HTTP 协议使用。
+            <h5>1.生成</h5>       
+            <p>
+                服务器如果希望在浏览器保存 Cookie,就要在 HTTP 的响应头信息里面,放置一个Set-Cookie字段,可以声明多个。
+                它是把cookie组成的7个选项在Set-Cookie字段使用分号和空格隔开来设置的,可以同时包括多个属性,没有次序的要求。
+                响应头:
+                    HTTP/1.0 200 OK
+                    Content-type: text/html
+                    Set-Cookie:  id=zhangsan01; expires=Friday, 21 Oct 2022 07:28:00 GMT; domain=example.com; path=/; secure; httpOnly
+                这就是设置了一个名为id值为zhangsan01的cookie,这个cookie在2022年10月21日周五7:28:00过期失效。
+                这个cookie对example.com域的请求有效,example.com/ 路径下即该域中所有页面有效,
+                这个cookie只能在https协议下发送,这个cookie是只读的。   
+                注意:最终实际发送给服务器的只有cookie的名值对,而域、路径、过期时间、安全标志、只读属性这些信息都是告诉浏览器在什么情况下将cookie放到请求中。
+            </p>
+            <h5>2.发送</h5>
+            <p>
+                浏览器向服务器发送 HTTP 请求时,每个请求都会带上相应的 Cookie。
+                也就是说,把服务器早前保存在浏览器的这段信息,再发回服务器。
+                这时要使用 HTTP 请求体的Cookie字段,这个字段可以包含多个 Cookie,使用分号(;)和空格分隔。
+                请求体:
+                    GET /index.js HTTP/1.1
+                    Cookie:id=zhangsan01; name2=value2;
+                    Other-header:other-header-value
+                服务器在接收到之后根据cookie的值就可以知道用户相关的消息了。
+            </p>
+        </div>
+    </div>
+    <h3>3、Storage接口</h3>
+    <div>
+        <h4>1.概述</h4>
+        <div>
+            由于cookie并不是客户端存储大量数据的理想方式,因此其它客户端存储技术就出现了。
+            在HTML5规范中提供了 Web Storage 规范。
+            它提供了在cookie之外的存储会话数据的途径:Storage接口,用于在浏览器中保存名值对数据。
+            它也提供了跨会话持久化存储大量数据的机制:sessionStorage和localStorage对象,sessionStorage对象是跨会话的存储机制,localStorage对象是持久化存储机制。
+            
+            这个接口很像 Cookie 的强化版,它也受同域限制。某个网页存入的数据,只有同域下的网页才能读取,如果跨域操作会报错。
+            不过它能够使用大得多的存储空间(由浏览器决定)保存“名值对”形式的数据,所有的数据都是以文本字符串格式保存。
+
+            
+        </div>
+       <h4>2.Storage接口常用属性和方法</h4>
+       <div>
+           <h5>1.length属性</h5>
+           <p>
+                Storage 接口只有的一个属性,返回Storage对象保存的数据项个数,即有多少个名值对。
+                window.localStorage.setItem('foo', 'a');
+                window.localStorage.setItem('bar', 'b');
+                window.localStorage.setItem('baz', 'c');
+
+                window.localStorage.length // 3
+            </p> 
+           <h5>2.setItem()</h5>
+           <p>
+                setItem(name,value),用于存入数据。它接受两个参数都是字符串,第一个是键名,第二个是保存的数据。
+                如果键名已经存在,该方法会更新已有的键值。该方法没有返回值。
+                window.sessionStorage.setItem('key', 'value');
+                window.localStorage.setItem('key', 'value');
+                和下面两种方式是等价的
+                window.localStorage.foo = '123';
+                window.localStorage['foo'] = '123';
+           </p>
+           <h5>3.getItem()</h5>
+           <p>
+                getItem(name),用于读取数据。它只有一个参数,就是键名。如果键名不存在,该方法返回null。
+                window.sessionStorage.getItem('key')
+                window.localStorage.getItem('key')
+           </p>
+           <h5>4.removeItem()</h5>
+           <p>
+                removeItem(name),用于清除某个键名对应的键值。它接受键名作为参数,如果键名不存在,该方法不会做任何事情。
+                sessionStorage.removeItem('key');
+                localStorage.removeItem('key');
+           </p>
+           <h5>5.clear()</h5>
+           <p>
+                clear(),用于清除所有保存的数据。该方法的返回值是undefined。
+                window.sessionStorage.clear()
+                window.localStorage.clear()
+           </p>
+           <h5>6.key()</h5>
+           <p>
+                key(),接受一个整数作为参数(从零开始),返回该位置对应的键值。结合使用length属性可以遍历所有的键。
+                window.sessionStorage.setItem('key', 'value');
+                window.sessionStorage.key(0) // "key"
+           </p>
+        </div>
+    </div>
+    <h3>4、sessionStorage对象</h3>
+    <div> 
+        <h4>1.概述</h4>
+        <div>
+            sessionStorage对象是 Web Storage 规范的跨会话的存储机制,只用来存储会话信息数据。可以叫会话存储。
+            保存的数据用于浏览器的一次会话(session),当会话结束(通常是浏览器窗口关闭),数据被清空；
+            它是Storage实例实现了 Storage接口,所以可以使用Storage类型的实例属性和方法来完成数据的增删改查。
+            注意:sessionStorage对象应该主要用于存储只在会话期间有效的小块数据,如果需要跨会话的且持久存储应该使用localStorage对象。
+        </div>
+        <h4>2.sessionStorage对象上数据的操作</h4>
+        <div>
+            <h5>1.添加数据</h5>
+            <p>
+                可以使用对象的特性也可以使用继承的方法
+                sessionStorage.setItem("name","zhangsan");
+                sessionStorage.name  = "zhangsan"
+            </p>
+            <h5>2.读取数据</h5>
+            <p>
+               let name  =  sessionStorage.getItem("name",);
+               let name  =  sessionStorage.name;
+            </p>
+            <h5>3.删除数据</h5>
+            <p>
+                sessionStorage.removeItem("name",);
+                delete sessionStorage.name;
+            </p>
+        </div>
+    </div>
+    <h3>5、localStorage对象</h3>
+    <div>
+        <h4>1.概述</h4>
+        <div>
+            localStorage对象是 Web Storage 规范的持久化的存储机制,用来存储持久会话信息数据。可以叫本地存储。
+            除非通过JavaScript删除或者用户清空浏览器缓存,不然localStorage数据永远不会清除,它是不受页面刷新影响,也不会因关闭浏览器窗口、标签或重启浏览器而丢失。
+            它也是Storage实例也实现了 Storage接口,所以可以像sessionStorage那样使用Storage类型的实例属性和方法来完成数据的增删改查。
+            要访问同一个localStorage对象,页面必须同域名、同端口以及同协议。
+            实际开发中用这个对象比较多。
+            
+        </div>
+        <h4>2.localStorage对象对象上数据的操作</h4>
+        <div>
+            <h5>1.添加数据</h5>
+            <p>
+                可以使用对象的特性也可以使用继承的方法
+                localStorage.setItem("name","zhangsan");
+                localStorage.name  = "zhangsan"
+            </p>
+            <h5>2.读取数据</h5>
+            <p>
+               let name  =  localStorage.getItem("name",);
+               let name  =  localStorage.name;
+            </p>
+            <h5>3.删除数据</h5>
+            <p>
+                localStorage.removeItem("name",);
+                delete localStorage.name;
+            </p>
+        </div>
+    </div>
+    <h3>6、IndexedDB</h3>
+    <div>
+        <h4>1.概述</h4>
+        <div>
+            无论是cookie还是web storage客户端数据存储方案都不适合储存大量数据。
+            但是随着浏览器的功能不断增强,越来越多的网站开始考虑,将大量数据储存在客户端,这样可以减少从服务器获取数据,直接从本地获取数据。
+            这时就需要一种新的数据存储方案,这就是 IndexedDB 诞生的背景。
+            通俗地说,IndexedDB 就是浏览器提供的本地数据库,它可以被网页脚本创建和操作。
+            IndexedDB 允许储存大量数据,提供存储、查找和搜索接口,还能建立索引。这些都是 LocalStorage 所不具备的。
+            就数据库类型而言,IndexedDB 不属于关系型数据库（不支持 SQL 查询语句）,更接近 NoSQL 数据库。使用对象存储。
+            实际基本不用,了解即可。
+        </div>
+    </div>
+<!-- js -->
+<script src="../../js/CookieUtil.js"></script>
+<script>
+window.onload = function(){
+    CookieUtil.set("name","zhangsan","secure")
+    console.log(CookieUtil.get("name"))
+
+    //创建cookie
+    // var cookieName = "zangqingan";
+    // var cookieValue = "testvalue";
+    // var date = new Date();
+    // date.setTime(date.getTime()+604800000);
+    // var expiresDate = date.toGMTString();
+    // var path = ";path=/";
+    // var myCookie = cookieName + "=" + cookieValue + ";expires=" + expiresDate + path;
+    // document.cookie = myCookie;
+    // var x = myCookie;
+    // console.log(x);//"zangqingan=testvalue;expires=Tue, 18 Jun 2019 02:20:19 GMT;path=/"
+    // console.log(typeof x);//string
+
+    //修改cookie,重新定义一次会自动覆盖修改。
+    // document.cookie="username=John Smith; expires=Thu, 18 Dec 2043 12:00:00 GMT; path=/";
+
+    //删除cookie,只需要设置 expires 参数为以前的时间即可,删除时也不必指定 cookie 的值。
+    // document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT"; 
+
+
+    //读取cookie,cookie中的属性都是使用分号;分隔的所以使用split()函数切割成一个个小块,然后使用for循环就好。
+    // var c = document.cookie.split(";");
+    // for(var i = 0 ; i < c.length ; i++){
+    //     console.log(c[i]);
+    // }
+
+
+
+};
+</script>
+</body>
+</html>

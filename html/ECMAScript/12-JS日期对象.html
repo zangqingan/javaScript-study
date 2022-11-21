@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript日期对象</title>
+    <style>
+        #showtime{
+
+        }
+    </style>
+</head>
+<body>
+    <h3>1、js日期对象概述</h3>
+    <div>
+        Date对象是 JavaScript 原生的时间库,参考了java早期版本的java.util.Date。可以用它来处理与时间和日期有关的问题。
+        所以它也以国际标准时间(UTC)1970年1月1日00:00:00作为时间的零点,从它至今经过的毫秒数来保存日期。
+        社区有现成的库datejs等如果需要百度即可。
+    </div>
+    <h3>2、创建方法</h3>
+    <div>
+        <h4>1.普通函数调用</h4>
+        <div>
+            直接调用时返回一个代表当前时间的字符串,无论有没有参数。
+            Date()
+        </div>
+        <h4>2.构造函数调用</h4>
+        <div>
+            使用new操作符调用时,返回一个日期对象。语法:let now = new Date();//创建了一个日期对象实例,Mon Mar 30 2020 18:01:58 GMT+0800 (中国标准时间)
+            构造方法可以传参即可指定日期的时间(参数格式:月份/日/年份 时:分:秒),不传就是默认当前的时间。
+            各个参数的取值范围如下:
+                年:使用四位数年份,比如2000。
+                月:0表示一月,依次类推,11表示12月。
+                日:1到31。
+                小时:0到23。
+                分钟:0到59。
+                秒:0到59
+                毫秒:0到999
+        </div>
+    </div>
+    <h3>3、js日期对象常用的静态方法</h3>
+    <div>   
+        <h4>1.Date.now()</h4>
+        <div>
+            Date.now方法返回当前时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数,相当于 Unix 时间戳乘以1000。
+            可以方便地用在代码分析中。
+        </div>
+        <h4>2.Date.parse()</h4>
+        <div>
+            Date.parse方法用来解析日期字符串,返回该时间距离时间零点(1970年1月1日 00:00:00)的毫秒数。
+            支持的日期格式:日期字符串应该符合 RFC 2822 和 ISO 8061 这两个标准。
+                "月/日/年",如"5/10/2022";
+                "月名 日,年",如"May 10,2022";
+                "周几 月名 日 年 时:分:秒 时区",如"Tue May 23 2019 00:00:00 GMT-0700";
+            例子:创建一个 "2019年5月23日" 的日期对象
+                let date = new Date(Date.parse("May  23,2019"))
+        </div>
+        <h4>3.Date.UTC()</h4>
+        <div>
+            Date.UTC方法接受年、月、日等变量作为参数,返回该时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数。
+            参数用法与Date构造函数完全一致,区别在于Date.UTC方法的参数会被解释为 UTC 时间(世界标准时间),Date构造函数的参数会被解释为当前所在时区的时间。
+            // 格式
+            Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
+
+        </div>
+    </div>
+    <h3>4、js日期对象常用的实例方法</h3>
+    <div>
+        <h4>1.继承方法</h4>
+        <div>
+            因为它也是一个对象,所以也继承了 toLocaleString()、toString()、和valueOf()这三个方法并重写了。
+            重写之后返回值不一样了
+            valueOf方法返回实例对象距离时间零点(1970年1月1日00:00:00 UTC)对应的毫秒数。
+            toString方法返回一个完整的日期字符串。
+        </div>
+        <h4>2.to-日期格式化方法</h4>
+        <div>
+            专门用于格式化日期的方法,都返回字符串。
+            1.toDateString()方法返回日期字符串(不含小时、分和秒)。
+            2.toTimeString()方法返回时间字符串(不含年月日)。
+            3.toLocaleDateString()方法返回本地日期(不含小时、分和秒)。
+            4.toLocaleTimeString()方法返回本地时间(不含年月日)。
+            5.toUTCString()方法返回对应的 UTC 时间,也就是比北京时间晚8个小时。
+            6.toISOString()方法返回对应时间的 ISO8601 写法。
+            7.toJSON()方法返回一个符合 JSON 格式的 ISO 日期字符串
+        </div>
+        <h4>3.get-获取日期实例对象值的方法</h4>
+        <div>
+            Date对象提供了一系列get*方法,用来获取日期实例对象某个方面的值。
+            1.getTime():返回实例距离1970年1月1日00:00:00的毫秒数,等同于valueOf方法。
+            2.getFullYear():返回四位的年份。
+            3.getMonth():返回月份(0表示1月,11表示12月)。
+            4.getDate():返回实例对象对应每个月的几号(从1开始)。
+            5.getDay():返回星期几,星期日为0,星期一为1,以此类推。
+            6.getHours():返回小时(0-23)。
+            7.getMinutes():返回分钟(0-59)。
+            8.getSeconds():返回秒(0-59)。
+            9.getMilliseconds():返回毫秒(0-999)。
+            10.getTimezoneOffset():返回当前时间与 UTC 的时区差异,以分钟表示,返回结果考虑到了夏令时因素。
+            所有这些get*方法返回的都是整数,不同方法返回值的范围不一样。
+        </div>
+        <h4>4.set-设置日期实例对象值的方法</h4>
+        <div>
+            Date对象提供了一系列set*方法,用来设置实例对象的各个方面。基本和get*方法一一对应的
+            1.setTime(milliseconds):设置毫秒时间戳。
+            2.setFullYear(year [, month, date]):设置四位年份。
+            3.setMonth(month [, date]):设置月份(0-11)。
+            4.setDate(date):设置实例对象对应的每个月的几号(1-31),返回改变后毫秒时间戳。
+            5.setHours(hour [, min, sec, ms]):设置小时(0-23)。
+            6.setMinutes(min [, sec, ms]):设置分钟(0-59)。
+            7.setSeconds(sec [, ms]):设置秒(0-59)。
+            8.setMilliseconds():设置毫秒(0-999)。
+        </div>
+        无论是获取还是设置方法,它们都有对应的 UTC 版本,即获取或设置 UTC 时区的时间。
+
+    </div>
+    <hr>
+
+    <!-- 练习 -->
+    <p id="showdate"></p>
+    <div id="showtime">
+    </div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //3.格式化方法
+    // let d=new Date();
+    // console.log(d)
+    // console.log(d.toString());//Mon Jun 10 2019 09:56:29 GMT+0800 (中国标准时间)
+    // console.log(d.valueOf());//1560131789333    毫秒数
+    // console.log(d.toDateString());//Thu Apr 26 2018
+    // console.log(d.toTimeString());//09:56:29 GMT+0800 (中国标准时间)
+    // console.log(d.toLocaleDateString());//2019/6/10 本地格式
+    // console.log(d.toLocaleTimeString());//上午9:56:29
+    // console.log(d.toUTCString());//Thu, 26 Apr 2018 02:44:12 GMT
+
+    //4.组件方法是为我们单独获取你想要的各种时间/日期而提供的方法可以加utc
+    // let d= new Date();
+    // let year = d.getFullYear();//获取当前时间对象的年份,
+    // console.log("今年是", year,"年" );
+    // let month = d.getMonth();//获取当前时间对象的月份,0~11的值。0表示一月,一次类推。
+    // console.log("这个月是",month + 1,"月");
+    // let date = d.getDate();//获取当前日期,一个月中的某天。
+    // console.log("今天是这个月的" + date + "号");
+    // let day = d.getDay();//获取星期数0~6,0表示周日
+    // console.log("今天是星期",day);
+    // let hours = d.getHours()
+    // let minutes = d.getMinutes()
+    // let seconds = d.getSeconds()
+    // console.log("现在是",hours,"点",minutes,"分",seconds,"秒")
+    // let time= d.getTime();//获取当前日期对象的时间戳:即从UTC1970年1月1日午夜(零时)开始到当前经过的毫秒数。 //1s=1000ms;
+    // console.log(time);
+
+ /*小练习*/
+    // 练习1 在网页上实时显示当前时间
+    // let showtime = document.getElementById("showdate");  
+    // function getNow(){
+    //     clearInterval(t)
+    //     let  nowdate  = new Date();
+    //     let datestring = "当前时间为:" + nowdate.toLocaleString();
+    //     showtime.innerHTML = datestring;
+    //     let t = setInterval(()=>{
+    //         getNow()
+    //     },1000)
+    // }
+    // getNow()
+
+    // 在网页上显示距离未来指定某天的倒计时,如计算本年度还剩下多少时间。
+    // 定义一个函数,使用定时器每一秒都计算一次
+    function showDiff(){
+        let timer;
+        //关闭定时器
+        clearInterval(timer);
+        //创建当前日期对象
+        let now = new Date();
+        //创建指定时间戳即未来时间点
+        let str="2022/12/30 00:00:00";
+        let future = new Date(str);
+        //获取相差的时间毫秒数除以1000得到秒数
+        let diff = future.getTime() - now.getTime();
+        // console.log(diff);
+        //对时间进行格式处理
+        let  d = Math.floor(diff/1000/60/60/24);
+        let  h = Math.floor(diff/1000/60/60%24);
+        let  m = Math.floor(diff/1000/60%60);
+        let  s = Math.floor(diff/1000%60);
+        //获取页面元素
+        let showtime = document.getElementById("showtime");
+        //在div中显示
+        showtime.innerHTML = "距离今年工作结束(2020/12/25)还有:" + d + "天" + h + "小时" + m + "分钟" + s + "秒";
+        //开启一个定时器定时更新
+        timer = setInterval(function(){
+            showDiff();
+        },1000);
+    }
+    showDiff();
+
+ 
+};
+</script>
+</body>
+</html>

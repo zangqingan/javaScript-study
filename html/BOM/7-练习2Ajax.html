@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+       .list-group{
+           display: none;
+       }
+        .container{
+            padding-top: 100px;
+        }
+    </style>
+    <title>Ajax练习2-搜索框输入文字自动提示</title>
+</head>
+<body>
+    <h3>搜索框输入文字自动提示练习</h3>
+    <div class="container">
+       <div class="form-group">
+           <label for="search">请输入内容搜索</label>
+           <input type="text" name="" id="search" class="form-control" placeholder="请输入搜索关键字">
+           <ul class="list-group" id="list-box">
+               <li class="list-group-item">提示文字的显示位置</li>
+           </ul>
+       </div>
+    </div>
+<!-- js -->
+<script src="../js/ajax.js"></script>
+<script>
+window.onload = function(){
+//获取页面元素
+   var search = document.getElementById('search')
+   var listBox = document.getElementById('list-box')
+   var timer = null
+//    console.log(listBox)
+   // 当用户在文本框输入时触发
+   search.oninput = function(){
+        clearTimeout(timer)
+        // 获取用户输入的内容
+        var value = this.value
+        // 如果没有内容隐藏下面的文本
+        if(value.trim().length == 0){
+            listBox.style.display = 'none'
+            return
+        }
+        timer = setTimeout(function(){
+            // 向服务器端发送请求
+            ajax({
+                type:'get',
+                url:'http://127.0.0.1:3000/api/search',
+                data:{value:value},
+                success:function(result){
+                    listBox.innerHTML = result
+                    listBox.style.display = 'block'
+                    listBox.className = 'bg-success'
+                },
+                onerror:function(result){
+                    listBox.innerHTML = result
+                    listBox.style.display = 'none'
+                    listBox.className = 'bg-danger'
+                }
+            })
+        },1000)
+        
+   }
+
+}
+</script>
+</body>
+</html>

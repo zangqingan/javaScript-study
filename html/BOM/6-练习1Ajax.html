@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        p:not(:empty){
+            padding: 15px;
+        }
+        .container{
+            padding-top: 100px;
+        }
+    </style>
+    <title>Ajax练习1-验证邮箱格式</title>
+</head>
+<body>
+    <h3>验证邮箱练习</h3>
+    <div class="container">
+       <div class="form-group">
+           <label for="email">邮箱地址</label>
+           <input type="email" name="" id="email" class="form-control" placeholder="请输入邮箱地址">
+           <p id="info"></p>
+       </div>
+    </div>
+<!-- js -->
+<script src="../js/ajax.js"></script>
+<script>
+window.onload = function(){
+//获取页面元素
+   var emailInfo = document.getElementById('email')
+   var pInfo = document.getElementById('info')
+   // 添加离开焦点事件
+   emailInfo.onblur = function(){
+        // 获取用户在文本框输入的值
+        var email = this.value
+        console.log(email)
+        //验证正则
+        var reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/ 
+        if(!reg.test(email)){
+            //提示信息
+            pInfo.innerHTML = '请输入符合规则的邮箱地址'
+            //添加一个类名
+            pInfo.className = 'bg-danger'
+            return
+        }
+        // 向服务器端发送请求
+        ajax({
+        type:'get',
+        url:'http://127.0.0.1:3000/api/verifyEmail',
+        data:{email:email},
+        success:function(result){
+            pInfo.innerHTML = result.message
+            pInfo.className = 'bg-success'
+        },
+        onerror:function(result){
+            pInfo.innerHTML = result.message
+            pInfo.className = 'bg-danger'
+        }
+    })
+ 
+   }
+
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>定时器的应用点击按钮移动div</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #box1{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /* 开启定位 */
+            position: absolute;
+            left: 0;
+        }
+        #box2{
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+            /* 开启定位 */
+            position: absolute;
+            left: 0;
+            top: 200px;
+        }
+    </style>
+    <!--引入工具类 -->
+    <script src="../js/tool.js"></script>
+</head>
+<body>
+    <button id="btn1">点击按钮以后box1向右移动</button>
+    <button id="btn2">点击按钮以后box1向左移动</button>
+    <button id="btn3">点击按钮以后box2向右移动</button>
+    <button id="btn4">测试</button>
+    <br><br>
+    <div id="box1"></div>
+    <div id="box2"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //获取任意样式的函数
+    // function getStyle(obj,name){
+    //     if(window.getComputedStyle){
+    //         return getComputedStyle(obj,null)[name];
+    //     }else{
+    //         return obj.currentStyle[name];
+    //     }
+    // }
+    /**
+     * 点击按钮才开始移动
+     * 
+     */
+
+    //获取box1
+    var box1  = document.getElementById("box1");
+    //获取按钮
+    var btn1 = document.getElementById("btn1");
+    var btn2 = document.getElementById("btn2");
+    var btn3 = document.getElementById("btn3");
+    var btn4 = document.getElementById("btn4");
+
+    //绑定btn1右移点击事件
+    //点击时，使box1往右边移动（left值增大）
+    //定义一个变量接收定时器的唯一标识。
+    // var timer
+    // btn1.onclick = function(){
+    //     // alert("hello");
+    //     //每次开启前都先关闭上一个定时器
+    //     clearInterval(timer);
+    //     //开启一个定时器来执行动画的效果
+    //     timer = setInterval(function(){
+    //         //获取box1原来的left值
+    //         var oldx = parseInt(getStyle(box1,"left"));
+    //         // alert(oldx);
+    //         //在旧值的基础上增加
+    //         var newValue = oldx + 10;
+    //         //判断边界
+    //         if(newValue > 800){
+    //             newValue = 800 ;
+    //         }
+    //         //将新的值设置给box1
+    //         box1.style.left = newValue + "px";
+    //         //div移动到800px时，停止
+    //         if(newValue == 800){
+    //             clearInterval(timer);
+    //         }
+    //     },20);
+    // };
+
+    //绑定btn2左移点击事件
+    //点击时，使box1往右边移动（left值增大）
+    //定义一个变量接收定时器的唯一标识。
+    // var timer
+    // btn2.onclick = function(){
+    //     // alert("hello");
+    //     //每次开启前都先关闭上一个定时器
+    //     clearInterval(timer);
+    //     //开启一个定时器来执行动画的效果
+    //     timer = setInterval(function(){
+    //         //获取box1原来的left值
+    //         var oldx = parseInt(getStyle(box1,"left"));
+    //         // alert(oldx);
+    //         //在旧值的基础上增加
+    //         var newValue = oldx - 10;
+    //         //判断边界
+    //         if(newValue < 0){
+    //             newValue = 0 ;
+    //         }
+    //         //将新的值设置给box1
+    //         box1.style.left = newValue + "px";
+    //         //div移动到800px时，停止
+    //         if(newValue == 0){
+    //             clearInterval(timer);
+    //         }
+    //     },20);
+    // };
+
+
+    /**
+     * 封装函数方法
+     * 
+     *  
+     */
+    btn1.onclick = function(){
+        move(box1,"left",800,10);
+    };
+
+    btn2.onclick = function(){
+        move(box1,"left",0,10);
+    };
+    btn3.onclick = function(){
+        move(box2,"left",800,10);
+        //这里会有一个问题，定时器的标识是全局变量，上一个被关闭了
+    };
+    btn4.onclick = function(){
+        // move(box2,"width",800,10);
+        //这里会有一个问题，定时器的标识是全局变量，上一个被关闭了
+        move(box2,"width",800,10,function(){
+            // alert("动画执行结束");
+            // 这里继续调用move()函数
+            move(box2,"height",400,10,function(){
+                //这里可以继续执行move()函数
+            });
+        });
+    };
+    
+    //定义一个变量接收定时器的唯一标识。
+    // var timer
+    // //尝试封装成一个函数
+    // //obj要执行动画的对象
+    // //attr要执行动画的样式,比如left，top，width，height等
+    // //target执行动画的目标位置
+    // //speed移动的速度（有正负，正向右移动，负向左移动。）
+    // //callback回调函数在动画执行结束后执行
+    // function move(obj,attr,target,speed,callback){
+    //     //每次开启前都先关闭上一个定时器
+    //     clearInterval(obj.timer);
+    //     //获取元素当前的位置
+    //     var current = parseInt(getStyle(obj,attr));
+    //     //判断速度的正负值
+    //     //如果从0到800移动则speed为正
+    //     //如果从800到0移动则speed为负
+    //     if(current > target){
+    //         //取反,这样调用时就不用考虑正负了
+    //         speed  = -speed;
+    //     }
+
+    //     //开启一个定时器来执行动画的效果
+    //     //向执行动画的对象添加一个timer属性，作为自己定时器的唯一标识
+    //     obj.timer = setInterval(function(){
+    //         //获取box1原来的left值
+    //         var oldx = parseInt(getStyle(obj,attr));
+    //         // alert(oldx);
+    //         //在旧值的基础上增加
+    //         var newValue = oldx + speed;
+    //         //判断边界
+    //         //向左移动时判断newValue是否小于target
+    //         //向右移动时判断newValue是否大于target
+    //         if(speed < 0 && newValue < target || speed > 0 && newValue > target){
+    //             newValue = target;
+    //         }
+    //         //将新的值设置给box1
+    //         // obj.style.left = newValue + "px";
+    //         //attr是一个变量，用[]这种方式
+    //         obj.style[attr]= newValue + "px";
+    //         //div移动到800px时，停止
+    //         if(newValue == target){
+    //             clearInterval(obj.timer);
+    //             //动画执行结束调用回调函数（只会执行一次次）
+    //             //我传了回调函数你才执行，我没传就不要执行。
+    //             callback && callback();
+    //         }
+    //     },20);
+    // }
+    // //可以封装到一个js文件中
+};
+</script>
+</body>
+</html>

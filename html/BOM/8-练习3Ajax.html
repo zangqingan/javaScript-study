@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .container{
+            padding-top: 100px;
+        }
+    </style>
+    <title>Ajax练习3-省市县三级联动</title>
+</head>
+<body>
+    <h3>省市县三级联动</h3>
+    <div class="container">
+        <div class="form-inline">
+            <div class="form-group">
+                <select class="form-control" id="province">
+                    <option value="" class="po">请选择省份</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" id="city">
+                    <option value="">请选择市</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="form-control" id="area">
+                    <option value="">请选择区</option>
+                </select>
+            </div>
+        </div>
+    </div>
+<!-- js -->
+<script src="../js/ajax.js"></script>
+<script>
+window.onload = function(){
+//获取页面元素
+    var province = document.getElementById('province')
+    var city= document.getElementById('city')
+    var area = document.getElementById('area')
+    var po = document.getElementsByClassName('po')
+    //先获取省份信息
+    ajax({
+            type:'get',
+            url:'http://127.0.0.1:3000/api/province',
+            success:function(result){
+                var txt = '<option value="" class="po">请选择省份</option>'
+                for(let i = 0;i<result.length;i++){
+                    txt += `<option value="${result[i].id}">${result[i].name}</option>`
+                    // txt += "<option value = '"+result[i].id+"'>"+result[i].name+"</option>" 
+                }
+                // console.log(txt)
+                province.innerHTML =   txt           
+                
+            },
+            onerror:function(result){
+                
+            }
+        })
+    // 当用户在文本框选中时触发
+    province.onchange = function(){
+        //获取省份的value值
+        var pid = this.value
+        // console.log(pid)
+        // 清空区信息
+        area.innerHTML = '<option value="" class="po">请选择区</option>'
+        city.innerHTML = '<option value="" class="po">请选择区</option>'
+        //根据pid获取对应的市级信息
+        ajax({
+            type:'get',
+            url:'http://127.0.0.1:3000/api/cities',
+            data:{
+                id:pid
+            },
+            success:function(result){
+                var txt = '<option value="" class="po">请选择市</option>'
+                for(let i = 0;i<result.length;i++){
+                    txt += `<option value="${result[i].id}">${result[i].name}</option>`
+                    // txt += "<option value = '"+result[i].id+"'>"+result[i].name+"</option>"
+                }
+                // console.log(txt)
+                city.innerHTML =   txt    
+                // console.log(result)       
+                
+            }
+        })
+    }
+    // 当用户在文本框选中时触发
+    city.onchange = function(){
+        //获取城市的id
+        var cid = this.value
+        //根据cid获取对应的县级信息
+        area.innerHTML = '<option value="" class="po">请选择区</option>'
+        ajax({
+            type:'get',
+            url:'http://127.0.0.1:3000/api/areaes',
+            data:{
+                id:cid
+            },
+            success:function(result){
+                var txt = '<option value="" class="po">请选择区</option>'
+                for(let i = 0;i<result.length;i++){
+                    txt += `<option value="${result[i].id}">${result[i].name}</option>`
+                    // txt += "<option value = '"+result[i].id+"'>"+result[i].name+"</option>"
+                    
+                }
+                // console.log(txt)
+                area.innerHTML =   txt    
+                // console.log(result)       
+                
+            }
+        })
+    }
+
+}
+</script>
+</body>
+</html>

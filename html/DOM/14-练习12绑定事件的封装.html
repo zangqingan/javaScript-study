@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件绑定的封装和事件的传播</title>
+    <styLe type="text/css">
+        #box1{
+            width: 300px;
+            height: 300px;
+            background-color: yellowgreen;
+        }
+        #box2{
+            width: 200px;
+            height: 200px;
+            background-color: yellow;
+        }
+        #box3{
+            width: 100px;
+            height: 100px;
+            background-color: skyblue;
+        }
+    </styLe>
+</head>
+<body>
+   <p>
+       使用：addEventListener()为元素绑定响应函数，ie8及以下不支持。
+        要使用 attachEvent("on-事件名",callback)兼容
+        参数：
+            1：事件名字符串（要on）
+            2：回调函数：当事件触发时该函数会被调用
+        执行时：和addEventListener顺序相反。  
+    </p> 
+    <div id="box1">
+        <div id="box2">
+            <div id="box3">
+            </div>
+        </div>
+    </div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //var btn  = document.getElementById("btn");
+    // btn.addEventListener("click",function(){
+    //     alert("1");
+    // },false);
+    // btn.addEventListener("click",function(){
+    //     alert("2");
+    // },false);
+    // btn.addEventListener("click",function(){
+    //     alert("3");
+    // },false);
+    // btn.attachEvent("onclick",function(){
+    //     alert("4");
+    // });
+
+    // 定义一个函数来实现兼容
+    //addEventListener()的this是绑定事件的对象。
+    //attachEvent()的this是window。
+    //obj 要绑定事件的对象
+    //eventstr 事件名称
+    //callback 回调函数
+    function bind(obj,eventstr,callback){
+        if(obj.addEventListener){
+            //大部分浏览器
+            obj.addEventListener(eventstr,callback,false);
+        }else{
+            //ie8及以下
+            // obj.attachEvent("on"+eventstr,callback);
+            obj.attachEvent("on"+eventstr,function(){
+                callback.call(obj);//通过匿名函数来修改this为当前触发事件的对象。
+            });//
+        }
+    }
+    var box1 = document.getElementById("box1");
+    var box2 = document.getElementById("box2");
+    var box3 = document.getElementById("box3");
+    bind(box1,"click",function(){
+        alert("我是box1");
+    });
+    bind(box2,"click",function(){
+        alert("我是box2");
+    });
+    bind(box3,"click",function(){
+        alert("我是box3");
+    });
+};
+</script>
+</body>
+</html>

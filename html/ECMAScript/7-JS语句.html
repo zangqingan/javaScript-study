@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript语句</title>
+</head>
+<body>
+    <h3>1、js语句</h3>
+    <div>
+        <h4>1.js语句和代码块</h4>
+        <div>
+            js语句:是用来向浏览器发出命令,即告诉浏览器该做什么。分号(可选)用于分隔Js语句,表示语句结束。
+            js代码块:则是 由JavaScript 语句和花括号组成的序列。代码块以左花括号开始,以右花括号结束,花括号只有分组作用,没有其它用途,一个花括号为一个代码块。
+            语法:{
+                //诸多语句
+            }
+            注意:js代码块的作用是一并地执行花括号内的所有语句序列(即要么都执行要么都不执行它是一个整体)
+            js代码执行顺序:浏览器会在读取js代码时,浏览器按照编写顺序逐行地(从上往下逐行)执行代码,
+            遇到分支则根据条件判断是否执行分支代码块中的内容,遇到循环则根据循环条件判断是否执行循环代码块中的内容。
+            代码块里的内容也是逐行往下执行的。
+            
+            js语句通常以一个语句标识符为开始,并执行该语句。注意语句标识符是保留关键字不能作为变量名使用。
+            下表列出了 JavaScript 常见语句的标识符 (关键字) : 
+                语句 	描述
+                break 	用于跳出循环。
+                catch 	语句块,在 try 语句块执行出错时执行 catch 语句块。
+                continue 	跳过循环中的一个迭代。
+                do ... while 	执行一个语句块,在条件语句为 true 时继续执行该语句块。
+                for 	在条件语句为 true 时,可以将代码块执行指定的次数。
+                for ... in 	用于遍历数组或者对象的属性(对数组或者对象的属性进行循环操作)。
+                function 	定义一个函数
+                if ... else 	用于基于不同的条件来执行不同的动作。
+                return 	退出函数
+                switch 	用于基于不同的条件来执行不同的动作。
+                throw 	抛出(生成)错误 。
+                try 	实现错误处理,与 catch 一同使用。
+                var 	声明一个变量。
+                while 	当条件语句为 true 时,执行语句块。 
+        </div>
+        <h4>2.js语句分类</h4>
+        <div>
+            <h5>1.条件判断语句也叫if语句:</h5> 
+            <p>
+                执行时先对条件表达式进行求值判断 值为true则执行if后面紧跟着的语句,false则不执行。
+                注意:如果要控制多条语句则将其放到一个代码块中即可,浏览器执行到if语句时会先判断()内的条件表达式的值,然后是根据值来确定怎么走下一步。
+                      条件表达式的值会被调用Boolean()函数隐式转换为布尔类型的,除了 "" 0 undefined null NaN转化为false外其它都是true。<br>
+                语法:
+                    if(条件)语句;
+
+                    if(条件){语句;}
+
+                    if(条件){条件成立执行的代码块}else{条件不成立时执行的代码块}
+
+                    if(条件1){当条件 1 为 true 时执行的代码}
+                    else if(条件2){当条件 2 为 true 时执行的代码}
+                    else if(条件3){当条件 3为 true 时执行的代码}
+                    else{当条件 1 和 条件 2 条件3 都不为 true 时执行的代码} 
+            </p> 
+            <h5>2.条件分支语句也叫switch语句:</h5>
+            <p>
+                工作原理:首先设置条件表达式n,随后条件表达式的值会与结构中的每个 case 后的表达式的值依次做全等比较。所以比较时不会发生类型转换
+                如果相等则为true,则执行关联case 后面对应的代码块,不为true跳过执行,都不相等执行default默认的代码块。
+                可以break 关键字来打断,防止case穿透这是必要的。
+                注意:switch 必须和case一起使用,<br>
+                语法:
+                    switch(条件表达式n)
+                    {
+                        case 条件表达式1:
+                            执行代码块 1
+                            break;
+                        case 条件表达式2:
+                            执行代码块 2n
+                            break;
+                        default:
+                            条件表达式n 与 条件表达式1 和 条件表达式2 都不同时执行的代码
+                    }
+            </p> 
+            <br>
+            <strong>switch练习:点击按钮获取今天是星期</strong>
+            <button id="demo">按钮</button>
+            <br>
+            <h5>3.循环语句:指当条件为true时反复的执行一个代码块多次。</h5>
+            <p>
+                JavaScript 支持不同类型的循环:for和while两种<br>
+
+                1.while - 当指定的条件为 true 时循环指定的代码块。条件在循环体中被修改。在{}内定义一个更新表达式防止造成死循环。
+                语法:while(条件){需要执行的代码块}<br>
+    
+                2.do/while - 同样当指定的条件为 true 时循环指定的代码块但是会先执行一次。
+                语法:do{需要执行的代码块}while (条件);<br>
+    
+                3.for - 循环代码块一定的次数
+                语法:for(初始化表达式;条件表达式;更新表达式;){条件成立时执行的代码块},初始化表达式;条件表达式;更新表达式;都不是必需的。<br>
+    
+                注意:
+                    break 语句用于跳出当前循环,离他最近的起作用,可以指定一个label确定终止哪一个循环。
+                    但是会继续执行该循环之后的代码(如果有的话)只能用在循环或 switch 中。
+                    continue 用于跳过当前循环中的一个迭代即跳过当次循环并重新回到循环开始的判断,只能用在循环中。
+
+                4.for-in 语句,用来枚举对象中的非符号键属性。
+                语法: for (property in expression){其它代码},所有可枚举的属性都会返回一次。
+
+                5.for-of 语句,用来遍历可迭代对象的元素。
+                语法: for (property of expression){其它代码},
+            </p>  
+        </div>
+    </div>
+<!-- js -->
+<script>
+window.onload = function(){
+    // var box=100;//这是一条单行语句,分号可选但是建议都加上。
+    // 代码块
+    // {
+    // 	var height=200;
+    // 	var width=200;
+    // }
+
+    //二。js语句分类
+    // 1.条件判断语句,
+    // var box=100;
+    // if (box>50){
+    // 	console.log(box);//if 后面的括号(box>50)返回的结果转成布尔值是true是
+    // 	//执行花括号中的语句,否则不执行。
+    // };
+    //if语句练习
+    // var num = prompt("请输入成绩");
+    // if(num>100||num<0||isNaN(num)){
+    //   alert("重新输入");
+    // }else{
+    //   if(num==100){
+    //     alert("奖励一辆bmw");
+    //   }else if(num>=80){
+    //     alert("奖励一辆iphone");
+    //   }else if(num >=60){
+    //     alert("奖励一辆参考书");
+    //   }else{
+    //     alert("没有奖励");
+    //   }
+    // }
+
+    //2.条件分支语句
+    // var box =2;
+    // switch(box){
+    // 	case 1 :
+    // 		alert('one');
+    // 		break;
+    // 	case  2:
+    // 		alert('two');
+    // 		break;
+    // 	case 3 :
+    // 		alert('three');
+    // 		break;
+    // 	default:
+    // 		alert('出错');
+    // }
+    // 练习:点击一个按钮来显示今天是周几:
+    var btn =   document.getElementById("demo")
+    btn.onclick = function (){
+        var x;
+        var d=new Date().getDay();
+        console.log(d);
+        switch (d)
+        {
+            case 0:
+                x="Today it's Sunday";
+                break;
+            case 1:
+                x="Today it's Monday";
+                break;
+            case 2:
+                x="Today it's Tuesday";
+                break;
+            case 3:
+                x="Today it's Wednesday";
+                break;
+            case 4:
+                x="Today it's Thursday";
+                break;
+            case 5:
+                x="Today it's Friday";
+                break;
+            case 6:
+                x="Today it's Saturday";
+                break;
+        }
+        btn.innerHTML=x;
+    }
+
+    //3.循环语句
+    // var box=1;
+    // while(box<=5){
+    // 	console.log('我是while循环输出的内容',box);
+    // 	box ++;
+    // }
+
+    // var ox=1;
+    // do {//先运行,再判断循环体
+    // 	console.log('我是do/while循环输出的内容',ox);
+    // 	ox++;	
+    // }while(ox <=5);
+
+    // for(var i = 0;i < 5;i++){
+    //     if (i == 2){
+    //         break ;//0,1.这里的break是对for循环起作用的,而不是if
+    //         // continue;//0,1,3,4
+    //     }
+    //     console.log('我是for循环输出的内容',i);
+    // }
+
+    // 练习1:加入投资的年利率为5%,试求从1000块增长到1500块,需要多少年
+    // var money = 1000;
+    // //定义一个计数器记录使用的年数
+    // var  count = 0;
+    // while(money < 5000){
+    //   money *=1.05; 
+    //   count++;
+    // }
+    // console.log("一共需要"+count+"年");
+
+    // 练习2:打印1-100之间所有的奇数之和
+    // var sum = 0;//用来保存奇数的和
+    // for(var i = 1;i <= 100;i++){
+    //   // 判断是否是奇数不能被2整除(除以2不等于0)
+    //   if(i%2 != 0){
+    //     sum = sum + i;
+    //   }
+    // }
+    // console.log("奇数的和是:" + sum);
+
+    //练习3:打印1-100之间所有7的倍数的个数及总和
+    // var sum = 0;//保存总数
+    // var count = 0;//保存个数
+    // for(var i = 1;i<=100;i++){
+    //   // 判断是否是7的倍数
+    //   if(i%7 == 0){
+    //     // sum =sum + i;
+    //     sum+=i
+    //     count++;
+    //   }
+    // }
+    // console.log('1-100之间所有7的倍数的个数是',count);
+    // console.log('1-100之间所有7的倍数的总和是',sum);
+
+    //练习4: 打印水仙花数:水仙花数是指一个三位数,它的每个位上的数字的3次幂之和等于它本身abc=a的三次方+b的 三次方+c的三次方
+    // 先打印所有的三位数
+    // for(var i = 100;i<1000;i++){
+    //   // 判断是不是水仙花数
+    //   var b = parseInt(i/100);//获取i的百位
+    //   var t = parseInt((i%100)/10);//获取十位
+    //   var g = parseInt(i%10);//获取各位
+    //   if(i == b*b*b + t*t*t + g*g*g){
+    //     console.log(i);
+        
+    //   }
+    // }
+
+    /*练习5:通过程序输出下面的图形
+    *  
+    **
+    ***
+    **** 
+    *****
+    */
+    // for(var i =1;i < 5;i++){//这个循环控制输出高度循环一次输出一行
+    //   for(var j=1;j < i;j++){//控制一行中输出图形的个数,这里面i执行一次里面j执行j<i次数。
+    //     document.write("*");
+    //   }
+    //   document.write("</br>");
+    // }
+
+    /*练习6:通过程序输出下面的图形
+    *****
+    **** 
+    ***
+    **
+    *  
+    */
+    // for(var i =1;i < 5;i++){//这个循环控制输出高度循环一次输出一行
+    //   for(var j=1;j < 5-i;j++){//控制一行中输出图形的个数,这里面i执行一次里面j执行j<i次数。
+    //     document.write("*");
+    //   }
+    //   document.write("</br>");
+    // }
+
+    /*练习7:打印九九乘法表
+    1*1=1
+    1*2=2 2*2=4
+    1*3=3 2*3=i6 3*3=9
+    ....
+    ..
+    有九行
+    */
+    // for(var i = 1;i < 10;i++){//行数
+    //   for(var j = 1;j <= i;j++){//每行里的个数
+    //     document.write(j+"*"+i+"="+i*j+"&nbsp&nbsp&nbsp");
+    //   }
+    //   document.write("</br>");//每打印一行就换行
+    // }
+
+}
+</script>
+</body>
+</html>

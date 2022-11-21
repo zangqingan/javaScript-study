@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript内置Math对象</title>
+</head>
+<body>
+    <h3>1、Math对象概述</h3>
+    <div>
+        所谓内置对象就是 ECMAScript提供实现与宿主环境无关,在JavaScript程序执行时就存在的对象。可以直接使用。
+        ECMAScript 原生提供了Math对象,Math对象和其它的对象不同,它不是一个构造函数所以不能生成实例。
+        而是一个工具类对象,封装了与数学计算的相关属性和方法。所有的属性和方法都必须在Math对象上调用。
+        语法:Math.属性名/方法名();
+    </div>
+    <h3>2、Math对象常见的静态属性</h3>
+    <div>
+        Math对象的一些静态属性主要是用来保存数学中的一些特殊值,都是只读的。基本不用。
+        语法:Math.属性名;
+        常见有:
+            Math.PI:表示圆周率π
+            Math.E:常数e。
+            Math.LN2:2 的自然对数。
+            Math.LN10:10 的自然对数。
+            Math.LOG2E:以 2 为底的e的对数。
+            Math.LOG10E:以 10 为底的e的对数。
+            Math.SQRT1_2:0.5 的平方根。
+            Math.SQRT2:2 的平方根。  
+    </div>
+    <h3>3、Math对象常见的静态方法</h3>
+    <div>
+       Math对象提供的辅助执行简单或复杂数学运算的方法。
+        语法:Math.方法名();
+        常见有:
+            1.Math.random():生成一个0-1之间的伪随机数,包括0但是不包括1。
+                指定范围的随机数 start-end
+                total = end-start+1
+                Math.floor(Math.random()*total+start),
+            2.Math.floor():向下取整
+            3.Math.round():四舍五入
+            4.Math.max():最大值
+            5.Math.min():最小值
+            6.Math.ceil():向上取整
+            7.Math.abs():绝对值
+            8.Math.pow():幂运算
+            9.Math.sqrt():平方根
+            10.Math.log():自然对数
+            11.Math.exp():e的指数
+        常用的是前面6个。
+    </div>
+
+
+<!-- js -->
+<script>
+window.onload = function(){
+    
+    // console.log(Math.min(2,1,3,5,8,7,0,6));//最小值0
+    // console.log(Math.max(2,1,3,5,8,7,0,6));//最大值8
+    // console.log(Math.sqrt(4));//开方
+
+    // console.log(Math.ceil(25.9));//26
+    // console.log(Math.ceil(25.5));//26
+    // console.log(Math.ceil(25.1));//26向上取整
+
+    // console.log(Math.floor(25.9));//25
+    // console.log(Math.floor(25.5));//25
+    // console.log(Math.floor(25.1));//25向下取整
+
+    // console.log(Math.round(25.9));//26
+    // console.log(Math.round(25.5));//26
+    // console.log(Math.round(25.1));//25四舍五入
+
+    //random()方法返回一个介于0和1之间的随机数，包括 0但不包括 1.
+    // console.log(Math.random());
+    // for(var i=0;i<10;i++){
+    	//document.write(Math.random());
+    	// console.log(Math.floor(Math.random()*10+1));
+    	// console.log(Math.round(Math.random()*10+1));
+    // }
+
+    // 定义一个函数用来生成指定范围的随机数
+    // function select(start,end){
+    // 	// var total = end-start+1;//加上1就包含end
+    //     // return Math.floor(Math.random()*total+start);
+    //     // var total = end-start;//四舍五入不用再加1
+    //     // return Math.round(Math.random()*total+start);
+    //     var total = end-start;
+    // 	return Math.ceil(Math.random()*total+start);
+    // }
+    // for(var i=0;i<10;i++){
+    // 	document.write(select(1,10));
+    // 	document.write('<br/>');
+    // }
+
+/*小练习*/
+    //生成指定长度的随机字符
+    function random_str(length) {
+        var ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        ALPHABET += 'abcdefghijklmnopqrstuvwxyz';
+        ALPHABET += '0123456789-_';
+        var str = '';
+        for (var i = 0; i < length; ++i) {
+            var rand = Math.floor(Math.random() * ALPHABET.length);
+            str += ALPHABET.substring(rand, rand + 1);
+        }
+        return str;
+    }
+    random_str(6) // "NdQKOr"
+
+
+}
+</script>
+</body>
+</html>

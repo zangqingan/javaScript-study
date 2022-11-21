@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js事件练习1-鼠标移动div块</title>
+    <style type="text/css">
+        #box1{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            /* 开启定位 */
+            position: absolute;
+        }
+    
+    </style>
+</head>
+<body>
+    <div id="box1"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //获取box1
+    var box1 = document.getElementById("box1");
+    //给整个文档页面绑定事件
+    document.onmousemove = function(event){
+        //兼容问题
+        event =  event ||window.event;
+        //设置div块移动的偏移量
+        // var left = event.clientX;
+        // var top = event.clientY;
+        //pageX和pageY可以获取鼠标相对于当前页面的坐标
+        //ie8中不支持
+        var left = event.pageX;
+        var top = event.pageY;
+        box1.style.left = left + "px";//单位px
+        box1.style.top = top + "px";
+    };
+};
+
+</script>
+</body>
+</html>

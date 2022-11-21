@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js键盘事件</title>
+    <style type="text/css">
+         #box1{
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+
+</head>
+<body>
+    <p>
+        onkeydown键盘按下事件，按着不松手事件一直在触发。
+        onkeyup按键松开事件，不会连续触发。
+        键盘事件一般绑定给一些可以获取到焦点的对象（表单项）或者是document。
+        通过keyCode可以获取按键的编码，通过它可以判断是那个键被按下了。
+        altKey,shiftKey,ctrlKey,这个三个另外给的属性用来判断alt，shift，ctrl这三个键是否被按下。
+        37左
+        38上
+        39右
+        40下
+    </p>
+    <div id="box1"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+    document.onkeydown = function(event){
+        event = event ||window.event;
+        //移动的步长可以是一个变量
+        //定义一个变量表示移动的步长。
+        var speed = 20;
+        switch(event.keyCode){
+            case 37:
+                // alert("向左移动了");
+                //向左移动left值减小
+                box1.style.left = box1.offsetLeft - speed +"px";
+                break;
+            case 38:
+                // alert("向上移动了");
+                box1.style.top = box1.offsetTop - speed +"px";
+                break;
+            case 39:
+                // alert("向右移动了");
+                box1.style.left = box1.offsetLeft + speed +"px";
+                break;
+            case 40:
+                // alert("向下移动了");
+                box1.style.top = box1.offsetTop + speed +"px";
+                break;
+
+        }
+        console.log(event.keyCode);
+    };
+    document.onkeyup = function(){
+        console.log("按键被松开了");
+    };
+};
+</script>
+</body>
+</html>

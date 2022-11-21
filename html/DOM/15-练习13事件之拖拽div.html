@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js拖拽div</title>
+    <style type="text/css">
+        #box1{
+            width: 200px;
+            height: 200px;
+            background-color: red;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <p>
+        目标流程：
+        1，鼠标在拖拽元素上按下时，开始拖拽。触发onmousedown
+        2，鼠标移动时被拖拽元素跟着移动。触发onmousemove
+        3，当鼠标松开时被拖拽元素停在当前位置。触发onmouseup
+        分析：
+        鼠标位置在按下之后与div的相对位置不变
+        调整div的位置(鼠标用户控制)
+        修改元素的left和top值
+        clientX和clientY是鼠标的偏移量
+        元素有offsetLeft和offsetTop的偏移量
+        两者相减就是移动的位置
+    </p>
+    <div id="box1"></div>
+<!-- js -->
+<script type="text/javascript">
+window.onload = function(){
+    //获取box1
+    var box1 = document.getElementById("box1");
+    //为box1绑定鼠标按下事件，在鼠标在div上按下时触发。
+    box1.onmousedown = function(event){
+        //兼容
+        event = event || window.event;
+         //clientX:表示鼠标指针的水平坐标。
+        // clientY：表示鼠标指针的垂直坐标。
+        //求出div的偏移量:
+        //鼠标.clientX - 元素.offsetLeft。
+        //鼠标.clientY - 元素.offsetTop。
+        var x = event.clientX - box1.offsetLeft;
+        var y = event.clientY - box1.offsetTop;
+
+        //给document绑定这样在页面的任意位置都能移动和释放鼠标。
+        //为document绑定一个onmousemove事件
+        document.onmousemove = function(event){
+            //兼容
+            event = event ||window.event;
+            //获取鼠标坐标
+            var left = event.clientX - x;
+            var top = event.clientY - y;
+            //修改div的偏移位置
+            box1.style.left = left +"px";
+            box1.style.top = top +"px";
+        };
+        //绑定一个鼠标释放事件
+        document.onmouseup = function(){
+            //当鼠标松开时被拖拽元素停在当前位置
+            //先取消document的onmousemove事件
+            document.onmousemove = null;
+            //也取消document的onmouseup事件
+            document.onmouseup = null;
+
+        };
+        return false;//取消浏览器的默认行为，但是对ie8不起作用。
+
+    };
+};
+</script>
+</body>
+</html>

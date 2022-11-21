@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js事件练习3-事件代理</title>
+</head>
+<body>
+    <div>
+        <p>
+            事件的代理(委派)：指将事件统一绑定给元素的共同祖先元素，这样当后代元素上的事件触发时，会一直冒泡到祖先元素。
+            从而通过祖先元素的响应函数来处理事件。
+            它是利用了事件的冒泡原理，通过事件的代理可以减少事件绑定的次数，提高程序的性能。
+        </p>
+    </div>
+    <button id="btn">点击添加一个超链接</button>
+    <ul id="ul">
+        <li><a href="javascript:;" class="link">超链接1</a></li>
+        <li><a href="javascript:;" class="link">超链接2</a></li>
+        <li><a href="javascript:;" class="link">超链接3</a></li>
+    </ul>
+<!-- js -->
+<script>
+window.onload = function(){
+    //获取btn
+    var btn = document.getElementById("btn");
+    btn.onclick = function(){
+        //创建li
+        var li = document.createElement("li");
+        li.innerHTML = "<a href='javascript:;' class='link'>新建的超链接</a>";
+
+        //将li添加到ul中
+        ul.appendChild(li);
+        //新建的 超链接没有绑定点击事件
+        // alert("添加一个超链接");
+    };
+    /*为每一个 li绑定响应函数*/
+    // var lis = document.getElementsByTagName("a");
+    //遍历
+    // for(var i = 0 ;i < lis.length;i++){
+    //     lis[i].onclick = function(){
+    //         alert("hello");
+    //     };
+    // }
+    // 只绑定一次事件，即可应用到多个元素上。即使元素是后添加的。
+    var ul =  document.getElementById("ul");
+    ul.onclick = function(event){
+        //兼容问题
+        event = event ||window.event;
+        // alert(event.target);//event中的 target表示触发事件的对象
+        //如果触发事件的对象是我们期望的元素，则执行否则不执行。
+        if(event.target.className=="link"){//多个类名时有问题（使用正则解决）
+            alert("我是ul的响应函数");
+        }
+
+    };
+};
+</script>
+</body>
+</html>

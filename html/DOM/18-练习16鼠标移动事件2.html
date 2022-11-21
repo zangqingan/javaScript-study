@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠标移入移出事件改变样式</title>
+</head>
+<body>
+    <div id="box">鼠标移入移出改变样式</div>
+<script>
+    window.onload = function(){
+    //获取鼠标区域div
+    var box = document.getElementById("box");
+    //绑定鼠标移入事件
+    box.onmouseover = function(){
+        // 改变样式
+        this.style.width = "300px";
+        this.style.height = "300px";
+        this.style.backgroundColor = "red";
+    }
+    // 绑定鼠标移出事件
+    box.onmouseout = function(){
+        //样式设置为空据会去找样式表中的样式
+        this.style  = "";
+    }
+}
+</script> 
+</body>
+</html>

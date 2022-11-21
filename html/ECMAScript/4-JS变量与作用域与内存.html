@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript变量和作用域</title>
+</head>
+<body>
+    <!-- js变量 -->
+    <h3>1、js变量</h3>
+    <div>
+        <h4>1.js变量概述</h4>
+        <div>
+            变量是存储数据(信息)的容器。与代数一样,JavaScridivt 变量可用于存放值(比如 x=2)和表达式(比如 z=x+y)。
+            变量可以使用短名称(比如 x 和 y),也可以使用描述性更好的名称即语义化(比如 age, sum, totalvolume)。
+            变量命名遵循js标识符的命名规则:如果命名包括多个单词,通常采用小驼峰式命名法(camelCase)
+                变量必须以字母开头
+                变量也能以 $ 和 _ 符号开头(不推荐这么做)
+                变量名称对大小写敏感即区分大小写(y 和 Y 是不同的变量)
+                变量不能是关键字和保留字
+            js变量是松散类型的,所以可以不用预先声明指定变量是保存什么类型数据的,重复声明后面的会覆盖前面的,在程序执行时会自动判断类型。      
+        </div>
+        <h4>2.js变量的声明语法</h4>
+        <div>
+            在JavaScript中有3个关键字可以用来声明变量:var、let、const,其中var是所有版本都可以使用,而let和const只能在es6及更晚的版本中使用。
+            语法都是: var/let/const 变量名1,变量名2,... = 任意数据类型的数据值;
+            <h5>1.var声明</h5>
+            <div>
+                特点:<br>
+                1、var 声明变量不初始化时值为 undefined。<br>
+                2、var 可以对同一个变量重复声明,后面的会覆盖前面的。<br>
+                3、var 在全局声明的变量是全局作用域变成window对象的属性、在函数体内声明的变量具有函数作用域,没有块级作用域。<br>
+                4、var 声明变量时存在变量提升,浏览器在预解析时会将所有变量声明放到最前面这也就是变量的提升(hoist)。<br>
+                5、for循环中使用var定义的迭代变量会渗透到循环体外部,这时迭代变量保存的是导致循环退出的值。<br>
+            </div>
+            <h5>2.let声明</h5>
+            <div>
+                let和var的作用是差不多的,就是用来替代var的。
+                特点:
+                1、let 声明变量不初始化时值也是 undefined。<br>
+                2、let 不允许在相同作用域内(即同一个花括号内)重复声明同一个变量。<br>
+                3、let 声明变量是块级作用域。<br>
+                4、let 声明变量不存在变量提升,所声明的变量一定要在声明后使用否则报错。<br>
+                5、let 声明变量存在临时性死区(暂时性死区temporal dead zone)TDZ。即:ES6 明确规定,如果块级作用域中存在let和const命令,这个块级作用域对这些命令声明的变量,从一开始就形成了封闭作用域。
+                凡是想在声明语句之前就使用这些变量,就会报错。也就是说在一个块级作用域(花括号内),使用let和const声明的变量不能在声明之前使用。
+                这是因为let和const声明的变量不存在变量提升。所以在声明语句出现之前,都属于变量的“死区”。这在语法上,称为“暂时性死区”(temporal dead zone,简称 TDZ)。<br>
+                6、for循环中使用let定义的迭代变量不会有问题,这是因为JavaScript引擎在每次迭代循环时都声明一个新的迭代变量。<br>
+            </div>
+            <h5>3.const声明</h5>
+            <div>
+                const行为和let基本一样,唯一一个区别在于const声明变量时必须同时初始化变量,且初始化后不能修改值。
+                本质上 const 其实保证的不是变量的值不变,而是保证变量指向的内存地址值不允许改动。
+            </div>
+            <h5>4.声明风格及最佳实践</h5>
+            <div>
+                1.不再使用var。<br>
+                2.优先使用const,只在提前知道未来会修改时再用let。这是因为使用const声明可以让浏览器运行时强制保持变量不变,同时也可以让静态代码分析工具提前发现不合法的赋值操作。
+            </div>
+        </div>
+        <h4>3.变量的存储空间</h4>
+        <div>
+            js变量是参考了Java语法的,也分为两种类型原始值和引用值,它们都是存储在计算机内存空间里的。
+            区别是:
+            保存原始值(primitive value)的变量是存放在栈(stack)内存中,同时是按值(by value)访问的,操作的就是实际值。
+            原始值包含7种:undefined、null、boolean、number、string、bigint、symbol。<br>
+
+            保存引用值(reference value)的变量实际值存放在堆(heap)内存中,这是因为JavaScript是不允许直接访问内存位置的。
+            所以是不能直接操作对象所在的堆内存空间的,而是通过对该对象的引用(reference)而非实际的对象本身。
+            因此当我们要访问堆内存中的引用数据类型时,实际上我们首先是从变量中获取了该对象的地址指针(它是存在栈内存中的), 然后再从堆内存中取得我们需要的数据。
+            引用值在变量保存之后可以随时添加、修改、删除自己的属性和方法。<br>
+            <img src="../../images/栈堆内存比较.png" alt=""><br>
+
+            复制值时:<br>
+            原始值是从栈内存中复制一份新的实际值给新变量,操作新变量不会影响原变量,它两互相独立互不干扰。<br>
+            <img src="../../images/原始值复制值.png" alt=""><br>
+            引用值是复制栈内存中的引用地址,所以新变量和旧变量指向的是同一个堆内存中的对象。无论谁修改都会改变实际值。<br>
+            <img src="../../images/引用值复制值.png" alt=""><br>
+
+            函数传递参数时:<br>
+            记住ECMAScript中所有的函数的参数都是函数内部的局部变量也都是按值传递的,也就是说实参传进来时是复制一份给到函数内部的形参。
+            原始值就跟原始值变量的复制一样,引用值就跟引用值变量的复制一样。其实就都是值,不过一个是实际值一个是引用地址值都是值。按的是栈内存中的值复制一份给到形参。<br>
+
+            变量类型的检测:<br>
+            typeof操作符:使用它可以判断一个变量是否是原始类型,确切地说是判断一个变量是否是字符串、数值、布尔值或undefined的最好方式。
+            而对于null或对象,它都返回 "object",所以对引用类型作用不大需要使用其它方法检测。<br>
+            instanceof操作符:判断一个变量是什么类型的对象(引用类型),语法: result = variable instanceof constructor;
+            如果变量是给定引用类型的实例,则instanceof操作符就返回true否则就返回false。
+            
+        </div>
+        <h4>4.变量的解构赋值</h4>
+        <div>
+            <h5>1.解构概述</h5>
+                在es5中对变量赋值是使用 '=' ,且如果是要把对象的属性或者数组的元素赋值给变量只能一个一个赋值。
+                所以在es6中提供了对赋值运算符(=)的扩展即：解构赋值。
+                所谓解构(Destructuring)赋值是指按照一定模式,按照对应位置从数组或对象中提取值,并将其赋值给变量。
+                
+                解构赋值的规则是:解构源如果不是对象或数组,就先将其转为对象,undefined和null无法转为对象解构报错。<br>
+                解构模型: let {解构的目标} =  解构的源     
+                    解构的源,解构赋值表达式的右边部分。<br>
+                    解构的目标,解构赋值表达式的左边部分。<br>
+                优点:在代码书写上简洁且易读,语义更加清晰明了也方便了复杂对象或数组中数据字段获取。
+            <h5>2.数组的解构:</h5>
+            <p>
+                数组是按照下标作为对应关系的进行解构的,变量的取值由它在数组中的位置决定。<br>
+                基本数组:<br>
+                let arr = [1, 2, 3]<br>
+                    let [a, b, c] = [1, 2, 3];<br>
+                    let [a, b, c] = arr;<br>
+                解构的源:arr = [1, 2, 3],一个含有三个元素的数组。<br>
+                解构的目标:[a, b, c]。即从数组中提取值,按照对应位置(下标)用a,b,c三个变量接收对应下标的数组值。<br>
+                es5是这样赋值的:<br>
+                    var a = arr[0]<br>
+                    var b = arr[1]<br>
+                    var c = arr[2] <br>
+                只要两边的模式相同,左边的变量就会被赋予对应的值。如果解构不成功,变量的值就等于undefined。<br>
+                可以不完全解构,也可以设置变量的默认值,还可以多重嵌套解构。<br>
+                注意:ES6 内部使用严格相等运算符(===)判断一个位置是否有值。所以只有当一个数组成员严格等于undefined时设置的默认值才会生效。
+            </p>
+            <h5>3.对象的解构:</h5>
+            <p>            
+                对象的解构不同于数组的解构是按元素下标(index)排列的,对象的解构赋值是根据对象的属性名来一一对应的与顺序无关。<br>
+                接收变量必须与对象的属性同名,数组的解构一样,解构失败,变量值为undefined,也可以嵌套,不完全解构,或者加默认值。<br>
+                基本对象: <br>
+                    obj = { username: 'zhangsan', age: 25 }<br>
+                    let { username, age} = obj <br>
+                    let { username, age} = { username: 'zhangsan', age: 25 }<br>
+                    username // zhangsan<br>
+                    age // 25<br>
+                es5是这样赋值的:<br>
+                    var username= obj.username<br>
+                    var age= obj.age<br>
+                或者通过键名取值<br>
+                    var username= obj["username"]<br>
+                    var age= obj["age"]<br>
+                注意:对象的解构赋值是es6中对象的扩展,当属性名和值同名时可以只写一个<br>
+                    let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                可以简写成下面,找对象中有没有foo属性有则将它的值赋值给foo变量所以可以这样使用<br>
+                    let { foo, bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                本质是:在对象中找有没有foo属性,有则将属性名对应的属性值赋值给别名变量myfoo。真正被赋值的是变量而不是解构模式<br>
+                    let { foo: myfoo(别名), bar: mybar } = { foo: 'aaa', bar: 'bbb' };<br>
+                注意:所有可以被遍历的对象都是可以被解构赋值的,也常常和res运算符(即... 三点运算符)一起使用。
+            </p>
+            <h5>4.应用</h5>
+            <p>
+                1.交换变量的值<br>
+                    let x = 1;<br>
+                    let y = 2;<br>
+                    [x, y] = [y, x];<br>
+
+                2.从函数返回多个值(返回数组或对象,通过解构赋值取出来比较常用<br>
+                    函数只能返回一个值,如果要返回多个值,只能将它们放在数组或对象里返回。<br>
+                    // 返回一个数组<br>
+                    function example() {<br>
+                        return [1, 2, 3];<br>
+                    }<br>
+                    let [a, b, c] = example();<br>
+    
+                    // 返回一个对象<br>
+                    function example() {<br>
+                        return {<br>
+                            foo: 1,<br>
+                            bar: 2<br>
+                        };<br>
+                    }<br>
+                    let { foo, bar } = example();<br>
+                    
+                3.输入模块的指定方法,加载模块时,往往需要指定输入哪些方法。非常常用！！！
+                    解构赋值使得输入语句非常清晰:
+                    const { SourceMapConsumer, SourceNode } = require("source-map");
+                    import {SourceMapConsumer, SourceNode} from '/source-map'
+
+            </p>
+        </div>
+    </div>
+    <!-- js作用域 -->
+    <h3>2、js执行上下文和作用域</h3>
+    <div>
+        <h4>1.js执行上下文</h4>
+        <div>
+            执行上下文:又称为执行环境(execution context)是评估和执行 JavaScript 代码的环境的抽象概念。由JavaScript引擎创建<br>
+            通俗地说,就是每当 Javascript 代码在运行的时候,它都是在执行上下文中运行的。<br>
+            每一个执行上下文都有与之关联的一个变量对象(variable object),一个上下文中定义的所有变量和函数都是存在这个对象上的。
+            JavaScript 中有三种执行上下文类型。<br>
+
+                全局执行上下文 — 这是默认的最外层的上下文,任何不在函数内部的代码都在全局上下文中。
+                根据宿主环境的不同在浏览器中全局上下文就是 window对象,这也是为什么使用var声明的全局变量和函数会变成window对象的属性和方法。
+                在node环境中全局上下文是global对象。一个程序中只会有一个全局执行上下文。
+
+                函数执行上下文 — 每当一个函数被调用时, 都会为该函数创建一个新的上下文。
+                每个函数都有它自己的执行上下文,不过是在函数被调用时才会创建。
+                函数上下文可以有任意多个。每当一个新的执行上下文被创建,它会按定义的顺序执行。
+
+                Eval() 函数执行上下文 — 执行在 eval 函数内部的代码也会有它属于自己的执行上下文,但由于 JavaScript 开发者并不经常使用 eval,所以在这里我不会讨论它。
+            <h5>1.执行上下文栈</h5>
+            <p>
+                执行上下文栈简称为执行栈,也就是在其它编程语言中所说的“调用栈”,是一种拥有 LIFO(后进先出)数据结构的栈,被用来存储JavaScript代码运行时创建的所有执行上下文。
+                当 JavaScript 引擎第一次执行脚本时,它会创建一个全局的执行上下文并且压入当前执行栈。
+                每当引擎遇到一个函数调用,它会为该函数创建一个新的函数执行上下文并压入栈的顶部。
+                引擎会执行那些执行上下文位于栈顶的函数。当该函数执行结束时,函数执行上下文从栈中弹出,将控制权返还给之前的那个执行上下文。<br>
+                <img src="../../images/执行上下文.png" alt=""><br>  
+                <img src="../../images/执行上下文栈.webp" alt=""><br>
+
+            </p>
+            <h5>2.执行上下文的创建</h5>
+            <p>
+                JavaScript 引擎创建执行上下文有两个阶段:1.创建阶段 和 2.执行阶段。<br> 
+                1.创建阶段<br> 
+                在创建阶段会发生三件事：
+                    this 值的决定,即我们所熟知的 This 绑定。
+                    创建词法环境组件。
+                    创建变量环境组件。
+                
+                在全局执行上下文中,this 的值指向全局对象即 this === window。(在浏览器中,this引用 Window 对象)。
+                在函数执行上下文中,this 的值取决于该函数是如何被调用的。
+                如果它被一个引用对象调用,那么 this 会被设置成那个对象,否则 this 的值被设置为全局对象window。
+
+                简单来说词法环境组件也是一个对象用来存储当前上下文中定义的变量、函数等内容的实际位置,以及一个作用域链。
+                所以词法环境的内部有两个组件:(1) 环境记录器和 (2) 一个外部环境的引用。
+                环境记录器是存储当前上下文中定义的变量、函数等内容的实际位置。
+                外部环境的引用意味着它可以通过作用域链访问其父级词法环境。<br> 
+            
+                2.执行阶段:在此阶段,完成对所有这些变量的分配,最后执行代码<br> 
+            </p>                   
+        </div>
+        <h4>2.js作用域</h4>
+        <div>
+            作用域就是变量起作用的范围,而作用域链是由执行上下文的变量对象在执行代码的时候创建的。
+            作用是当当前作用域没有这个变量时就会根据作用域链逐级往上查询上一级的执行上下文,一直找到全局上下文。
+            也就是在特定的上下文中读取或使用某个变量或函数时,会先在自己上下文的变量对象中搜索有没有对应的变量或函数,没有就会沿着作用域链逐级往上搜索直到全局上下文的变量对象。
+            还是没有一般就会报错。<br>
+            <img src="../../images/执行上下文和作用域链.png" alt=""><br>
+            js代码执行过程:
+            在执行一段代码时,JS 引擎会首先创建一个执行栈,用来存放执行上下文。
+            然后 JS 引擎会创建一个全局执行上下文,并 push 到执行栈中, 这个过程 JS 引擎会为这段代码中所有变量分配内存并赋一个初始值（undefined）,在创建完成后,JS 引擎会进入执行阶段,这个过程 JS 引擎会逐行的执行代码,即为之前分配好内存的变量逐个赋值(真实值)。
+            如果这段代码中存在 function 的调用,那么 JS 引擎会创建一个函数执行上下文,并 push 到执行栈中,其创建和执行过程跟全局执行上下文一样。
+            当一个执行栈执行完毕后该执行上下文就会从栈中弹出,接下来会进入下一个执行上下文。
+
+        </div>
+    </div>
+    <!-- js内存 -->
+    <h3>3、内存</h3>
+    <div>
+        计算机的内存是非常珍贵的,所以当程序不需要内存时应该释放之前占据的内存空间。
+        在JavaScript中是通过垃圾回收程序自动完成内存管理进而实现内存分配和闲置内存资源回收的。
+        基本思路就是确定哪个变量不会再被使用就释放它占用的内存空间。
+        主要有两种策略:
+        1.标记清理
+            JavaScript最常用的垃圾回收策略,
+        2.引用计数
+
+    </div>
+
+
+
+    <button>测试1</button>
+    <button>测试2</button>
+    <button>测试3</button>
+
+<!-- js -->
+<script>
+window.onload = function(){
+/* var 声明 */
+    // var message;
+    // console.log(message);//undefined
+
+    // function test(){
+    //     var fnmsg = '我是函数作用域变量,在函数外面访问不到';
+    // }
+    // test();
+    // console.log(fnmsg);//Uncaught ReferenceError: fnmsg is not defined
+
+    // function foo(){
+    //     console.log(age);
+    //     var age = 27;
+    // }
+    // foo();//undefined
+    
+    // function foo(){
+    //     var age = 27;
+    //     var age = 7;
+    //     var age = 30;
+    //     console.log(age);
+    // }
+    // foo();//30
+
+    // for(var i = 0;i < 5;i++){}
+    // console.log(i)//5
+
+    // for(var i=0;i<3;i++){//3
+    //     setTimeout(() => {
+    //         console.log(i)
+    //     }, 1000);
+    // }
+
+    // 使用var获取按钮列表
+    // var  btns = document.getElementsByTagName('button');
+    // // 遍历
+    // for(var i = 0;i < btns.length;i++){   
+    //     // 绑定点击事件
+    //     // btns[i].onclick = function(){
+    //     //     alert(i);//都是3,
+    //     //     //回调函数是放在事件队列里等主线程都执行完了再执行的,此时i已经循环完了。
+    //     // }
+
+    //     // 解决方法1：用一个变量存起来   
+    //     // btns[i].index = i
+    //     // btns[i].onclick = function(){
+    //     //     alert(this.index)
+    //     // }
+
+    //     // 解决方法2：使用闭包解决 (function(形参){})(实参)
+    //     (function(j){
+    //         btns[j].onclick = function(){
+    //             alert(j);//点哪个就是哪个的下标(从0开始).
+    //         }
+    //     })(i);
+    // }
+
+/* let 声明 */
+    // let message;
+    // console.log(message)//undefined
+
+    // {
+    //     let a = 2;
+    //     const c = 'hello';
+    //     var b = 3;
+    // }
+    // console.log(a);//ReferenceError: a is not defined
+    // console.log(c)//ReferenceError: c is not defined
+    // console.log(b);//3
+    
+    // function f1() {
+    //     let n = 5;
+    //     var m = 5;
+    //     if (true) {
+    //         let n = 10;
+    //         console.log(n);//10
+    //         var m = 10;
+    //         console.log(m);//10
+    //     }
+    //     console.log(n); // 5 。代码块可以任意嵌套,函数有两个代码块,都声明了变量n,运行后输出 5。
+    //     //这表示外层代码块不受内层代码块的影响。如果两次都使用var定义变量n,最后输出的值才是 10。
+    //     console.log(m);// 10
+    // }
+    // f1();
+
+        // 临时性死区
+    // if (true) {
+    //     // TDZ开始
+    //     tmp = 'abc'; // ReferenceError
+    //     console.log(tmp); // ReferenceError: can't access lexical declaration `tmp' before initialization
+
+    //     let tmp; // TDZ结束,即要先声明,因为let声明的变量不存在变量提升。在let命令声明变量tmp之前,都属于变量tmp的“死区”。
+    //     console.log(tmp); // undefined
+
+    //     // tmp = 123; //能赋值
+    //     // console.log(tmp); // 能输出123
+    // }
+
+    // for(let j = 0;i < 5;i++){}
+    // console.log(j)//Uncaught ReferenceError: j is not defined
+
+    // for(let j=0;j<3;j++){//0,1,2
+    //     setTimeout(() => {
+    //         console.log(j)
+    //     }, 1000);
+    // }
+
+    // 解决方法3：使用let声明 
+    // let  btns = document.getElementsByTagName('button');
+    // //遍历
+    // for(let i = 0;i < btns.length;i++){//let有自己的块级作用域  
+    //     // 绑定点击事件
+    //     btns[i].onclick = function(){
+    //         alert(i);//点哪个就是哪个的下标(从0开始)
+    //     }
+    // }
+
+/* 变量的存储空间 */
+    // let person  = new Object()
+    // person.name = 'zhangsan';
+    // console.log(person.name)//zhangsan
+
+    // function addTen(num){
+    //     num += 10;
+    //     return num;
+    // }
+    // let count  = 20;
+    // let result = addTen(count)
+    // console.log(count)//20,没改变
+    // console.log(result)//30
+
+/* 变量的解构赋值*/
+        // let arr = [12,'hello',{name:"zhangsan",age:29}]
+        // let [a,b,c] = arr;
+        // console.log('a is',a)//a is 12
+        // console.log('b is',b)//b is hello
+        // console.log('c is',c)//c is Object { name: "zhangsan", age: 29 }
+        // es5
+        // var a = arr[0]
+        // var b = arr[1]
+        // var c = arr[2]
+
+        // 不完全解构
+        // let [ , , third] = ["foo", "bar", "baz"];
+        // console.log(third) // "baz"
+
+        // 对象的解构:注意点解构变量名和对象属性名要相同,才能取到对应的值
+        // var obj = {username:'wanggeng',age:25,gender:'male'}
+        // let { username,age,gender,baz } = obj
+        // console.log(username,age,gender,baz) // 等号右边的对象没有baz属性,所以变量baz取不到值,所以等于undefined。
+        //es5
+        // var username = obj.username
+        // var age = obj.age
+        // var gender = obj.gender
+        // var baz = obj.baz
+        // console.log(username,age,gender,baz)
+        // 复杂情况,多重结构
+        // var options = {
+        //     size:{
+        //         userwidth:{width:'对象的对象'},
+        //         height:'200'
+        //     },
+        //     items:[12,{username:'zhangsan',age:25},'7777',1,],
+        //     flag:'true'
+        // }
+        // // ...res是将剩下变量的放到一个数组中
+        // let {size:{userwidth:{width:uwidth},height},items:[a,obj,...res]} = options
+        // console.log(uwidth,height,a,obj,res)//对象的对象 200 12 Object { username: "zhangsan", age: 25 }Array [ "7777", 1 ]
+    
+
+/* 执行上下文和作用域链 */  
+    var globalNum = 100
+    function Foo(){
+        var fooNum = 200
+        function Bar(){
+            var barNum = 300
+            // 这里可以访问 globalNum、fooNum、barNum
+        }
+        Bar()
+        // 这里可以访问 globalNum、fooNum
+    }
+    Foo()
+    // 这里只能访问 globalNum
+
+
+}
+</script>
+</body>
+</html>

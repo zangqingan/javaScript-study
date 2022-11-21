@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript正则表达式</title>
+</head>
+<body>
+    <div>
+        <h3>1、js正则表达式概述</h3>
+        <div>
+            ECMAScript是通过 RegExp 对象提供正则表达式的功能,所以本质上它也是一个对象。
+            所谓正则表达式(regular expression)就是一种表达文本模式(即字符串结构)的方法,有点像字符串的模板,常常用来按照“给定模式”来匹配文本。
+            比如,正则表达式给出一个 Email 地址的模式,然后用它来确定一个字符串是否为 Email 地址。JavaScript 的正则表达式体系是参照 Perl 5 建立的。
+        </div>
+        <h3>2、js正则表达式的创建方法</h3>
+        <div>
+            <h4>1.使用构造函数RegExp()</h4>
+            <div>
+                它是一个对象也有内置的构造函数,所以可以使用new初始化。
+                语法:var pattern = new  RegExp("正则表达式","匹配模式标记");
+                如:var reg = new RegExp("a","i") 检查一个字符串中是否含有a,匹配模式i表示忽略大小写
+                匹配模式有 i 忽略大小写,g开启全局匹配模式,m多行匹配,注意:这两个参数都是字符串
+                方法在运行时才新建正则表达式,效率较低。
+            </div>
+            <h4>2.使用正则表达式字面量创建</h4>
+            <div>
+                以斜杠表示开始和结束。它在引擎编译代码时就会新建正则表达式所以效率较高,而且比较便利和直观。
+                所以实际应用中,基本上都采用字面量定义正则表达式。
+                语法: 
+                var pattern= /正则表达式/匹配模式标记
+                如: var reg = /a/i
+            </div>
+        </div>
+        <h3>3、js正则表达式匹配模式的标记</h3>
+        <div>
+            无论哪种创建方式,都可以在声明时带上灵零个或多个 flags(匹配模式标记),用来控制正则表达式的行为。
+            g(global):全局模式,表示查找字符串的全部内容,而不是找到第一个匹配的就结束。
+
+            i(ignoreCase):查找时不区分大小写,表示查找时忽略模式和字符串的大小写。默认是区分大小写的。
+
+            m(multiline):多行匹配,表示查找到一行文本末尾时会继续查找。
+
+            u(Unicode):ES6 添加的,含义为“Unicode 模式”,开启Unicode匹配,用来正确处理大于\uFFFF的 Unicode 字符。
+
+            y(sticky):ES6 还为正则表达式添加了y修饰符,叫做“粘连”(sticky)修饰符。作用与g修饰符类似也是全局匹配,后一次匹配都从上一次匹配成功的下一个位置开始。
+
+            s:dotAll 模式,表示元字符" . "可以匹配任意单个字符。
+
+        </div>
+        <h3>4、js正则常见的实例属性和方法</h3>
+        <div>
+            一类是与匹配模式标记相关,用于了解设置了什么标记,都是只读的。实际开发中用的不多。
+                RegExp.prototype.global:返回一个布尔值,表示是否设置了g修饰符。
+                RegExp.prototype.ignoreCase:返回一个布尔值,表示是否设置了i修饰符。
+                RegExp.prototype.multiline:返回一个布尔值,表示是否设置了m修饰符。
+                RegExp.prototype.unicode:es6新增unicode属性返回一个布尔值,表示是否设置了u修饰符。
+                RegExp.prototype.sticky:es6新增sticky属性返回一个布尔值,表示是否设置了y修饰符。
+                RegExp.prototype.flags:es6新增flags属性返回一个字符串,包含了已经设置的所有修饰符,按字母排序。
+            var r = /abc/igm;
+            r.global // true
+            r.ignoreCase // true
+            r.multiline // true
+            r.unicode // false
+            r.sticky // false
+            r.flags // 'gim'
+
+
+            常用实例方法:用于测试字符串匹配是否成功。
+            test()接收一个字符串参数,如果输入的文本和模式匹配则返回true,否则返回false。只适用于测试模式是否匹配,而不关心实际匹配的内容是什么。经常用在if语句中。
+
+            exec()与test功能相同,如果发现匹配,就返回一个数组,成员是匹配成功的子字符串,失败返回null。
+
+            继承的 toLocalString() 和toString()方法,都返回正则表达式的字面量表示
+        </div>
+        <h3>5、字符串方法</h3>
+        <div>
+            字符串方法(接收一个正则表达式作为参数来调用方法),对字符串进行正则匹配的方法。
+            在语言内部全部调用对应的RegExp的实例方法。
+            String.prototype.match():返回一个数组,成员是所有匹配的子字符串。
+            String.prototype.search():按照给定的正则表达式进行搜索,返回一个整数,表示匹配开始的位置。
+            String.prototype.replace():按照给定的正则表达式进行替换,返回替换后的字符串。
+            String.prototype.split():按照给定规则进行字符串分割,返回一个数组,包含分割后的各个成员。
+            String.prototype.matchAll():ES2020 增加的方法,可以一次性取出所有匹配。不过,它返回的是一个遍历器(Iterator),而不是数组。
+
+            var s = '_x_x';
+            var r1 = /x/;
+            s.match(r1) // ["x"]
+            s.search(/x/) // 1
+
+        </div>
+        <h3>6.js正则表达式常见量词和元字符</h3>
+        <div>
+            js正则表达式的规则很复杂,常见的语法格式如下:
+            {n} 正好出现n次  <br>
+            {n,m} 出现n-m之间都行  <br>
+            {m,} m次以上  <br>
+            o+ 表示至少一个或者多个o == {1,}  <br>
+            o* 表示0个或者多个o == {0,}  <br>
+            o? 表示一个或者0个o == {0,1}  <br>
+            |竖线表示或的意思  <br>
+            [] 也是表示或的意思  <br>
+            ()括号表示分组,可以看成一个整体  <br>
+            ^ 表示开头,检查一个字符串是否以a开头 == /^a/  <br>
+            $ 表示结尾,检查一个字符串是否以a结尾 == /a$/  <br>
+            [a-z] 任意小写字母   <br>
+            [A-Z] 任意大写字母  <br>
+            [A-z] 任意字母  <br>
+            [0-9] 任意数字 等价于 \d  <br>
+            [^0-9] 任意数字 等价于 \D  <br>
+            \w 任意字母,数字,下划线 等价于 [A-z0-9_]  <br>
+            \W 除了字母,数字,下划线之外的字符 等价于 [^A-z0-9_]  <br>
+                
+        </div>
+        <h3>7、js常见正则表达式</h3>
+        <div>
+            1.验证邮编,电话号码,邮箱,压缩包后缀名等
+        </div>
+    </div>
+<!-- js -->
+<script>
+window.onload = function(){
+    //二:正则表达式的创建方法
+    // 使用new运输符
+    // var box = new RegExp('Box','ig');//第二个参数是是可选的,i区分大小写,g全局,m多行匹配
+    // console.log(box);//  /Box/gi 为输出值就是正则表达式的字面量表达式方法
+    // console.log(typeof box);//object
+    // 使用字面量
+    // var box=/'Box'/ig;//字面量创建
+    
+/*实例方法*/
+    // test()
+    // var pattern=new RegExp('Box',);//区分大小写
+    // var str='boxBOXboX';
+    // console.log(pattern.test(str));//false
+
+    // var pattern=new RegExp('Box','i');//"i"不区分大小写
+    // var str='box';
+    // console.log(pattern.test(str));//true 
+    // //字面量声明
+    // var pattern=/Box/i;
+    // var str ='This is a box!';
+    // console.log(pattern.test(str));
+
+    //exec()
+    // var pattern=/Box/i;
+    // var str ='This is a box!';
+    // console.log(typeof pattern.exec(str));//Object
+    // console.log(pattern.exec(str));//Array [ "box" ],box匹配数组被返回了
+
+/*字符串方法(接收一个正则表达式作为参数来调用方法)*/
+    //match()返回一个或多个正则表达式的匹配,是一个数组对象。
+    // var  pattern=/Box/ig;//不区分大小写,开启全局会匹配所有的。
+    // var str = 'this is a BOX! that is a Box.';
+    // console.log(str.match(pattern));//Array [ "BOX", "Box" ]
+
+    //search():搜索字符串中有没有正则表达式,找到了返回第一个(只找第一个)匹配的位置,找不到返回-1,不需要开启全局
+    // var  pattern=/Box/ig;//不区分大小写,开启全局
+    // var str = 'this is a BOX! that is a Box.';
+    // console.log(str.search(pattern));//10
+
+    // var  pattern=/xox/ig;//不区分大小写,开启全局
+    // var str = 'this is a BOX! that is a Box.';
+    // console.log(str.search(pattern));//-1
+
+    //replace()方法:替换与正则表达式匹配的子集,第一个参数为匹配字符串,第二个参数为要替换的字符串。
+    //开启全局所有的都被替换,不然就第一个被替换。
+    // var  pattern=/Box/ig;//不区分大小写,开启全局
+    // var str = 'this is a BOX! that is a Box.';
+    // console.log(str.replace(pattern,'wang'));//this is a wang! that is a wang.
+
+    //split()方法把字符串按指定参数符号分割成字符串数组,不开启全局也会自己启动。
+    // var  pattern=/ /ig;//不区分大小写,开启全局
+    // var str = 'this is a BOX! that is a Box.';
+    // console.log(str.split(pattern));//Array(8) [ "this", "is", "a", "BOX!", "that", "is", "a", "Box." ]
+    // console.log(str.split(pattern).length);//这个数组的长度为8
+
+/*量词和元字符*/ 
+    // ”|“,[] 或
+    // var pattern = /google|baidu|bing/;// '|'竖线表示或的意思
+    // var str = 'baidu';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /[googlebaidubing]/;// '[]'中括号也表示或的意思
+    // var str = 'baidu';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /[a-z]oogle/;//[a-z]表示26个小写字母任意一个都匹配
+    // var str = 'loogle';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /[0-9]oogle/;//[0-9]表示0-9的数字任意一个都匹配
+    // var str = '44oogle';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /[a-zA-Z0-9]oogle/;//[a-zA-Z0-9]表示个大小写字母和数字任意一个都匹配。
+    // var str = 'z4oogle';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /g..gle/;//点符号表示匹配除了换行符外的任意字符
+    // var str = 'google';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /go*gle/;   //o*表示0个或者多个o
+    // var str = 'google';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /go+gle/;   //o+表示一个或者多个o
+    // var str = 'gooooogle';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /go?gle/;//o?表示一个或者0个o
+    // var str = 'gooooogle';
+    // console.log(pattern.test(str));//false
+
+    // var pattern = /\woogle/;//\w表示匹配字母数字和下划线。
+    // var str = 'z4oogle';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /google\b/;//\b表示是否到达边界
+    // var str = 'google';
+    // console.log(pattern.test(str));//true
+
+    // var pattern = /(google){4,8}/; //括号表示()分组,可以看成一个整体,表示“google”连续出现4到8次之间(4,5,6,7,8次都行)。
+    // var str = 'googlegooglegooglegooglegooglegoogle';//表示google4-8次
+    // console.log(pattern.test(str));//true
+
+/*常用的正则表达式*/
+    //检查邮政编码
+    // var pattern = /[1-9][0-9]{5}/;
+    // var str='224000';//必须是六位,必须是数字,第一位不能为0
+    // console.log(pattern.test(str));//true
+
+    // 检查压缩文件
+    // var pattern = /^[\w]+\.zip|gz|rar/; //文件名.后缀扩展名^首字符开始匹配
+    // var str='111.zip';//文件名可以是字母数字下划线,+.+后缀zip,rar,7z等
+    // console.log(pattern.test(str));//true
+
+    // 删除多余空格
+    // var pattern= /\s/g;
+    // var str= '111 222 333 555';
+    // console.log(str.replace(pattern,''));
+
+    // 删除首末位空格
+    // var pattern= /^\s+/;
+    // var str= '      goo    gle         ';
+    // var result = str.replace(pattern,'');
+    // pattern = /\s+$/;//尾部匹配
+    // result = result.replace(pattern,'');
+    // console.log('|'+result+'|');//此法过于繁琐。
+    // var pattern= /^\s*(.+?)\s*$/;//非贪婪
+    // var str= '      goo    gle         ';
+    // console.log('|'+pattern.exec(str)[1]+'|');
+
+    // 另一种删除空格的方法
+    // var pattern= /^\s*(.+?)\s*$/;//分组
+    // var str= '      goo    gle         ';
+    // console.log('|'+str.replace(pattern,'$1')+'|');
+
+    // 验证简单电子邮件
+    //^任意字母 数字 下划线 点 (至少一个)@ 字母数字(长度没有限制至少一个).com/net/cn(任意字母2-4位)$；
+    // var pattern=/^([\w\.\-]+)@([\w\-]+)\.([a-zA-Z]{2,4})$/;
+    // var str='18367329491@163.com';
+    // console.log(pattern.test(str));
+}
+</script>
+</body>
+</html>

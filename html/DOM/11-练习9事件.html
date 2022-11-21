@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js事件练习1</title>
+    <style type="text/css">
+    #box1{
+        width: 300px;
+        height: 200px;
+        background-color: green;
+    }
+    #s1{
+        background-color: yellow;
+    }
+    #areaDiv{
+        width: 300px;
+        height: 300px;
+        background-color: red;
+    }
+    #showMsg{
+        width: 100px;
+        height: 100px;
+        background-color:darkgrey;
+    }
+    </style>
+</head>
+<body>
+    <div onClick="console.log('使用HTML元素的on-事件名属性触发的点击事件div')">
+        <button onClick="console.log('使用HTML元素的on-事件名属性触发的点击事件button')">点击</button>
+      </div>
+    <div id="box1">
+        我是box1
+        <span id="s1">我是span</span>
+    </div>
+    <div class="content">
+        事件冒泡(bubble):事件冒泡就是指事件的向上传导，当后代元素上的事件被触发时，其祖先元素的相同事件也会触发。
+        注意：向上传递，相同事件。在开发中大部分冒泡都是有用的。
+        不希望发生事件冒泡可以通过事件对象来取消冒泡。
+
+    </div>
+    <div id="areaDiv"></div>
+    <div id="showMsg"></div>
+    
+<!-- js -->
+<script>
+window.onload = function(){
+    //通过元素节点的事件属性定义监听函数
+    //取消冒泡：将事件对象的cancelBubble属性设置为true，即可取消。
+    //为s1绑定一个单击响应函数
+    var sl = document.getElementById("s1");
+    s1.onclick = function(event){
+        console.log(event)
+        event.cancelBubble = true;
+        alert("我是span的单击响应函数，我是通过元素节点的事件属性触发的;");
+    }
+    //为box1绑定一个单击响应函数
+    var box1 = document.getElementById("box1");
+    box1.onclick = function(){
+        alert("我是div的单击响应函数，我是通过元素节点的事件属性触发的;");
+    }
+    // 为body绑定一个单击响应函数
+    document.body.onclick = function(){
+        // console.log(event.currentTarget)
+        alert("我是body的单击响应函数，我是通过元素节点的事件属性触发的;");
+    }
+
+    // 推荐使用addEventListener()绑定监听函数,可以写多个
+    var content = document.querySelector(".content")
+    content.addEventListener("click",function(event){
+        console.log(event)
+        console.log(event.target)
+        event.stopPropagation()
+        alert("hello")
+    },false)
+    content.addEventListener("click",function(){
+        alert("hello第二个监听函数")
+    },false)
+
+     /**
+     * 当鼠标在areadiv中移动时，在showmsg中显示鼠标的坐标。
+     */
+    //获取这个两个div
+    var areadiv = document.getElementById("areaDiv");
+    var showMsg = document.getElementById("showMsg");
+    //给areadiv绑定事件
+    areadiv.onmousemove = function(event){
+        //clientX:表示鼠标指针的水平坐标。
+        // clientY：表示鼠标指针的垂直坐标。
+        //ie8及以下不兼容，它是将事件对象作为window对象的属性来保存的。window.event
+        //兼容
+        event = event || window.event;
+        var x = event.clientX;
+        var y = event.clientY;
+        //在showMsg中显示鼠标的坐标
+        showMsg.innerHTML = "x="+ x + "," + "y=" + y ;
+    };
+
+};
+</script>
+</body>
+</html>
