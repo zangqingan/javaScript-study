@@ -1,72 +1,79 @@
 # 一、文档概述
-此文档是个人对JavaScript语言的学习记录，主要包括三部分：核心语法ecmascript，DOM以及BOM。
+此文档是个人对JavaScript语言的学习记录，主要包括三部分：核心语法ECMAscript，文档对象模型DOM以及浏览器对象模型BOM。
 后面新增了面试题和一些其它零散的知识点。
+
 缘起：大学时接触前端是从web飘城俱乐部的李炎恢老师的课程开始。
+
 积累：大三之后迷茫混沌时期看了很多培训机构的视频、各种网址博客等可惜都没有梳理形成自己的知识体系。
-构建：经过多年工作和学习积累，在通过红宝书《JavaScript高级程序设计第3/4版》，网道的教程-https://wangdoc.com，以及现代JavaScript教程-https://zh.javascript.info/ 的学习总结后整理的个人JavaScript知识体系。
 
-# 二、ECMAscript
-## 2.1 JavaScript语言概述
+构建：经过多年工作和学习积累，在通过红宝书《JavaScript高级程序设计第3/4版》，[网道的教程](https://wangdoc.com)，[现代JavaScript教程](https://zh.javascript.info/)，以及[MDN的JavaScript参考](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript) 的学习和总结后整理的个人JavaScript知识体系。
+
+# 二、核心语法ECMAscript
+## 2.1、 ECMAscript5
+ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成。
+### 2.1.1 JavaScript语言概述
 * [js语言概述](./html/ES5/1-JS语言概述.html "js语言概述")
-## 2.2 JavaScript数据类型
+### 2.1.2 JavaScript数据类型
 * [js数据类型](./html/ES5/2-JS数据类型.html "js数据类型")
-## 2.3 JavaScript运算符
+### 2.1.3 JavaScript运算符
 * [js运算符](./html/ES5/3-JS运算符.html "js运算符")
-## 2.4 JavaScript语句
-## 2.5 JavaScript对象
-## 2.6 JavaScript函数
-## 2.7 JavaScript数组
-## 2.8 JavaScript正则表达式
-## 2.9 JavaScript日期时间对象
-## 2.10 JavaScript内置Math对象
-## 2.11 JavaScript基本包装类型
-## 2.12 JavaScript变量和作用域
-## 2.13 JavaScript对象高级
-## 2.14 JavaScript函数高级
-## 2.15 JavaScript数组高级
-## 2.16 JavaScript内置json对象
-## 2.17 JavaScript代码执行过程
+### 2.1.4 JavaScript语句
+### 2.1.5 JavaScript对象
+### 2.1.6 JavaScript函数
+### 2.1.7 JavaScript数组
+### 2.1.8 JavaScript正则表达式
+### 2.1.9 JavaScript日期时间对象
+### 2.1.10 JavaScript内置Math对象
+### 2.1.11 JavaScript基本包装类型
+### 2.1.12 JavaScript变量和作用域
+### 2.1.13 JavaScript对象高级
+### 2.1.14 JavaScript函数高级
+### 2.1.15 JavaScript数组高级
+### 2.1.16 JavaScript内置json对象
+### 2.1.17 JavaScript代码执行过程
 
-# 三、ecmascript6
-## 3.1 let-const关键字
-## 3.2 变量的结构赋值
-## 3.3 Symbol数据类型
-## 3.4 字符串对象的扩展
-## 3.5 Number对象的扩展
-## 3.6 正则对象的扩展
-## 3.7 函数对象的扩展
-## 3.8 数组对象的扩展
-## 3.9 对象的扩展
-## 3.10 Set和Map数据结构
-## 3.11 class类
-## 3.12 Promise对象
-## 3.13 Reflect对象
-## 3.14 Proxy对象
-## 3.15 Iterator迭代器
-## 3.16 Generator函数
-## 3.17 Async异步函数
-## 3.18 module模块系统
+## 2.2、ECMAscript6
+ECMAscript6是下一代JavaScript语法标准扩展，它包括了es6、es7....等之后所有新增的语法新特性。
+它极大的扩展和丰富了JavaScript语言的语法。
+### 2.2.1 let-const关键字
+### 2.2.2 变量的结构赋值
+### 2.2.3 Symbol数据类型
+### 2.2.4 字符串对象的扩展
+### 2.2.5 Number对象的扩展
+### 2.2.6 正则对象的扩展
+### 2.2.7 函数对象的扩展
+### 2.2.8 数组对象的扩展
+### 2.2.9 对象的扩展
+### 2.2.10 Set和Map数据结构
+### 2.2.11 class类
+### 2.2.12 Promise对象
+### 2.2.13 Reflect对象
+### 2.2.14 Proxy对象
+### 2.2.15 Iterator迭代器
+### 2.2.16 Generator函数
+### 2.2.17 Async异步函数
+### 2.2.18 module模块系统
 
-# 四、DOM
-## 4.1 DOM概述
-## 4.2 DOM组成
-## 4.3 Node接口
-## 4.4 document节点对象
-## 4.5 element节点对象
-## 4.6 DOM增删改查
-## 4.7 JavaScript事件模型
-## 4.8 EventTarget接口
-## 4.9 JavaScript事件对象
-## 4.10 JavaScript事件常见类型
+# 三、文档对象模型DOM
+## 3.1 DOM概述
+## 3.2 DOM组成
+## 3.3 Node接口
+## 3.4 document节点对象
+## 3.5 element节点对象
+## 3.6 DOM增删改查
+## 3.7 JavaScript事件模型
+## 3.8 EventTarget接口
+## 3.9 JavaScript事件对象
+## 3.10 JavaScript事件常见类型
 
-# 五、BOM
-## 5.1 BOM组成概述
-## 5.2 cookie
-## 5.3 XMLHttpRequest对象
-## 5.4 CORS
-## 5.5 JavaScript异步概述
-## 5.6 JavaScript定时器
+# 四、浏览器对象模型BOM
+## 4.1 BOM组成概述
+## 4.2 cookie
+## 4.3 XMLHttpRequest对象
+## 4.4 CORS
+## 4.5 JavaScript异步概述
+## 4.6 JavaScript定时器
 
-# 六、面试
+# 五、面试题
 
-# 七、其它
+# 六、其它
