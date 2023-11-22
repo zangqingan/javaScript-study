@@ -9,8 +9,10 @@
 构建：经过多年工作和学习积累，在通过红宝书《JavaScript高级程序设计第3/4版》，[网道的教程](https://wangdoc.com)，[现代JavaScript教程](https://zh.javascript.info/)，以及[MDN的JavaScript参考](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript) 的学习和总结后整理的个人JavaScript知识体系。
 
 # 二、核心语法ECMAscript
+
 ## 2.1、 ECMAscript5
 ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成。
+
 ### 2.1.1 JavaScript语言概述
 * [js语言概述](./html/ES5/1-JS语言概述.html "js语言概述")
 ### 2.1.2 JavaScript数据类型
@@ -35,6 +37,7 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 ## 2.2、ECMAscript6
 ECMAscript6是下一代JavaScript语法标准扩展，它包括了es6、es7....等之后所有新增的语法新特性。
 它极大的扩展和丰富了JavaScript语言的语法。
+
 ### 2.2.1 let-const关键字
 ### 2.2.2 变量的结构赋值
 ### 2.2.3 Symbol数据类型
