@@ -52,7 +52,7 @@
                 本质上 const 其实保证的不是变量的值不变,而是保证变量指向的内存地址值不允许改动。
             </div>
             <h5>4.声明风格及最佳实践</h5>
-            <div>
+            <div class="content">
                 1.不再使用var。<br>
                 2.优先使用const,只在提前知道未来会修改时再用let。这是因为使用const声明可以让浏览器运行时强制保持变量不变,同时也可以让静态代码分析工具提前发现不合法的赋值操作。
             </div>
@@ -87,7 +87,7 @@
     <!-- js作用域 -->
     <h3>2、js执行上下文和作用域</h3>
     <div class="content">
-        <h4>1.js执行上下文</h4>
+        <h4>2.1、js执行上下文</h4>
         <div>
             执行上下文:又称为执行环境(execution context)是评估和执行 JavaScript 代码的环境的抽象概念。由JavaScript引擎创建<br>
             通俗地说,就是每当 Javascript 代码在运行的时候,它都是在执行上下文中运行的。<br>
@@ -96,11 +96,11 @@
 
                 全局执行上下文 — 这是默认的最外层的上下文,任何不在函数内部的代码都在全局上下文中。
                 根据宿主环境的不同在浏览器中全局上下文就是 window对象,这也是为什么使用var声明的全局变量和函数会变成window对象的属性和方法。
-                在node环境中全局上下文是global对象。一个程序中只会有一个全局执行上下文。
+                在node环境中全局上下文是global对象。一个程序中只会有一个全局执行上下文。<br>
 
                 函数执行上下文 — 每当一个函数被调用时, 都会为该函数创建一个新的上下文。
                 每个函数都有它自己的执行上下文,不过是在函数被调用时才会创建。
-                函数上下文可以有任意多个。每当一个新的执行上下文被创建,它会按定义的顺序执行。
+                函数上下文可以有任意多个。每当一个新的执行上下文被创建,它会按定义的顺序执行。<br>
 
                 Eval() 函数执行上下文 — 执行在 eval 函数内部的代码也会有它属于自己的执行上下文,但由于 JavaScript 开发者并不经常使用 eval,所以在这里我不会讨论它。
             <h5>1.执行上下文栈</h5>
@@ -109,22 +109,21 @@
                 当 JavaScript 引擎第一次执行脚本时,它会创建一个全局的执行上下文并且压入当前执行栈。
                 每当引擎遇到一个函数调用,它会为该函数创建一个新的函数执行上下文并压入栈的顶部。
                 引擎会执行那些执行上下文位于栈顶的函数。当该函数执行结束时,函数执行上下文从栈中弹出,将控制权返还给之前的那个执行上下文。<br>
-                <img src="../../images/执行上下文.png" alt=""><br>  
-                <img src="../../images/执行上下文栈.webp" alt=""><br>
+                <img src="../../assets/images/执行上下文.png" alt=""><br>  
+                <img src="../../assets/images/执行上下文栈.webp" alt=""><br>  
 
             </p>
             <h5>2.执行上下文的创建</h5>
             <p>
                 JavaScript 引擎创建执行上下文有两个阶段:1.创建阶段 和 2.执行阶段。<br> 
                 1.创建阶段<br> 
-                在创建阶段会发生三件事：
-                    this 值的决定,即我们所熟知的 This 绑定。
-                    创建词法环境组件。
-                    创建变量环境组件。
+                在创建阶段会发生三件事：<br>  
+                &nbsp;&nbsp;&nbsp;&nbsp;this 值的决定,即我们所熟知的 this 绑定。<br>  
+                &nbsp;&nbsp;&nbsp;&nbsp;创建词法环境组件。<br>  
+                &nbsp;&nbsp;&nbsp;&nbsp;创建变量环境组件。<br>  
                 
-                在全局执行上下文中,this 的值指向全局对象即 this === window。(在浏览器中,this引用 Window 对象)。
-                在函数执行上下文中,this 的值取决于该函数是如何被调用的。
-                如果它被一个引用对象调用,那么 this 会被设置成那个对象,否则 this 的值被设置为全局对象window。
+                在全局执行上下文中,this 的值指向全局对象即 this === window。(在浏览器中,this引用 Window 对象)。<br>  
+                在函数执行上下文中,this 的值取决于该函数是如何被调用的:如果它被一个引用对象调用,那么 this 会被设置成那个对象,否则 this 的值被设置为全局对象window。<br> 
 
                 简单来说词法环境组件也是一个对象用来存储当前上下文中定义的变量、函数等内容的实际位置,以及一个作用域链。
                 所以词法环境的内部有两个组件:(1) 环境记录器和 (2) 一个外部环境的引用。
@@ -134,23 +133,27 @@
                 2.执行阶段:在此阶段,完成对所有这些变量的分配,最后执行代码<br> 
             </p>                   
         </div>
-        <h4>2.js作用域</h4>
+        <h4>2.2、js作用域</h4>
         <div>
             作用域就是变量起作用的范围,而作用域链是由执行上下文的变量对象在执行代码的时候创建的。
             作用是当当前作用域没有这个变量时就会根据作用域链逐级往上查询上一级的执行上下文,一直找到全局上下文。
             也就是在特定的上下文中读取或使用某个变量或函数时,会先在自己上下文的变量对象中搜索有没有对应的变量或函数,没有就会沿着作用域链逐级往上搜索直到全局上下文的变量对象。
             还是没有一般就会报错。<br>
-            <img src="../../images/执行上下文和作用域链.png" alt=""><br>
+            <img src="../../assets/images/执行上下文和作用域链.png" alt=""><br>
             js代码执行过程:
             在执行一段代码时,JS 引擎会首先创建一个执行栈,用来存放执行上下文。
             然后 JS 引擎会创建一个全局执行上下文,并 push 到执行栈中, 这个过程 JS 引擎会为这段代码中所有变量分配内存并赋一个初始值（undefined）,在创建完成后,JS 引擎会进入执行阶段,这个过程 JS 引擎会逐行的执行代码,即为之前分配好内存的变量逐个赋值(真实值)。
             如果这段代码中存在 function 的调用,那么 JS 引擎会创建一个函数执行上下文,并 push 到执行栈中,其创建和执行过程跟全局执行上下文一样。
-            当一个执行栈执行完毕后该执行上下文就会从栈中弹出,接下来会进入下一个执行上下文。
+            当一个执行栈执行完毕后该执行上下文就会从栈中弹出,接下来会进入下一个执行上下文。<br>
+            ES6之后js有三种作用域<br>
+            全局作用域-window <br>
+            函数作用域-function <br>
+            块级作用域- {} <br>
 
         </div>
     </div>
-    <!-- js内存 -->
-    <h3>3、内存</h3>
+    <!-- js内存回收 -->
+    <h3>3、内存回收</h3>
     <div class="content">
         计算机的内存是非常珍贵的,所以当程序不需要内存时应该释放之前占据的内存空间。
         在JavaScript中是通过垃圾回收程序自动完成内存管理进而实现内存分配和闲置内存资源回收的。
@@ -167,7 +170,9 @@
     <button>测试1</button>
     <button>测试2</button>
     <button>测试3</button>
-
+    <br>
+    <br>
+    <br>
 <!-- js -->
 <script>
 window.onload = function(){
@@ -302,44 +307,6 @@ window.onload = function(){
     // console.log(count)//20,没改变
     // console.log(result)//30
 
-/* 变量的解构赋值*/
-        // let arr = [12,'hello',{name:"zhangsan",age:29}]
-        // let [a,b,c] = arr;
-        // console.log('a is',a)//a is 12
-        // console.log('b is',b)//b is hello
-        // console.log('c is',c)//c is Object { name: "zhangsan", age: 29 }
-        // es5
-        // var a = arr[0]
-        // var b = arr[1]
-        // var c = arr[2]
-
-        // 不完全解构
-        // let [ , , third] = ["foo", "bar", "baz"];
-        // console.log(third) // "baz"
-
-        // 对象的解构:注意点解构变量名和对象属性名要相同,才能取到对应的值
-        // var obj = {username:'wanggeng',age:25,gender:'male'}
-        // let { username,age,gender,baz } = obj
-        // console.log(username,age,gender,baz) // 等号右边的对象没有baz属性,所以变量baz取不到值,所以等于undefined。
-        //es5
-        // var username = obj.username
-        // var age = obj.age
-        // var gender = obj.gender
-        // var baz = obj.baz
-        // console.log(username,age,gender,baz)
-        // 复杂情况,多重结构
-        // var options = {
-        //     size:{
-        //         userwidth:{width:'对象的对象'},
-        //         height:'200'
-        //     },
-        //     items:[12,{username:'zhangsan',age:25},'7777',1,],
-        //     flag:'true'
-        // }
-        // // ...res是将剩下变量的放到一个数组中
-        // let {size:{userwidth:{width:uwidth},height},items:[a,obj,...res]} = options
-        // console.log(uwidth,height,a,obj,res)//对象的对象 200 12 Object { username: "zhangsan", age: 25 }Array [ "7777", 1 ]
-    
 
 /* 执行上下文和作用域链 */  
     var globalNum = 100
