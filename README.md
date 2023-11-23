@@ -13,13 +13,14 @@
 ## 2.1、 ECMAscript5
 ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成。
 
-### 2.1.1 JavaScript语言概述
-* [js语言概述](./html/ES5/1-JS语言概述.html "js语言概述")
-### 2.1.2 JavaScript数据类型
-* [js数据类型](./html/ES5/2-JS数据类型.html "js数据类型")
-### 2.1.3 JavaScript运算符
-* [js运算符](./html/ES5/3-JS运算符.html "js运算符")
-### 2.1.4 JavaScript语句
+### 2.1.1 js语言概述
+* [js语言概述](./src/views/ECMAScript/1-JS语言概述.html "js语言概述")
+### 2.1.2 js在网页中的使用
+* [js在网页中的使用](./src/views/ECMAScript/2-JS在网页中的使用.html "js在网页中的使用")
+### 2.1.3 js语法基础
+* [js语法基础](./src/views/ECMAScript/3-JS语言基础语法.html "js语法基础")
+### 2.1.4 js变量与作用域与内存
+* [js变量与作用域与内存](./src/views/ECMAScript/4-JS变量与作用域与内存.html "js变量与作用域与内存")
 ### 2.1.5 JavaScript对象
 ### 2.1.6 JavaScript函数
 ### 2.1.7 JavaScript数组

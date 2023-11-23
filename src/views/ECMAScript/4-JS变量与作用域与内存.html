@@ -2,29 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>JavaScript变量和作用域</title>
+    <title>JavaScript变量、作用域、内存</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
     <!-- js变量 -->
     <h3>1、js变量</h3>
-    <div>
+    <div class="content">
         <h4>1.js变量概述</h4>
         <div>
-            变量是存储数据(信息)的容器。与代数一样,JavaScridivt 变量可用于存放值(比如 x=2)和表达式(比如 z=x+y)。
+            变量是存储数据(信息)的命名容器。与代数一样,JavaScridivt 变量可用于存放值(比如 x=2)和表达式(比如 z=x+y)。
             变量可以使用短名称(比如 x 和 y),也可以使用描述性更好的名称即语义化(比如 age, sum, totalvolume)。
             变量命名遵循js标识符的命名规则:如果命名包括多个单词,通常采用小驼峰式命名法(camelCase)
                 变量必须以字母开头
                 变量也能以 $ 和 _ 符号开头(不推荐这么做)
-                变量名称对大小写敏感即区分大小写(y 和 Y 是不同的变量)
+                变量名称对大小写敏感即严格区分大小写(y 和 Y 是不同的变量)
                 变量不能是关键字和保留字
             js变量是松散类型的,所以可以不用预先声明指定变量是保存什么类型数据的,重复声明后面的会覆盖前面的,在程序执行时会自动判断类型。      
         </div>
         <h4>2.js变量的声明语法</h4>
         <div>
-            在JavaScript中有3个关键字可以用来声明变量:var、let、const,其中var是所有版本都可以使用,而let和const只能在es6及更晚的版本中使用。
-            语法都是: var/let/const 变量名1,变量名2,... = 任意数据类型的数据值;
+            在JavaScript中有3个关键字可以用来声明变量:var、let、const,其中var是所有版本都可以使用,而let和const只能在es6及更晚的版本中使用。<br>
+            语法都是: var/let/const 变量名1,变量名2,... = 任意数据类型的数据值; 注意：为了更好的可读性，请一行只声明一个变量。<br>
             <h5>1.var声明</h5>
-            <div>
+            <div class="content">
                 特点:<br>
                 1、var 声明变量不初始化时值为 undefined。<br>
                 2、var 可以对同一个变量重复声明,后面的会覆盖前面的。<br>
@@ -33,9 +34,9 @@
                 5、for循环中使用var定义的迭代变量会渗透到循环体外部,这时迭代变量保存的是导致循环退出的值。<br>
             </div>
             <h5>2.let声明</h5>
-            <div>
-                let和var的作用是差不多的,就是用来替代var的。
-                特点:
+            <div class="content">
+                let和var的作用是差不多的,就是用来替代var的。<br>
+                特点:<br>
                 1、let 声明变量不初始化时值也是 undefined。<br>
                 2、let 不允许在相同作用域内(即同一个花括号内)重复声明同一个变量。<br>
                 3、let 声明变量是块级作用域。<br>
@@ -57,123 +58,35 @@
             </div>
         </div>
         <h4>3.变量的存储空间</h4>
-        <div>
-            js变量是参考了Java语法的,也分为两种类型原始值和引用值,它们都是存储在计算机内存空间里的。
-            区别是:
-            保存原始值(primitive value)的变量是存放在栈(stack)内存中,同时是按值(by value)访问的,操作的就是实际值。
-            原始值包含7种:undefined、null、boolean、number、string、bigint、symbol。<br>
+        <div class="content">
+            我们知道变量其实就是一个起了名字的盒子，这个盒子内保存的是一个值。基本类型是本身、引用类型是引用地址。
+            而js变量是参考了Java语法的,也将这个值分为两种类型原始值和引用值,它们实际都是存储在计算机内存空间里的。<br>
+            区别是:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;保存原始值(primitive value)的变量是存放在栈(stack)内存中,同时是按值(by value)访问的,操作的就是实际值。
+            原始值包含7种js数据类型:undefined、null、boolean、number、string、bigint、symbol。<br>
 
-            保存引用值(reference value)的变量实际值存放在堆(heap)内存中,这是因为JavaScript是不允许直接访问内存位置的。
+            &nbsp;&nbsp;&nbsp;&nbsp;保存引用值(reference value)的变量实际值存放在堆(heap)内存中,这是因为JavaScript是不允许直接访问内存位置的。
             所以是不能直接操作对象所在的堆内存空间的,而是通过对该对象的引用(reference)而非实际的对象本身。
             因此当我们要访问堆内存中的引用数据类型时,实际上我们首先是从变量中获取了该对象的地址指针(它是存在栈内存中的), 然后再从堆内存中取得我们需要的数据。
             引用值在变量保存之后可以随时添加、修改、删除自己的属性和方法。<br>
-            <img src="../../images/栈堆内存比较.png" alt=""><br>
-
-            复制值时:<br>
+            <img src="../../assets/images/栈堆内存比较.png" alt=""><br>
+            <b>复制值时:</b>
+            <br>
             原始值是从栈内存中复制一份新的实际值给新变量,操作新变量不会影响原变量,它两互相独立互不干扰。<br>
-            <img src="../../images/原始值复制值.png" alt=""><br>
+            <img src="../../assets/images/原始值复制值.png" alt=""><br>
             引用值是复制栈内存中的引用地址,所以新变量和旧变量指向的是同一个堆内存中的对象。无论谁修改都会改变实际值。<br>
-            <img src="../../images/引用值复制值.png" alt=""><br>
+            <img src="../../assets/images/引用值复制值.png" alt=""><br>
 
-            函数传递参数时:<br>
-            记住ECMAScript中所有的函数的参数都是函数内部的局部变量也都是按值传递的,也就是说实参传进来时是复制一份给到函数内部的形参。
-            原始值就跟原始值变量的复制一样,引用值就跟引用值变量的复制一样。其实就都是值,不过一个是实际值一个是引用地址值都是值。按的是栈内存中的值复制一份给到形参。<br>
-
-            变量类型的检测:<br>
-            typeof操作符:使用它可以判断一个变量是否是原始类型,确切地说是判断一个变量是否是字符串、数值、布尔值或undefined的最好方式。
-            而对于null或对象,它都返回 "object",所以对引用类型作用不大需要使用其它方法检测。<br>
-            instanceof操作符:判断一个变量是什么类型的对象(引用类型),语法: result = variable instanceof constructor;
-            如果变量是给定引用类型的实例,则instanceof操作符就返回true否则就返回false。
+            <b>函数传递参数时:</b>
+            <br>
+            记住ECMAScript中所有的函数的参数都是函数内部的局部变量也都是按值传递的,也就是说实参传进来时是复制一份给到函数内部的形参。<br>
+            原始值就跟原始值变量的复制一样,引用值就跟引用值变量的复制一样。其实就都是值,不过一个是实际值一个是引用地址值都是值,都是栈内存中的值复制一份给到形参。<br>
             
-        </div>
-        <h4>4.变量的解构赋值</h4>
-        <div>
-            <h5>1.解构概述</h5>
-                在es5中对变量赋值是使用 '=' ,且如果是要把对象的属性或者数组的元素赋值给变量只能一个一个赋值。
-                所以在es6中提供了对赋值运算符(=)的扩展即：解构赋值。
-                所谓解构(Destructuring)赋值是指按照一定模式,按照对应位置从数组或对象中提取值,并将其赋值给变量。
-                
-                解构赋值的规则是:解构源如果不是对象或数组,就先将其转为对象,undefined和null无法转为对象解构报错。<br>
-                解构模型: let {解构的目标} =  解构的源     
-                    解构的源,解构赋值表达式的右边部分。<br>
-                    解构的目标,解构赋值表达式的左边部分。<br>
-                优点:在代码书写上简洁且易读,语义更加清晰明了也方便了复杂对象或数组中数据字段获取。
-            <h5>2.数组的解构:</h5>
-            <p>
-                数组是按照下标作为对应关系的进行解构的,变量的取值由它在数组中的位置决定。<br>
-                基本数组:<br>
-                let arr = [1, 2, 3]<br>
-                    let [a, b, c] = [1, 2, 3];<br>
-                    let [a, b, c] = arr;<br>
-                解构的源:arr = [1, 2, 3],一个含有三个元素的数组。<br>
-                解构的目标:[a, b, c]。即从数组中提取值,按照对应位置(下标)用a,b,c三个变量接收对应下标的数组值。<br>
-                es5是这样赋值的:<br>
-                    var a = arr[0]<br>
-                    var b = arr[1]<br>
-                    var c = arr[2] <br>
-                只要两边的模式相同,左边的变量就会被赋予对应的值。如果解构不成功,变量的值就等于undefined。<br>
-                可以不完全解构,也可以设置变量的默认值,还可以多重嵌套解构。<br>
-                注意:ES6 内部使用严格相等运算符(===)判断一个位置是否有值。所以只有当一个数组成员严格等于undefined时设置的默认值才会生效。
-            </p>
-            <h5>3.对象的解构:</h5>
-            <p>            
-                对象的解构不同于数组的解构是按元素下标(index)排列的,对象的解构赋值是根据对象的属性名来一一对应的与顺序无关。<br>
-                接收变量必须与对象的属性同名,数组的解构一样,解构失败,变量值为undefined,也可以嵌套,不完全解构,或者加默认值。<br>
-                基本对象: <br>
-                    obj = { username: 'zhangsan', age: 25 }<br>
-                    let { username, age} = obj <br>
-                    let { username, age} = { username: 'zhangsan', age: 25 }<br>
-                    username // zhangsan<br>
-                    age // 25<br>
-                es5是这样赋值的:<br>
-                    var username= obj.username<br>
-                    var age= obj.age<br>
-                或者通过键名取值<br>
-                    var username= obj["username"]<br>
-                    var age= obj["age"]<br>
-                注意:对象的解构赋值是es6中对象的扩展,当属性名和值同名时可以只写一个<br>
-                    let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };<br>
-                可以简写成下面,找对象中有没有foo属性有则将它的值赋值给foo变量所以可以这样使用<br>
-                    let { foo, bar } = { foo: 'aaa', bar: 'bbb' };<br>
-                本质是:在对象中找有没有foo属性,有则将属性名对应的属性值赋值给别名变量myfoo。真正被赋值的是变量而不是解构模式<br>
-                    let { foo: myfoo(别名), bar: mybar } = { foo: 'aaa', bar: 'bbb' };<br>
-                注意:所有可以被遍历的对象都是可以被解构赋值的,也常常和res运算符(即... 三点运算符)一起使用。
-            </p>
-            <h5>4.应用</h5>
-            <p>
-                1.交换变量的值<br>
-                    let x = 1;<br>
-                    let y = 2;<br>
-                    [x, y] = [y, x];<br>
-
-                2.从函数返回多个值(返回数组或对象,通过解构赋值取出来比较常用<br>
-                    函数只能返回一个值,如果要返回多个值,只能将它们放在数组或对象里返回。<br>
-                    // 返回一个数组<br>
-                    function example() {<br>
-                        return [1, 2, 3];<br>
-                    }<br>
-                    let [a, b, c] = example();<br>
-    
-                    // 返回一个对象<br>
-                    function example() {<br>
-                        return {<br>
-                            foo: 1,<br>
-                            bar: 2<br>
-                        };<br>
-                    }<br>
-                    let { foo, bar } = example();<br>
-                    
-                3.输入模块的指定方法,加载模块时,往往需要指定输入哪些方法。非常常用！！！
-                    解构赋值使得输入语句非常清晰:
-                    const { SourceMapConsumer, SourceNode } = require("source-map");
-                    import {SourceMapConsumer, SourceNode} from '/source-map'
-
-            </p>
         </div>
     </div>
     <!-- js作用域 -->
     <h3>2、js执行上下文和作用域</h3>
-    <div>
+    <div class="content">
         <h4>1.js执行上下文</h4>
         <div>
             执行上下文:又称为执行环境(execution context)是评估和执行 JavaScript 代码的环境的抽象概念。由JavaScript引擎创建<br>
@@ -238,7 +151,7 @@
     </div>
     <!-- js内存 -->
     <h3>3、内存</h3>
-    <div>
+    <div class="content">
         计算机的内存是非常珍贵的,所以当程序不需要内存时应该释放之前占据的内存空间。
         在JavaScript中是通过垃圾回收程序自动完成内存管理进而实现内存分配和闲置内存资源回收的。
         基本思路就是确定哪个变量不会再被使用就释放它占用的内存空间。

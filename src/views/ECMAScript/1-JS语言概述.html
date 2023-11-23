@@ -3,20 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>JavaScript语言概述</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <!-- js历史 -->
-    <h3>1、JS历史</h3>
-    <div> 
-            1995年,网景公司凭借其Navigator浏览器成为Web时代开启时最著名的第一代互联网公司。
-        由于网景公司希望能在静态HTML页面上添加一些动态效果以及验证表单,于是叫Brendan Eich这哥们在两周之内设计出了JavaScript语言。
-        当时叫LiveScript,为了搭上Java大热的顺风车进而推广这门语言,网景公司跟sun公司结盟并改名为JavaScript,所以和Java就是两个东西。
-        JavaScript的主要用途是为向 HTML 页面增加交互性并替代Perl等服务器端语言处理表单验证,当然现在JavaScript功能是非常丰富的。
-        Tips:编程语言本质上和我们说的语言(中文)没什么区别,只是语法比较特殊,它是人和计算机交流的工具。而js是与浏览器交流沟通的工具。
+    <!-- js是什么 -->
+    <h3 class="pl-10">1、JS是什么</h3>
+    <div class="content">
+            JavaScript(缩写:JS)是一门轻量级、弱类型、动态的脚本编程语言。
     </div>
-    <!-- ecmascript介绍 -->
-    <h3>2、ECMAScript</h3>
-    <div>
+    <!-- js历史 -->
+    <h3 class="pl-10">2、JS历史</h3>
+    <div class="content"> 
+            1995年,网景公司凭借其Navigator浏览器成为Web时代开启时最著名的第一代互联网公司。
+        由于网景公司希望能在静态HTML页面上添加一些动态效果以及验证表单,于是叫布兰登·艾克(Brendan Eich)这哥们在两周之内设计出了JavaScript语言。
+        当时叫LiveScript,但是因为当时 Java 很流行为了搭上Java大热的顺风车进而推广这门语言,网景公司跟sun公司结盟并改名为JavaScript,所以和Java语言就是两个东西。
+        JavaScript的主要用途是为向 HTML 页面增加交互性并替代Perl等服务器端语言处理表单验证,当然现在JavaScript功能是非常丰富的。
+        Tips:高级编程语言本质上和我们说的语言(中文)没什么区别,只是语法比较特殊,它是人和计算机交流的工具。而js是与浏览器交流沟通的工具。
+    </div>
+    <!-- ECMAScript介绍 -->
+    <h3 class="pl-10">3、ECMAScript</h3>
+    <div class="content">
             因为网景开发了JavaScript,一年后微软又模仿JavaScript开发了JScript,这样就有了两个版本的JavaScript。
         为了让JavaScript成为全球标准,网景等几个公司就联合ECMA(European Computer Manufacturers Association 欧洲计算机制造商协会)组织定制了JavaScript语言的标准。
         第39技术委员会的工程师们花了数月时间打造出ECMA-262这一新的脚本语言标准,而为了保证这门语言的开放性、中立性、标准化、就被称为ECMAScript标准。
@@ -27,44 +33,47 @@
         
     </div>  
     <!-- js的组成-->
-    <h3>3、JS的组成</h3>
-    <div>
-        虽然JavaScript和ECMAScript可以说是同义词,但是实际上完整的JavaScript实现主要包括三个部分 
-        ECMA-262定义的核心基础语法,从基本的层面描述了这门脚本语言的数据类型、语句、关键字、保留字操作符等内容。
-        我们熟知的版本是2009年发布的ECMA-262第五版也就是ECMAScript5。
-        之后就是ECMA-262第六版俗称ES6、ES2015是2015年6月发布,这是一个大版本的改动增加了很多新特性。
-        之后就是ECMA-262第七版俗称ES7、ES2016是2016年6月发布。
-        之后就是ECMA-262第八版俗称ES8、ES2017是2017年6月发布。
-        之后就是ECMA-262第九版俗称ES9、ES2018是2018年6月发布。
-        之后就是ECMA-262第十版俗称ES10、ES2019是2019年6月发布。
-        主要是ECMA-262第六版之后变动多所以一般也称ES6是JavaScript语言的新一代语法,而之前的统称为ECMAScript5。
+    <h3 class="pl-10">4、JS的组成</h3>
+    <div class="content">
+        虽然JavaScript和ECMAScript可以说是同义词,但是实际上完整的JavaScript实现主要包括三个部分<br>
+        <b>4.1、ECMAScript</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 它定义了JavaScript语言的核心基础语法,从基本的层面描述了这门脚本语言的数据类型、语句、关键字、保留字操作符等内容。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们熟知的版本是2009年发布的ECMA-262第五版也就是ECMAScript5。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之后就是ECMA-262第六版俗称ES6、ES2015是2015年6月发布,这是一个大版本的改动增加了很多新特性。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之后就是ECMA-262第七版俗称ES7、ES2016是2016年6月发布。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之后就是ECMA-262第八版俗称ES8、ES2017是2017年6月发布。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之后就是ECMA-262第九版俗称ES9、ES2018是2018年6月发布。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 之后就是ECMA-262第十版俗称ES10、ES2019是2019年6月发布。<br>
+        主要是ECMA-262第六版之后变动多、所以一般也称ES6是JavaScript语言的新一代语法,而ECMA-262第六版之前的统称为ECMAScript5。<br><br>
 
-        浏览器文档对象模型DOM(Document Object Model),是浏览器提供的一个应用编程接口(API),实现使用js这门语言操作HTML文档中的各种元素。
-        它的标准是由万维网联盟(W3C,World Wide Web Consortium)制定的。
+        <b>4.2、DOM</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 文档对象模型DOM(Document Object Model)它是浏览器提供的一个应用编程接口(API),实现使用js这门语言操作HTML文档中的各种元素,它的标准是由万维网联盟(W3C,World Wide Web Consortium)制定的。<br><br>
 
-        浏览器对象模型BOM(Browser Object Model),浏览器提供的使用js操作浏览器窗口的编程接口(API)。它是没有相关标准的,但是HTML5之后慢慢规范起来了。
+        <b>4.3、BOM</b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 浏览器对象模型BOM(Browser Object Model)它是浏览器提供的使用js操作浏览器窗口的编程接口(API)。它是没有相关标准的,但是HTML5之后慢慢规范起来了。
 
     </div> 
     <!-- 学习修养 -->
-    <h3>4、前端工程师的自我修养</h3>
-    <div>
-        扎实的基础,学习新知识的欲望。
-        初级:
-         	JavaScript各种概念都得了解,《JavaScript语言精粹》这本书的目录都得有概念,并且这些核心点都能脱口而出是什么。这里列举一些做参考:
-         	知道组合寄生继承,知道class继承。
-         	知道怎么创建类function + class。
-         	知道闭包在实际场景中怎么用,常见的坑。
-         	知道模块是什么,怎么用。
-         	知道event loop是什么,能举例说明event loop怎么影响平时的编码。
-         	掌握基础数据结构,比如堆、栈、树,并了解这些数据结构计算机基础中的作用。
-         	知道ES6数组相关方法,比如forEach,map,reduce。
-        中级:
-         	知道class继承与组合寄生继承的差别,并能举例说明。
-         	知道event loop原理,知道宏微任务,并且能从个人理解层面说出为什么要区分。知道node和浏览器在实现loop时候的差别。
-         	能将继承、作用域、闭包、模块这些概念融汇贯通,并且结合实际例子说明这几个概念怎样结合在一起。
-         	能脱口而出2种以上设计模式的核心思想,并结合js语言特性举例或口喷基础实现。
-         	掌握一些基础算法核心思想或简单算法问题,比如排序,大数相加。
-
+    <h3 class="pl-10">5、前端工程师的自我修养</h3>
+    <div class="content">
+        扎实的基础,学习新知识的欲望。<br>
+        <b>初级:</b><br>
+         	JavaScript各种概念都得了解,《JavaScript语言精粹》这本书的目录都得有概念,并且这些核心点都能脱口而出是什么。<br>
+        这里列举一些做参考:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道组合寄生继承,知道class继承。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道怎么创建类function + class。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道闭包在实际场景中怎么用,常见的坑。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道模块是什么,怎么用。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道event loop是什么,能举例说明event loop怎么影响平时的编码。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 掌握基础数据结构,比如堆、栈、树,并了解这些数据结构计算机基础中的作用。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道ES6数组相关方法,比如forEach,map,reduce。<br>
+        <b>中级:</b><br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道class继承与组合寄生继承的差别,并能举例说明。<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 知道event loop原理,知道宏微任务,并且能从个人理解层面说出为什么要区分。知道node和浏览器在实现loop时候的差别。<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 能将继承、作用域、闭包、模块这些概念融汇贯通,并且结合实际例子说明这几个概念怎样结合在一起。<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 能脱口而出2种以上设计模式的核心思想,并结合js语言特性举例或口喷基础实现。<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 掌握一些基础算法核心思想或简单算法问题,比如排序,大数相加。<br>
+         <br><br><br><br>
     </div>
 </body>
 </html>

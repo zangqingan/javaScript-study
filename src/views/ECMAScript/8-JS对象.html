@@ -683,6 +683,90 @@
                     主要是通过Object.assign()方法实现的。
                 </p>
             </div>
+            <h4>4.变量的解构赋值</h4>
+            <div>
+                <h5>1.解构概述</h5>
+                    在es5中对变量赋值是使用 '=' ,且如果是要把对象的属性或者数组的元素赋值给变量只能一个一个赋值。
+                    所以在es6中提供了对赋值运算符(=)的扩展即：解构赋值。
+                    所谓解构(Destructuring)赋值是指按照一定模式,按照对应位置从数组或对象中提取值,并将其赋值给变量。
+                    
+                    解构赋值的规则是:解构源如果不是对象或数组,就先将其转为对象,undefined和null无法转为对象解构报错。<br>
+                    解构模型: let {解构的目标} =  解构的源     
+                        解构的源,解构赋值表达式的右边部分。<br>
+                        解构的目标,解构赋值表达式的左边部分。<br>
+                    优点:在代码书写上简洁且易读,语义更加清晰明了也方便了复杂对象或数组中数据字段获取。
+                <h5>2.数组的解构:</h5>
+                <p>
+                    数组是按照下标作为对应关系的进行解构的,变量的取值由它在数组中的位置决定。<br>
+                    基本数组:<br>
+                    let arr = [1, 2, 3]<br>
+                        let [a, b, c] = [1, 2, 3];<br>
+                        let [a, b, c] = arr;<br>
+                    解构的源:arr = [1, 2, 3],一个含有三个元素的数组。<br>
+                    解构的目标:[a, b, c]。即从数组中提取值,按照对应位置(下标)用a,b,c三个变量接收对应下标的数组值。<br>
+                    es5是这样赋值的:<br>
+                        var a = arr[0]<br>
+                        var b = arr[1]<br>
+                        var c = arr[2] <br>
+                    只要两边的模式相同,左边的变量就会被赋予对应的值。如果解构不成功,变量的值就等于undefined。<br>
+                    可以不完全解构,也可以设置变量的默认值,还可以多重嵌套解构。<br>
+                    注意:ES6 内部使用严格相等运算符(===)判断一个位置是否有值。所以只有当一个数组成员严格等于undefined时设置的默认值才会生效。
+                </p>
+                <h5>3.对象的解构:</h5>
+                <p>            
+                    对象的解构不同于数组的解构是按元素下标(index)排列的,对象的解构赋值是根据对象的属性名来一一对应的与顺序无关。<br>
+                    接收变量必须与对象的属性同名,数组的解构一样,解构失败,变量值为undefined,也可以嵌套,不完全解构,或者加默认值。<br>
+                    基本对象: <br>
+                        obj = { username: 'zhangsan', age: 25 }<br>
+                        let { username, age} = obj <br>
+                        let { username, age} = { username: 'zhangsan', age: 25 }<br>
+                        username // zhangsan<br>
+                        age // 25<br>
+                    es5是这样赋值的:<br>
+                        var username= obj.username<br>
+                        var age= obj.age<br>
+                    或者通过键名取值<br>
+                        var username= obj["username"]<br>
+                        var age= obj["age"]<br>
+                    注意:对象的解构赋值是es6中对象的扩展,当属性名和值同名时可以只写一个<br>
+                        let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    可以简写成下面,找对象中有没有foo属性有则将它的值赋值给foo变量所以可以这样使用<br>
+                        let { foo, bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    本质是:在对象中找有没有foo属性,有则将属性名对应的属性值赋值给别名变量myfoo。真正被赋值的是变量而不是解构模式<br>
+                        let { foo: myfoo(别名), bar: mybar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    注意:所有可以被遍历的对象都是可以被解构赋值的,也常常和res运算符(即... 三点运算符)一起使用。
+                </p>
+                <h5>4.应用</h5>
+                <p>
+                    1.交换变量的值<br>
+                        let x = 1;<br>
+                        let y = 2;<br>
+                        [x, y] = [y, x];<br>
+    
+                    2.从函数返回多个值(返回数组或对象,通过解构赋值取出来比较常用<br>
+                        函数只能返回一个值,如果要返回多个值,只能将它们放在数组或对象里返回。<br>
+                        // 返回一个数组<br>
+                        function example() {<br>
+                            return [1, 2, 3];<br>
+                        }<br>
+                        let [a, b, c] = example();<br>
+        
+                        // 返回一个对象<br>
+                        function example() {<br>
+                            return {<br>
+                                foo: 1,<br>
+                                bar: 2<br>
+                            };<br>
+                        }<br>
+                        let { foo, bar } = example();<br>
+                        
+                    3.输入模块的指定方法,加载模块时,往往需要指定输入哪些方法。非常常用！！！
+                        解构赋值使得输入语句非常清晰:
+                        const { SourceMapConsumer, SourceNode } = require("source-map");
+                        import {SourceMapConsumer, SourceNode} from '/source-map'
+    
+                </p>
+            </div>
         </div>
     </div>
 <!-- js -->
