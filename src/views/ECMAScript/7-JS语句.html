@@ -3,68 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>JavaScript语句</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
     <h3>1、js语句</h3>
-    <div>
+    <div class="content">
         <h4>1.js语句和代码块</h4>
         <div>
-            js语句:是用来向浏览器发出命令,即告诉浏览器该做什么。分号(可选)用于分隔Js语句,表示语句结束。
-            js代码块:则是 由JavaScript 语句和花括号组成的序列。代码块以左花括号开始,以右花括号结束,花括号只有分组作用,没有其它用途,一个花括号为一个代码块。
+            js语句:是用来向浏览器发出命令,即告诉浏览器该做什么。分号(可选)用于分隔Js语句,表示语句结束。<br>
+            js代码块:则是 由JavaScript 语句和花括号{}组成的序列。代码块以左花括号开始,以右花括号结束,花括号只有分组作用,没有其它用途,一个花括号为一个代码块。
             语法:{
                 //诸多语句
             }
             注意:js代码块的作用是一并地执行花括号内的所有语句序列(即要么都执行要么都不执行它是一个整体)
             js代码执行顺序:浏览器会在读取js代码时,浏览器按照编写顺序逐行地(从上往下逐行)执行代码,
             遇到分支则根据条件判断是否执行分支代码块中的内容,遇到循环则根据循环条件判断是否执行循环代码块中的内容。
-            代码块里的内容也是逐行往下执行的。
+            代码块里的内容也是逐行往下执行的。<br>
             
-            js语句通常以一个语句标识符为开始,并执行该语句。注意语句标识符是保留关键字不能作为变量名使用。
-            下表列出了 JavaScript 常见语句的标识符 (关键字) : 
-                语句 	描述
-                break 	用于跳出循环。
-                catch 	语句块,在 try 语句块执行出错时执行 catch 语句块。
-                continue 	跳过循环中的一个迭代。
-                do ... while 	执行一个语句块,在条件语句为 true 时继续执行该语句块。
-                for 	在条件语句为 true 时,可以将代码块执行指定的次数。
-                for ... in 	用于遍历数组或者对象的属性(对数组或者对象的属性进行循环操作)。
-                function 	定义一个函数
-                if ... else 	用于基于不同的条件来执行不同的动作。
-                return 	退出函数
-                switch 	用于基于不同的条件来执行不同的动作。
-                throw 	抛出(生成)错误 。
-                try 	实现错误处理,与 catch 一同使用。
-                var 	声明一个变量。
-                while 	当条件语句为 true 时,执行语句块。 
+            js语句通常以一个语句标识符为开始,并执行该语句。注意语句标识符是保留的关键字不能作为变量名使用。<br>
+            下表列出了 JavaScript 常见语句的标识符 (关键字) : <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;语句 	描述<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;break 	用于跳出循环。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;catch 	语句块,在 try 语句块执行出错时执行 catch 语句块。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;continue 	跳过循环中的一个迭代。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;do ... while 	执行一个语句块,在条件语句为 true 时继续执行该语句块。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;for 	在条件语句为 true 时,可以将代码块执行指定的次数。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;for ... in 	用于遍历数组或者对象的属性(对数组或者对象的属性进行循环操作)。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;function 	定义一个函数<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;if ... else 	用于基于不同的条件来执行不同的动作。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return 	退出函数<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;switch 	用于基于不同的条件来执行不同的动作。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;throw 	抛出(生成)错误 。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;try 	实现错误处理,与 catch 一同使用。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;var 	声明一个变量。<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;while 	当条件语句为 true 时,执行语句块。 <br>
         </div>
         <h4>2.js语句分类</h4>
         <div>
             <h5>1.条件判断语句也叫if语句:</h5> 
             <p>
-                执行时先对条件表达式进行求值判断 值为true则执行if后面紧跟着的语句,false则不执行。
+                执行时先对条件表达式进行求值判断 值为true则执行if后面紧跟着的语句,false则不执行。即满足预设的条件执行对应的语句块。
                 注意:如果要控制多条语句则将其放到一个代码块中即可,浏览器执行到if语句时会先判断()内的条件表达式的值,然后是根据值来确定怎么走下一步。
-                      条件表达式的值会被调用Boolean()函数隐式转换为布尔类型的,除了 "" 0 undefined null NaN转化为false外其它都是true。<br>
-                语法:
-                    if(条件)语句;
+                      条件表
+                      达式的值会被调用Boolean()函数隐式转换为布尔类型的,除了 空字符串、0、undefined、null、NaN转化为false外其它都是true。<br>
+                <pre>
+                    语法:
+                    if(条件)语句;<br>
 
-                    if(条件){语句;}
+                    if(条件){语句;}<br>
 
-                    if(条件){条件成立执行的代码块}else{条件不成立时执行的代码块}
+                    if(条件){条件成立执行的代码块}else{条件不成立时执行的代码块}<br>
 
-                    if(条件1){当条件 1 为 true 时执行的代码}
-                    else if(条件2){当条件 2 为 true 时执行的代码}
-                    else if(条件3){当条件 3为 true 时执行的代码}
-                    else{当条件 1 和 条件 2 条件3 都不为 true 时执行的代码} 
+                    if(条件1) {
+                        当条件 1 为 true 时执行的代码
+                    } else if(条件2) {
+                        当条件 2 为 true 时执行的代码 
+                    } else if(条件3) {
+                        当条件 3为 true 时执行的代码
+                    } else {
+                        当条件 1 和 条件 2 条件3 都不为 true 时执行的代码
+                    } <br>
+                </pre>
+                注意:
+                    如果不希望往下执行就return中断。<br>
+                    一层的if else 一般也会使用三元条件运算符语句来代替<br>
+                    实际开发中 if语句不要嵌套操作3层、多个if else 可以转为更方便的switch结构<br>
+                <pre>
+                    if(a) {
+                        b
+                    }else {
+                        c
+                    }
+                    等价写法：
+                    a ? b : c;
+                </pre>
             </p> 
             <h5>2.条件分支语句也叫switch语句:</h5>
             <p>
-                工作原理:首先设置条件表达式n,随后条件表达式的值会与结构中的每个 case 后的表达式的值依次做全等比较。所以比较时不会发生类型转换
+                工作原理:首先设置条件表达式n,随后条件表达式的值会与结构中的每个 case 后的表达式的值依次做全等比较。所以比较时不会发生类型转换<br>
                 如果相等则为true,则执行关联case 后面对应的代码块,不为true跳过执行,都不相等执行default默认的代码块。
-                可以break 关键字来打断,防止case穿透这是必要的。
+                可以break 关键字来打断跳出循环,防止case穿透这是必要的。<br>
                 注意:switch 必须和case一起使用,<br>
-                语法:
-                    switch(条件表达式n)
-                    {
+                <pre>
+                    语法:
+                    switch(条件表达式n) {
                         case 条件表达式1:
                             执行代码块 1
                             break;
@@ -74,34 +96,113 @@
                         default:
                             条件表达式n 与 条件表达式1 和 条件表达式2 都不同时执行的代码
                     }
+                </pre>
+
             </p> 
             <br>
             <strong>switch练习:点击按钮获取今天是星期</strong>
             <button id="demo">按钮</button>
             <br>
-            <h5>3.循环语句:指当条件为true时反复的执行一个代码块多次。</h5>
+            <h5>3. 三元运算符判断语句</h5>
             <p>
-                JavaScript 支持不同类型的循环:for和while两种<br>
+                JavaScript的三元运算符 ?: 也可以用于逻辑判断、一般是用来代替一层的if else语句算是它的简写形式。
+                <pre>
+                    (条件) ? 表达式1 : 表达式2
+                    let even;
+                    if (n % 2 === 0) {
+                    even = true;
+                    } else {
+                    even = false;
+                    }
+                    等价如下写法：
+                    let even = (n % 2 === 0) ? true : false;
+                </pre>
+            </p>
+            <h5>4.循环语句:指当条件为true时反复的执行一个代码块多次。</h5>
+            <p>
+                JavaScript 支持不同类型的循环:有for和while两种<br>
 
                 1.while - 当指定的条件为 true 时循环指定的代码块。条件在循环体中被修改。在{}内定义一个更新表达式防止造成死循环。
-                语法:while(条件){需要执行的代码块}<br>
+                <pre>
+                    语法:while(条件){需要执行的代码块}
+                    let i = 0;
+                    while (i < 100) {
+                    console.log('i 当前为：' + i);
+                    i = i + 1;
+                    }
+                </pre>
+                <br>
     
-                2.do/while - 同样当指定的条件为 true 时循环指定的代码块但是会先执行一次。
-                语法:do{需要执行的代码块}while (条件);<br>
-    
-                3.for - 循环代码块一定的次数
-                语法:for(初始化表达式;条件表达式;更新表达式;){条件成立时执行的代码块},初始化表达式;条件表达式;更新表达式;都不是必需的。<br>
-    
-                注意:
-                    break 语句用于跳出当前循环,离他最近的起作用,可以指定一个label确定终止哪一个循环。
-                    但是会继续执行该循环之后的代码(如果有的话)只能用在循环或 switch 中。
-                    continue 用于跳过当前循环中的一个迭代即跳过当次循环并重新回到循环开始的判断,只能用在循环中。
+                2.do/while - 同样当指定的条件为 true 时循环指定的代码块、唯一的区别就是无论如何都会先运行一次循环体、然后判断循环条件。
+                <pre>
+                    语法:do{需要执行的代码块}while (条件);
+                    let x = 3;
+                    let i = 0;
 
-                4.for-in 语句,用来枚举对象中的非符号键属性。
-                语法: for (property in expression){其它代码},所有可枚举的属性都会返回一次。
+                    do {
+                        console.log(i);
+                        i++;
+                    } while(i < x);
+                    
+                </pre>
+                <br>
+    
+                3.for -指定循环的起点、终点和终止条件、循环代码块一定的次数。
+                <pre>
+                    语法:for(初始化表达式;条件表达式;更新表达式;){
+                        条件成立时执行的代码块
+                    }
+                    let x = 3;
+                    for (let i = 0; i < x; i++) {
+                        console.log(i);
+                    }
+                    // 0
+                    // 1
+                    // 2
+                </pre>
+                注意:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;初始化表达式;条件表达式;更新表达式;都不是必需的。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;break 语句用于跳出当前循环,离他最近的起作用,可以指定一个label确定终止哪一个循环。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;但是会继续执行该循环之后的代码(如果有的话)只能用在循环或 switch 中。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;continue 用于跳过当前循环中的一个迭代即跳过当次循环并重新回到循环开始的判断,只能用在循环中。<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;所有for循环都可以改写成while循环。<br>
 
-                5.for-of 语句,用来遍历可迭代对象的元素。
-                语法: for (property of expression){其它代码},
+                4.for-in 语句,用来枚举对象中所有可遍历的非符号键属性(不管是自身的还是继承的)。
+                <pre>
+                    语法: for (property in expression){
+                        其它代码
+                    },所有可枚举的属性都会返回一次。如果只想要获取对象自身的属性可以使用 hasOwnProperty 方法判断一下。
+                    for ( var name in object ) {
+                        if ( object.hasOwnProperty(name) ) {
+                          /* loop code */
+                        }
+                      }
+                      let es6 = {
+                        edition: 6,
+                        committee: "TC39",
+                        standard: "ECMA-262"
+                      };
+                      
+                      for (let e in es6) {
+                        console.log(e);
+                      }
+                      // edition
+                      // committee
+                      // standard
+                </pre>
+
+                5.for-of 语句,是ES6 借鉴 C++、Java、C# 和 Python 语言、引入作为遍历所有数据结构的统一的方法。
+                也就是说只要一个数据结构只要部署了Symbol.iterator属性、就被视为具有 iterator 接口、就可以用for...of循环遍历它的成员。<br>
+                我们常见的: 数组、Set、Map、arguments类数组对象、DOM NodeList类数组对象、字符串等都可以使用这个方法。而普通对象是不能使用这个方法的。
+                <pre>
+                    语法: for (property of expression){
+                        其它代码
+                    },
+                    使用Object.keys方法将对象的键名生成一个数组然后遍历这个数组。
+                    for (const key of Object.keys(someObject)) {
+                        console.log(key + ': ' + someObject[key]);
+                      }
+                </pre>
             </p>  
         </div>
     </div>
