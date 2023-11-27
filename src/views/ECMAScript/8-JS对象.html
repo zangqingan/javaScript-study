@@ -12,27 +12,30 @@
             <h4>1.js对象的定义</h4>
             <div>
                 对象就是现实事物在计算机程序语言中的抽象表示,在JavaScript 中其实所有事物都是对象:字符串、数字、数组、日期,等等。
-                而且JavaScript 的所有其他对象都继承自Object对象,即那些对象都是Object的实例。
-                对象是一种复合的数据类型,它可以保存多个不同数据类型的变量,这些变量也叫做属性或方法。就像一个袋子或者说一个容器或者说一张无序的表一样。
+                而且JavaScript 的所有其他对象都继承自Object对象,即那些对象都是Object的实例。<br>
+                对象是一种复合的引用数据类型,它可以保存多个不同数据类型的变量,这些变量也叫做属性或方法。就像一个袋子或者说一个容器或者说一张无序的表一样。
                 属性是与对象相关的值,方法是能够在对象上执行的动作。在面向对象的语言中,属性和方法常被称为对象的成员。
-                在js对象中都是以名值对形式存在(key-value)的无序的复合数据集合,名字也叫“属性”(property),
-                注意:名值对之间用逗号分隔,属性名都是字符串所以可以不用逗号括起来,而属性值是字符串类型时必须用双引号括起来。
+                在js对象中都是以名值对形式存在(key-value)的无序的复合数据集合,名字也叫“属性”(property),<br>
+                注意:名值对之间用逗号分隔,属性名是字符串时可以不用逗号括起来,而属性值是字符串类型时必须用双引号括起来。
                 如果一个属性的值为函数,通常把这个属性称为“方法”,它可以像函数那样调用。
-                {
-                    属性名:属性值,
-                    name:"zhangsan",
-                    age:25,
-                    sayHi:function(){...}
-                }
+                <pre>
+                    {
+                        属性名:属性值,
+                        name:"zhangsan",
+                        age:25,
+                        sayHi:function(){...}
+                    }
+                </pre>
                 注意:属性名和属性值的要求
-                    属性名都是字符串或者符号类型同时应遵守js标识符的命名规则且应尽量语义化,对于特殊的属性名不能使用 对象.属性名 的方式访问操作。而是应该使用 对象[属性名] 来操作。
+                    属性名都是字符串或者符号类型同时应遵守js标识符的命名规则且应尽量语义化,对于特殊的属性名不能使用 对象.属性名 的方式访问操作。<br>
+                    而是应该使用 对象[属性名] 来操作。
                     属性值可以是除undefined值之外的任何值,即其它任意的 js数据类型(也可以是另一个对象这时就是嵌套了)
-                    
-                js对象特性:
-                    js对象都有自由扩展属性的特性,即object.新属性名 = 属性值;而不是必须在声明对象时同时声明所有的属性。
+                <br> 
+                <b>js对象特性:</b>js对象都有自由扩展属性的特性,即object.新属性名 = 属性值;而不是必须在声明对象时同时声明所有的属性。
             </div>
             <h4>2.js对象的分类</h4>
             <div>
+                主要就是两种: 内置对象和自定义对象。
                 内置对象:由ecmascript标准中定义的对象,如Math,String等
                 宿主对象:由js的运行环境即浏览器提供的对象,主要是BOM和DOM.
                 自定义对象:由开发人员自己创建的对象(最难最重要)
@@ -42,65 +45,80 @@
                 <h5>1.属性的增删改查</h5>
                 <p>
                     
-                    在js中读取对象的属性,有两种方法,一种是使用点运算符 . ,还有一种是使用方括号运算符 [] (属性是变量或者不易表达的值就使用)。
-                    优先考虑使用 . 点运算符来操作(增删改查)对象的属性。
-                    增:通过赋值语句来增加,如果之前有就覆盖久的值,没有就添加为新的属性。对象.要增加的属性名 = 对应的属性值;
-                    删:delete 对象.要删除的属性名;删除成功后返回true,只能删除对象本身的属性,无法删除继承的属性
-                    改:重新调用赋值语句就行,对象.要修改的属性名 = 新修改的值;
-                    查:对象.要查找的属性名 或者 对象.["属性名"], 查找到了返回的是属性名对应的属性值,查找不到返回undefined。
-                    经常使用的定义与赋值方法
-                    obj.prop =value
-                    obj['prop']=value,
-                    此外还有Object.defineProperty()方法。
-                    var obj = {
-                        p: 'Hello World'
-                    };
-                    obj.p // "Hello World"
-                    obj['p'] // "Hello World"
+                    在js中读取对象的属性,有两种方法,一种是使用点运算符 . ,还有一种是使用方括号运算符 [] (属性是变量或者不易表达的值就使用)。<br>
+                    优先考虑使用 . 点运算符来操作(增删改查)对象的属性。<br>
+                    <pre>
+                        增:通过赋值语句来增加,如果之前有就覆盖久的值,没有就添加为新的属性。对象.要增加的属性名 = 对应的属性值;
+                        删:delete 对象.要删除的属性名;删除成功后返回true,只能删除对象本身的属性,无法删除继承的属性
+                        改:重新调用赋值语句就行,对象.要修改的属性名 = 新修改的值;
+                        查:对象.要查找的属性名 或者 对象["属性名"], 查找到了返回的是属性名对应的属性值,查找不到返回undefined。
+                        经常使用的定义与赋值方法
+                        obj.prop =value
+                        obj['prop']=value,
+                        此外还有Object.defineProperty()方法。
+                        var obj = {
+                            p: 'Hello World'
+                        };
+                        obj.p // "Hello World"
+                        obj['p'] // "Hello World"
+                    </pre>
                 </p>
                 <h5>2.属性的遍历</h5>
                 <p>
                     1.for in 循环,通过利用in操作符在循环中把对象的属性遍历处理,可以定义一个数组接收遍历的属性名。
                     所有可枚举属性包括实例属性和原型属性。
-                    function Person(){}
-                    Person.prototype.name ="zhangsan";
-                    Person.prototype.age = 27;
-                    Person.prototype.gender = "male";
-                    Person.prototype.city = "guangzhou";
-                    Person.prototype.sayName = function(){
-                        console.log(this.name)
-                    };
-                    let person = new Person();
-                    person.name = "lisi";
-                    person.age = 22;
-                    person.gender = "female";
-                    // for in
-                    let arr = []//定义一个数组接收遍历的对象属性 
-                    for(let i in person){
-                        arr.push(i)
-                    
-                    }
-                    console.log('arr is',arr)//arr is Array(5) [ "name", "age", "gender", "city", "sayName" ]
-                    
+                    <pre>
+                        function Person(){}
+                        Person.prototype.name ="zhangsan";
+                        Person.prototype.age = 27;
+                        Person.prototype.gender = "male";
+                        Person.prototype.city = "guangzhou";
+                        Person.prototype.sayName = function(){
+                            console.log(this.name)
+                        };
+                        let person = new Person();
+                        person.name = "lisi";
+                        person.age = 22;
+                        person.gender = "female";
+                        // for in
+                        let arr = []//定义一个数组接收遍历的对象属性 
+                        for(let i in person){
+                            arr.push(i)
+                            结合 hasOwnProperty 方法可以判断这个属性是不是对象自身的属性而不是继承的属性。
+                            if (person.hasOwnProperty(key)) {
+                                console.log(key);
+                              }
+                        
+                        }
+                        console.log('arr is',arr)//arr is Array(5) [ "name", "age", "gender", "city", "sayName" ]
+                    </pre>
 
-                    2. Object.keys(),接收一个对象作为参数,返回一个包含该实例对象所有可枚举的属性名称的字符串数组。
-                    const result = Object.keys(person)
-                    console.log('result is',result)//result is Array(3) [ "name", "age", "gender" ]
+                    2. Object.keys(),接收一个对象作为参数,返回一个包含该实例对象自身所有可枚举的属性名称的字符串数组。
+                    <pre>
+                        const result = Object.keys(person)
+                        console.log('result is',result)//result is Array(3) [ "name", "age", "gender" ]
+                    </pre>
 
-                    3. Object.getOwnPropertyNames(),接收一个对象作为参数,返回一个包含所有实例属性无论是否可以枚举的属性名称的字符串数组。
-                    const otherResult = Object.getOwnPropertyNames(person)
-                    console.log('otherResult is',otherResult)//result is Array(3) [ "name", "age", "gender" ]
-
+                    3. Object.getOwnPropertyNames(),接收一个对象作为参数,返回一个包含所有实例属性无论是否可以枚举的(即所有的包括可枚举、不可枚举)属性名称的字符串数组。
+                    很少用、基本上使用 Object.keys() 就行。
+                    <pre>
+                        const otherResult = Object.getOwnPropertyNames(person)
+                        console.log('otherResult is',otherResult)//result is Array(3) [ "name", "age", "gender" ]
+                    </pre>
                     es8之后又新增了两个迭代的静态方法,它们都接收一个对象,返回对应的内容数组。
                     Object.values()返回对象值的数组, Object.entries()返回键值对的二维数组。
 
-                    4. Object.values()
-                    const valusResult = Object.values(person)
-                    console.log('valusResult is',valusResult)//valusResult is Array(3) [ "lisi", 22, "female" ]
+                    4. Object.values(),接收一个对象作为参数,返回一个包含该实例对象所有可枚举的属性名对应的属性值字符串数组。
+                    <pre>
+                        const valusResult = Object.values(person)
+                        console.log('valusResult is',valusResult)//valusResult is Array(3) [ "lisi", 22, "female" ]
+                    </pre>
 
-                    5. Object.entries()
-                    const entriesResult = Object.entries(person)
-                    console.log('entriesResult is',entriesResult)//entriesResult is[[ "name", "lisi" ],[ "age", 22 ],[ "gender", "female" ]]
+                    5. Object.entries(),接收一个对象作为参数,返回一个包含该实例对象所有可枚举键值对组成的二维字符串数组。
+                    <pre>
+                        const entriesResult = Object.entries(person)
+                        console.log('entriesResult is',entriesResult)//entriesResult is[[ "name", "lisi" ],[ "age", 22 ],[ "gender", "female" ]]
+                    </pre>
                 </p>
             </div>
             <h4>4.js对象的增强语法</h4>
@@ -198,22 +216,26 @@
             <h4>1.使用内置的构造函数 Object() 创建</h4>
             <div>
                 创建一个对象,使用new运算符调用Object()构造函数,然后再给它添加属性和方法。构造函数就是专门用来创建对象的函数它的首字母默认要大写。
-                语法:var obj = new Object();这样就创建了一个obj对象了。
-                obj.name = 'zhangsan';
-                obj.age = 29;
-                obj.sayName = function(){console.log(this.name)}
+                <pre>
+                    语法:var obj = new Object();这样就创建了一个obj对象了。
+                    obj.name = 'zhangsan';
+                    obj.age = 29;
+                    obj.sayName = function(){console.log(this.name)}
+                </pre>
             </div>
             <h4>2.使用对象字面量的方法创建</h4>
             <div>
                 对象字面量就是在 {} 花括号中直接指定对象含有的属性和属性值。实际开发中多使用对象字面量的声明方式。
-                语法:var obj = {属性名1:属性值1,属性名2:属性值2};
-                注意:属性名和属性值之间使用 : 冒号分隔,名值对之间使用 , 逗号分隔。
-                var obj = {
-                    name:'zhangsan',
-                    age:29,
-                    sayName:function(){console.log(this.name)}
-                }
-                实际上 var obj = {} 是 var obj = new Object();的语法糖。
+                <pre>
+                    语法:var obj = {属性名1:属性值1,属性名2:属性值2};
+                    注意:属性名和属性值之间使用 : 冒号分隔,名值对之间使用 , 逗号分隔。
+                    var obj = {
+                        name:'zhangsan',
+                        age:29,
+                        sayName:function(){console.log(this.name)}
+                    }
+                    实际上 var obj = {} 是 var obj = new Object();的语法糖。
+                </pre>
             </div>
             <h4>3.使用工厂函数的方法创建</h4>
             <div>
@@ -221,15 +243,17 @@
                 就可以使用这个方法。
                 这个方法的本质是定义了一个函数,这个函数的返回值是一个对象的实例。
                 通过定义形参作为创建的对象的属性,这样传入不同的实参,对象的属性值也就不同了。
-                语法: 
-                    function creatPerson(name,属性名2){
-                        let obj = new Object()
-                        obj.name = name
-                        return obj
-                    }
-                var obj1 =  creatPerson("zhangsan"); 这时执行一次函数就会生成一个对象。
-                var obj2 =  creatPerson("lisi"); 这时执行一次函数就会又生成一个对象。
-                注意:使用工厂函数方法可以解决创建多个类似对象的问题,但是创建的对象都是使用Object()构造函数创建的,所以都是object类型的,无法具体区分对象的类型。
+                <pre>
+                    语法: 
+                        function creatPerson(name,属性名2){
+                            let obj = new Object()
+                            obj.name = name
+                            return obj
+                        }
+                    var obj1 =  creatPerson("zhangsan"); 这时执行一次函数就会生成一个对象。
+                    var obj2 =  creatPerson("lisi"); 这时执行一次函数就会又生成一个对象。
+                    注意:使用工厂函数方法可以解决创建多个类似对象的问题,但是创建的对象都是使用Object()构造函数创建的,所以都是object类型的,无法具体区分对象的类型。
+                </pre>
 
             </div>
             <h4>4.使用自定义构造函数的方法创建</h4>
@@ -237,26 +261,27 @@
                 构造函数,就是专门来创建对象的函数,与普通函数没什么区别,只是构造函数首字母要大写,
                 同时普通函数是直接调用,而构造函数要使用 new 关键字来调用。
                 这样使用同一个构造函数创建的对象称为一类对象,所以也将一个构造函数称为一个类,而由它创建出来的对象称为这个类的一个实例。
-                function Person(name,){
-                    this.name = name
-                }
-                可以使用 instanceof 运算符 检查一个实例对象是否是某个类的实例。
-                    语法:实例对象 instanceof 构造函数(类);如果是则返回true反之则返回false。
-                function Foo(name,age){
-                    this.name = name
-                    this.age = age
-                    return this //默认有返回,不写时new返回的也是这个this对象
-                }
-                var foo = new Foo('zhangsan',25)
-                console.log(foo instanceof Foo)//true
-
+                <pre>
+                    function Person(name,){
+                        this.name = name
+                    }
+                    可以使用 instanceof 运算符 检查一个实例对象是否是某个类的实例。
+                        语法:实例对象 instanceof 构造函数(类);如果是则返回true反之则返回false。
+                    function Foo(name,age){
+                        this.name = name
+                        this.age = age
+                        return this //默认有返回,不写时new返回的也是这个this对象
+                    }
+                    var foo = new Foo('zhangsan',25)
+                    console.log(foo instanceof Foo)//true
+                </pre>
                 new 运算符 生成的实例对象能访问构造函数里的属性,也能访问构造函数原型prototype里的属性。
                 也就是这个对象的this是指向构造函数里的this。
                 构造函数默认是return返回this对象,人为设置返回原始类型的值毫无意义,人为返回是一个对象时new出来的就是返回的对象。
                 这时候和普通函数返回一个对象没区别,new运算符也就失去了它的作用而变的毫无意义。所以定义构造函数时一般不要返回值。
-                在实例化时,如果不传入参数,构造函数后面的括号()也可以不加,但是建议都加。
-
-                面试题:描述new一个对象的过程?手动实现一个new操作符?
+                在实例化时,如果不传入参数,构造函数后面的括号()也可以不加,但是建议都加。<br>
+                <pre>
+                    面试题:描述new一个对象的过程?手动实现一个new操作符?
                     1.立刻在内存中创建一个新的空对象{},
                     2.将这个空对象的原型特性指向构造函数的显示原型prototype上,即: {}.prototype = 构造函数.prototype。
                     3.将新建的空对象{}设置为构造函数内部中的this,即this指向这个新的空对象。
@@ -273,23 +298,26 @@
                     1.构造函数方法没有显示的创建对象new Object(),但是后台会自动var  obj = new Object();
                     2.直接将属性和方法赋值给this对象即this就相当与obj
                     3.没用return语句返回对象引用,由后台自动返回。
-               
+                </pre>
             </div>
             <h4>5.构造函数和原型模式</h4>
             <div>
                 针对4中提到的方法被重复定义的问题,就可以将公共的属性定义到构造函数的原型属性prototype上。
                 这是因为js所有的函数都有一个 prototype属性,可以叫显示原型属性,它是浏览器帮忙添加的。它指向一个对象即它的值是一个对象。
-                在它上面定义的属性和方法会被所有对象实例共享:
-                function Person(){}
-                Person.prototype.name = "zhangsan";
-                Person.prototype.sayName = function (){
-                    console.log(this.name)
-                };
-                let person1 = new Person()
-                let person2 = new Person()
-                person1.sayName()//zhangsan
-                person2.sayName()//zhangsan
-                console.log(person1.sayName() == person2.sayName())//true
+                <pre>
+                    在它上面定义的属性和方法会被所有对象实例共享:
+                    function Person(){}
+                    Person.prototype.name = "zhangsan";
+                    Person.prototype.sayName = function (){
+                        console.log(this.name)
+                    };
+                    let person1 = new Person()
+                    let person2 = new Person()
+                    person1.sayName()//zhangsan
+                    person2.sayName()//zhangsan
+                    console.log(person1.sayName() == person2.sayName())//true
+                </pre>
+
                 <h5>1.理解原型</h5>
                 <p>
                     js原型就是一个对象,分为隐式原型和显示原型。
@@ -300,29 +328,31 @@
                 </p>
                 <h5>2.js对象原型规则</h5>
                 <p>
-                    1. js中所有的引用数据类型(对象,数组,函数等)都具有对象的特性,即可自由扩展属性(null除外)
-                    例子:
-                        var obj = {}
-                        obj.name = 'zhangsan'//自由扩展属性
-                        var arr = []
-                        arr.a = 100
-                        function fn(){}
-                        fn.age = 20
-                    2.所有的引用数据类型都有一个隐式原型属性 __proto__ (null除外),它是浏览器帮忙添加,它指向一个对象。
-                    这是浏览器给的实际脚本是没有访问这个特性的标准方法,而是通过[[Prototype]]来表示这个特性。
-                    即: 
-                        obj.__proto__ = {},
-                        arr.__proto__ = {}
-                        fn.__proto__ = {}
-                    3.所有的函数都有一个显示原型属性 prototype,它也是浏览器帮忙添加,它也指向一个对象。
-                    即: 只要创建一个函数,js原型规则就会给这个函数添加一个prototype属性。
-                        fn.prototype = {}
-                    
-                    4.所有的引用数据类型的隐式原型属性__proto__指向它对应的构造函数的显示原型属性 prototype上。
-                    即:__proto__与 prototype指向的是同一个对象上,	obj.__proto__ === Object.prototype = {}。
-                    这个对象就是原型对象。
-                    5.当试图得到引用数据类型的某个属性时,会现在自己本身查找有没有这个属性,如果没有就会去它的__proto__上寻找也就是它的构造函数的prototype上寻找。
-                    如果还是没有继续去构造函数的__proto__对象上找,一层一层往上找直到Object.prototype,还是没有就是undefined,这也就形成了原型链。
+                    <pre>
+                        1. js中所有的引用数据类型(对象,数组,函数等)都具有对象的特性,即可自由扩展属性(null除外)
+                        例子:
+                            var obj = {}
+                            obj.name = 'zhangsan'//自由扩展属性
+                            var arr = []
+                            arr.a = 100
+                            function fn(){}
+                            fn.age = 20
+                        2.所有的引用数据类型都有一个隐式原型属性 __proto__ (null除外),它是浏览器帮忙添加,它指向一个对象。
+                        这是浏览器给的实际脚本是没有访问这个特性的标准方法,而是通过[[Prototype]]来表示这个特性。
+                        即: 
+                            obj.__proto__ = {},
+                            arr.__proto__ = {}
+                            fn.__proto__ = {}
+                        3.所有的函数都有一个显示原型属性 prototype,它也是浏览器帮忙添加,它也指向一个对象。
+                        即: 只要创建一个函数,js原型规则就会给这个函数添加一个prototype属性。
+                            fn.prototype = {}
+                        
+                        4.所有的引用数据类型的隐式原型属性__proto__指向它对应的构造函数的显示原型属性 prototype上。
+                        即:__proto__与 prototype指向的是同一个对象上,	obj.__proto__ === Object.prototype = {}。
+                        这个对象就是原型对象。
+                        5.当试图得到引用数据类型的某个属性时,会先在自己本身查找有没有这个属性,如果没有就会去它的__proto__上寻找也就是它的构造函数的prototype上寻找。
+                        如果还是没有继续去构造函数的__proto__对象上找,一层一层往上找直到Object.prototype,还是没有就是undefined,这也就形成了原型链。
+                    </pre>
 
                     实例通过隐式原型属性__proto__链接到原型对象,构造函数通过显示原型prototype链接原型对象。
                     注意:原型链只有在检索一个属性值的时候才被用到,同时原型链也是动态更新的在上面添加一个属性会对所有基于该原型链的对象可见。
@@ -341,8 +371,10 @@
             <h4>6.es6使用类关键字声明</h4>
             <div>
                 JavaScript 语言中,生成实例对象的传统方法是通过构造函数。ES6 提供了更接近传统语言的写法,引入了 Class(类)这个概念,作为对象的模板。
-                通过class关键字,就可以定义类,新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。本质上是构造函数生成对象的语法糖,也是使用了原型对象。
-                语法1:类声明,不存在提升。
+                通过class关键字,就可以定义类,新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。<br>
+                本质上是构造函数生成对象的语法糖,也是使用了原型对象。
+                <pre>
+                    语法1:类声明,不存在提升。
                     class Person{
                         constructor()
                             //构造函数方法
@@ -362,52 +394,55 @@
                     const Person = class {
 
                     }
+                </pre>
+                
                 类包含构造函数方法、实例方法、获取/设置函数、静态类方法但都不是必需的。可以定义空的类。
                 类的名字首字母也要大写,以便区别通过它创建的实例。
                 方法与方法之间不需要逗号分隔,加了会报错而且所有方法都是不可枚举的。
-                使用时和构造函数一样要用new 声明,let 实例 = new 类名()
-                在类里面定义的所有方法都是定义在类的prototype属性上面,因此在类的实例上面调用方法,其实就是调用原型上的方法。
-
-                // es6生成实例对象
-                // 定义一个私有变量
-                    let _age = 25
-                    class MathHandle{
-                        constructor(x,y){
-                            this.x = x
-                            this.y = y
-                            this.show = () => {console.log('我是类的实例方法',this)}
-                        }
-                        get age(){
-                            return _age //对某个属性设置存值函数和取值函数,拦截该属性的存取行为。
-                        }
-                        set age(value){
-                            if(value < 30 && value > 25){
-                                _age = value
+                并且在类里面定义的所有方法都是定义在类的原型属性 prototype上面,因此在类的实例上面调用方法,其实就是调用原型上的方法。
+                使用时和构造函数一样要用new 声明即可,let 实例 = new 类名()
+                <pre>
+                    // es6生成实例对象
+                    // 定义一个私有变量
+                        let _age = 25
+                        class MathHandle{
+                            constructor(x,y){
+                                this.x = x
+                                this.y = y
+                                this.show = () => {console.log('我是类的实例方法',this)}
+                            }
+                            get age(){
+                                return _age //对某个属性设置存值函数和取值函数,拦截该属性的存取行为。
+                            }
+                            set age(value){
+                                if(value < 30 && value > 25){
+                                    _age = value
+                                }
+                            }
+                            static show(){
+                                console.log('我是类的静态方法',this)
+                            }
+                            add(){
+                                MathHandle.show()
+                                return this.x + this.y
+                            }
+                            show(){
+                                console.log('我是类的原型方法',this)
                             }
                         }
-                        static show(){
-                            console.log('我是类的静态方法',this)
-                        }
-                        add(){
-                            MathHandle.show()
-                            return this.x + this.y
-                        }
-                        show(){
-                            console.log('我是类的原型方法',this)
-                        }
-                    }
-                    // 创建实例对象
-                    const m = new MathHandle(3,2)
-                    console.log(m.add())//5
-                    console.log(m.age)//25// 'getter'
-                    m.age = 28// setter: 28
-                    console.log(m.age)//28
-                    console.log(m)//Object { x: 3, y: 2 }
-                    console.log(MathHandle)//class MathHandle { constructor(x, y) }
-                    console.log(typeof MathHandle)//function
-                    console.log(MathHandle.name)//MathHandle
-                    console.log(MathHandle === MathHandle.prototype.constructor)//true
-                <img src="../../images/class.png" alt=""> <br>
+                        // 创建实例对象
+                        const m = new MathHandle(3,2)
+                        console.log(m.add())//5
+                        console.log(m.age)//25// 'getter'
+                        m.age = 28// setter: 28
+                        console.log(m.age)//28
+                        console.log(m)//Object { x: 3, y: 2 }
+                        console.log(MathHandle)//class MathHandle { constructor(x, y) }
+                        console.log(typeof MathHandle)//function
+                        console.log(MathHandle.name)//MathHandle
+                        console.log(MathHandle === MathHandle.prototype.constructor)//true
+                </pre>
+                <img src="../../assets/images/class.png" alt=""> <br>
                 <h5>1.类构造函数</h5>
                 <p>
                     constructor 关键字用于在类定义块内部创建类的构造函数,而方法名constructor则是告诉浏览器在new 操作符创建类的新实例时要调用一次这个函数。
@@ -440,26 +475,39 @@
             <h4>1.数据属性</h4>
             <div>
                 它包含一个保存属性值的位置value。具体如下:
-                {
-                    value: 123,该属性的属性值,默认为undefined。
-                    writable: 是一个布尔值,表示属性值(value)是否可改变,默认直接定义在对象的属性都是true可改变。
-                    enumerable: 是一个布尔值,表示该属性是否可枚举/遍历,默认直接定义在对象的属性都是true可枚举。
-                    configurable: 是一个布尔值,表示属性的可配置性是否能被delete删除并重新定义,默认直接定义在对象的属性都是true可删除配置。
-                }
+                <pre>
+                    {
+                        value: 123,该属性的属性值,默认为undefined。
+                        writable: 是一个布尔值,表示属性值(value)是否可改变,默认直接定义在对象的属性都是true可改变。
+                        enumerable: 是一个布尔值,表示该属性是否可枚举/遍历,默认直接定义在对象的属性都是true可枚举。
+                        configurable: 是一个布尔值,表示属性的可配置性是否能被delete删除并重新定义,默认直接定义在对象的属性都是true可删除配置。
+                       }
+                </pre>
             </div>
             <h4>2.访问器属性</h4>
             <div>
                 它不能和value、writable这两个特性一起出现,主要是使用获取(getter)和设置(setter)函数。
-                {
-                    enumerable: false,是一个布尔值,表示该属性是否可枚举/遍历,默认false不可枚举。
-                    configurable: false,是一个布尔值,表示属性的可配置性,默认false不可删除配置。
-                    get: undefined,是一个函数,表示该属性的取值函数(getter),默认为undefined。
-                    set: undefined,是一个函数,表示该属性的存值函数(setter),默认为undefined
-                }
+                <pre>
+                    {
+                        enumerable: false,是一个布尔值,表示该属性是否可枚举/遍历,默认false不可枚举。
+                        configurable: false,是一个布尔值,表示属性的可配置性,默认false不可删除配置。
+                        get: undefined,是一个函数,表示该属性的取值函数(getter),默认为undefined。
+                        set: undefined,是一个函数,表示该属性的存值函数(setter),默认为undefined
+                       }
+                </pre>
             </div>
-            可以通过Object.defineProperty()方法给对象新增或修改属性并设置属性描述对象,接收三个参数:要添加属性的对象,添加的属性名称,属性描述对象。
-                Object.defineProperty(obj,name,{writable:false,value:'zhangsan'}),给obj对象添加了一个只读name属性值为'zhangsan'。
+            可以通过Object.defineProperty()方法给对象新增或修改属性并设置属性描述对象,它返回修改后的对象。接收三个参数:要添加属性的对象,添加的属性名称,属性描述对象。
+            <pre>
+                语法: Object.defineProperty(object, propertyName, attributesObject)
+                let obj = {}
+                Object.defineProperty(obj,name,{
+                    writable:false,
+                    value:'zhangsan'
+                })
+                给obj对象添加了一个只读name属性值为'zhangsan'。
+            </pre>
             可以通过Object.defineProperties(),复数形式通过多个描述符一次定义多个属性,接收两个参数:要添加属性的对象,另一个属性描述对象。
+            <pre>
                 Object.defineProperties(obj,{
                     name:{
                         value:'zhangsan'
@@ -468,9 +516,7 @@
                         writable:false
                     }
                 })
-			可以通过Object.getOwnPropertyDescriptor()方法获取一个对象指定属性的属性描述对象,接收两个参数属性所在对象和要取其属性描述对象的属性名,返回指定属性对应的属性描述对象。
-                let descriptor = Object.getOwnPropertyDescriptor(obj,name),descriptor就是一个属性对应的描述对象。
-            可以通过ES8新增的Object.getOwnPropertyDescriptors()方法,复数形式就是调用Object.getOwnPropertyDescriptor()方法并将所有返回值放到一个对象中返回。就接收一个参数:要取属性的对象。
+            </pre>
             注意:默认情况下所有直接定义在对象上的属性的writable、enumerable、configurable值都是true 即可写可读可删除可配置。
             而使用Object.defineProperty()和Object.defineProperties()方法添加的默认writable、enumerable、configurable值为false。
 		</div>
