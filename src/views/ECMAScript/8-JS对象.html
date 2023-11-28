@@ -124,91 +124,258 @@
             <h4>4.js对象的增强语法</h4>
             <div>
                 ECMAScript6为定义和操作对象新增了很多极其有用的语法特性,极大的提升了处理对象的方便程度。
+                特别是属性的简写对于函数的返回值、模块的导出都是非常简洁的。
                 <h5>1.属性值简写</h5>
                 <p>
                     如果一个对象中属性名和属性值(属性值是一个变量)一样(key值和value值一样)则可以简写,写一个就好。
-                    es5: <br>
-                    let name = "zhangsan";
-                    let person = {
-                        name:name
-                    }
-                    es6: <br>
-                    let name = "zhangsan";
-                    let person = {
-                        name
-                    }
+                    这时、属性名就是变量名、属性值就是变量值。
+                    <pre>
+                        es5:
+                        let name = "zhangsan";
+                        let person = {
+                            name:name
+                        }
+                        es6:
+                        let name = "zhangsan";
+                        let person = {
+                            name
+                        }
+                    </pre>
+
                 </p>
                 <h5>2.可计算属性</h5>
                 <p>
                     在es5里使用变量作为属性名,需要使用中括号语法来添加。
                     而在es6增强之后可以使用可计算属性直接在对象字面量中定义动态属性。也是使用中括号告诉浏览器里面的是JavaScript表达式而不是字符串。
-                    es5: <br>
-                    let nameKey = "zhangsan";
-                    let person = {}
-                    person[nameKey] = "lisi"
-                    es6: <br>
-                    let nameKey = "zhangsan";
-                    let person = {
-                        [nameKey]:'lisi'
-                    }
+                    <pre>
+                        es5: 
+                        let nameKey = "zhangsan";
+                        let person = {}
+                        person[nameKey] = "lisi"<br>
+                        es6: 
+                        let nameKey = "zhangsan";
+                        let person = {
+                            [nameKey]:'lisi'
+                        }
+                        person[nameKey] = "lisi"
+                    </pre>
+
                 </p>
                 <h5>3.方法名的简写</h5>
                 <p>
                     es5时给对象定义方法时,一般都是方法名:匿名函数表达式,如下:
-                    let person = {
-                        sayName:function(name){
-                            console.log(`my name is ${name}`)
-                        },
-                        get:function(){},
-                        set:function(val){}
-                    }
-                    person.sayName('zhangsan');my name is zhangsan 
-                    es6: 不用再使用匿名函数表达式了,对获取和设置函数也适用,与可计算属性也相互兼容 <br> 
-                    let meKey = 'sayHi'
-                    let person = {
-                        sayName(name){
-                            console.log(`my name is ${name}`)
-                        },
-                        get name(){},
-                        set name(name){},//这里的name函数名是根据实际取的属性自己定义的。
-                        [meKey](name){
-                            console.log(`hi ${name}`)
+                    <pre>
+                        let person = {
+                            sayName:function(name){
+                                console.log(`my name is ${name}`)
+                            },
+                            get:function(){},
+                            set:function(val){}
                         }
-                    }
-                    person.sayName('zhangsan');my name is zhangsan 
+                        person.sayName('zhangsan');my name is zhangsan  <br> 
+                        es6: 不用再使用匿名函数表达式了,对获取和设置函数也适用,与可计算属性也相互兼容,直接写函数名即可。
+                        let meKey = 'sayHi'
+                        let person = {
+                            sayName(name){
+                                console.log(`my name is ${name}`)
+                            },
+                            get name(){},
+                            set name(name){},//这里的name函数名是根据实际取的属性自己定义的。
+                            [meKey](name){
+                                console.log(`hi ${name}`)
+                            }
+                        }
+                        person.sayName('zhangsan');my name is zhangsan 
+                        实例：
+                        let birth = '2000/01/01';
+                        const Person = {
+                            name: '张三',
+                            //等同于birth: birth
+                            birth,
+                            // 等同于hello: function ()...
+                            hello() { console.log('我的名字是', this.name); }
+                        };
+                    </pre>
                 </p>
-                <h5>4.对象的解构</h5>
+                <h5>4.对象的解构和扩展: 扩展(三点)运算符...</h5>
                 <p>
-                    就是变量那一节,使用它可以简化变量的赋值操作,在模块化引入中使用比较多。
-                </p>
-                <h5>5.三点运算符...</h5>
-                <p>
+                    对象的结构用于从一个对象中取值、然后赋值给其它变量(这里的赋值是浅拷贝)、一般是和对象的增强语法属性简写一起使用。这样解构出来就可以直接使用,而不用通过 .点运算符操作。
+                    特别是在模块系统中、和后端接口返回数据时解构是非常常见的。还有一个是剩余操作、即将在解构时除了已解构变量剩余的其它变量放到一个参数对象里。
+                    <pre> 
+                        a.js 导出
+                        export const peopleObj = {
+                            name:'zhangsan',
+                            age:28,
+                            gender:male,
+                            province:'guangxi',
+                            sayHi() {}
+                        }
+                        b.js
+                        引入 
+                        import { peopleObj } from './a.js'
+                        let {name:Rename,age,gender} = peopleObj
+                        let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+                        x // 1
+                        y // 2
+                        z // { a: 3, b: 4 }
+                    </pre>
                     扩展运算符... ES2018 将这个运算符引入了对象。
-                    对已知对象使用扩展运算符 ... 则会取出参数对象自身的、可枚举的所有属性,浅拷贝到当前对象之中。
-                    
-                    let obj1 = { a: 1, b: 2 };
-                    let obj2 = { name:"wang",...obj1, c: 3 }; // { a:1, b:2, c:3 }
-                    let obj3 = { ...obj1,name:"wang"}; // { a: 1, b: 2, name: "wang" }
-                    console.log('obj1 is',obj1)
-                    console.log('obj2 is',obj2)
-                    console.log('obj3 is',obj3)
-                    浅拷贝时相当于使用Object.assign()
-                    let aClone = { ...a };
-                    // 等同
-                    let aClone = Object.assign({}, a);
+                    对已知对象使用扩展运算符 ... 则会取出参数对象自身的、可枚举的所有属性,浅拷贝到当前对象之中。跟剩余操作相反。
+                    <pre>
+                        let obj1 = { a: 1, b: 2 };
+                        let obj2 = { name:"wang",...obj1, c: 3 }; 
+                        let obj3 = { ...obj1,name:"wang"}; 
+                        console.log('obj1 is',obj1) obj1 is { a: 1, b: 2 }
+                        console.log('obj2 is',obj2) obj2 is { name: 'wang', a: 1, b: 2, c: 3 }
+                        console.log('obj3 is',obj3) obj3 is { a: 1, b: 2, name: 'wang' }
+                        浅拷贝时相当于使用 Object.assign() 方法
+                        let aClone = { ...a };
+                        // 等同
+                        let aClone = Object.assign({}, a);
+                    </pre>
                 </p>
             </div>
             <h4>5.js对象的复制拷贝</h4>
             <div>
-                所谓拷贝就是将一个对象的所有属性,复制一份一模一样的到另一个对象里,拷贝又分成浅拷贝和深拷贝两种。
+                所谓拷贝就是将一个对象的所有属性,复制一份一模一样的到另一个对象里,同时要保证拷贝后的对象和原对象具有相同的原型、实例属性。
+                拷贝又分成浅拷贝和深拷贝两种。
                 <h5>1.浅拷贝</h5>
-                <p>
-
-                </p>
+                对于嵌套的对象、拷贝的是引用地址。
+                <div>
+                    1.一种是使用循环语句中的 for in 循环遍历对象的所有可枚举属性。这个方法的问题在于、如果遇到存取器定义的属性、会只拷贝值。
+                    <pre>
+                        const a = {
+                            name:'zhangsan',
+                            age:23,
+                            hobbies:{
+                                hobbyName:'打篮球',
+                                move:'走动'
+                            }
+                        }
+                        
+                        function extend(to,from) {
+                            for (let i in to) {
+                                from[i] = to[i]
+                            }
+                            return from 
+                        }
+                        
+                        const otherObj = extend(a,{})
+                        otherObj.hobbies.hobbyName = '修改'
+                        console.log('a',a.hobbies.hobbyName) // 修改
+                    </pre>
+                    2. 增强 for in 循环遍历对象属性、Object.hasOwnProperty()方法去除继承的属性、Object.defineProperty()方法拷贝属性、Object.getOwnPropertyDescriptor()方法获取属性的属性描述对象。
+                    <pre>
+                        var extend = function (to, from) {
+                            for (var property in from) {
+                              if (!from.hasOwnProperty(property)) continue;
+                              Object.defineProperty(
+                                to,
+                                property,
+                                Object.getOwnPropertyDescriptor(from, property)
+                              );
+                            }
+                          
+                            return to;
+                          }
+                        
+                    </pre>
+                    3. 扩展运算符 ... 也可以将一个对象的所有属性复制一份到另一个对象
+                    <pre>
+                        const obj = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                                name: '足球'
+                            },
+                        }
+                        const target = {...obj}
+                        console.log('target', target)
+                        // target{ age: 28, gender: male, hobbies:{name:'修改后的名字'}, name: zhangsan}
+                        target.hobbies.name = '修改后的名字'
+                        console.log('obj', obj)
+                        // obj{ age: 28, gender: male, hobbies:{name:'修改后的名字'}, name: zhangsan}
+                    </pre>
+                    4. es6 新增Object.assign()方法、它是用于合并对象,当目标对象是空对象是就是浅拷贝。
+                    <pre>
+                        const obj = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                            name: '足球'
+                        },
+                        }
+                        const target = {}
+                        Object.assign(target,obj)
+                        console.log('target', target)
+                        // target{ age: 28, gender: male, hobbies:{name:'修改后的名字'}, name: zhangsan}
+                        target.hobbies.name = '修改后的名字'
+                        console.log('obj', obj)
+                        // obj{ age: 28, gender: male, hobbies:{name:'修改后的名字'}, name: zhangsan}
+                    </pre>
+                </div>
                 <h5>2.深拷贝</h5>
-                <p>
-                    
-                </p>
+                深拷贝是指创建一个全新的对象、并且递归地复制所有嵌套对象的值、这样原对象和拷贝对象完全独立、互不影响。
+                <div>
+                    1. JSON.parse(JSON.stringify(obj))、将一个对象利用JSON.stringify将对象转成JSON字符串、再用JSON.parse把字符串解析成对象、一去一来、新的对象产生了、而且对象会开辟新的栈从而实现深拷贝。<br>
+                    缺陷: 无法处理 undefined、function、Symbol 等特殊类型、这些类型在转换过程中会丢失。无法处理正则、对象循环引用:即对象中存在循环引用关系时会导致堆栈溢出或报错。
+                    <pre>
+                        const obj = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                                name: '足球'
+                            },
+                        }
+                        const target = JSON.parse(JSON.stringify(obj))
+                        console.log('target', target)
+                        // target{ age: 28, gender: male, hobbies:{name:'修改后的名字'}, name: zhangsan}
+                        target.hobbies.name = '修改后的名字'
+                        console.log('obj', obj)
+                        // obj{ age: 28, gender: male, hobbies:{name:'足球'}, name: zhangsan}
+                    </pre>
+                    2. 递归-手撸: 本质就是基础数据类型直接返回、引用类型递归调用方法、然后特殊的引用类型(数组、日期等)要单独判断。
+                    <pre>
+                        const obj = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                                name: '足球'
+                            },
+                        }
+                        function deepClone(origin, hash = new WeakMap()) {
+                            if (origin === null) return origin; // 如果是null或者undefined我就不进行拷贝操作
+                            if (origin instanceof Date) return new Date(origin); // 日期类型重新生成
+                            if (origin instanceof RegExp) return new RegExp(origin); // 正则重新生成
+                            // 可能是对象或者普通的值  如果是函数的话是不需要深拷贝
+                            if (typeof origin !== "object") return origin;
+                            // 是对象的话就要进行深拷贝,并检查是否循环引用
+                            if (hash.get(origin)) return hash.get(origin);
+                            let target = new origin.constructor();
+                            // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
+                            hash.set(origin, target);
+                            for (let key in origin) {
+                                if (origin.hasOwnProperty(key)) {// 去除继承属性
+                                    // 实现一个递归拷贝
+                                    target[key] = deepClone(origin[key], hash);
+                                }
+                            }
+                            return target;
+                        }
+                        const sf = deepClone(obj)
+                        sf.hobbies.name = 'sf'
+                        sf.name = 'lisisi'
+                        sf.age = 10
+                        sf.gender = 'female'
+                        console.log('sf', sf)// obj{ age: 10, gender: female, hobbies:{name:'sf'}, name: lisisi}
+                        console.log('obj', obj)// obj{ age: 28, gender: male, hobbies:{name:'足球'}, name: zhangsan}
+                    </pre>
+                    3. 第三方库如: lodash的_.cloneDeep方法
+                </div>
             </div>
         </div>
         <h3>2、js对象的创建方法</h3>
@@ -480,7 +647,7 @@
                         value: 123,该属性的属性值,默认为undefined。
                         writable: 是一个布尔值,表示属性值(value)是否可改变,默认直接定义在对象的属性都是true可改变。
                         enumerable: 是一个布尔值,表示该属性是否可枚举/遍历,默认直接定义在对象的属性都是true可枚举。
-                        configurable: 是一个布尔值,表示属性的可配置性是否能被delete删除并重新定义,默认直接定义在对象的属性都是true可删除配置。
+                        configurable: 是一个布尔值,表示属性的可配置性是否能被delete删除并重新定义,默认直接定义在对象的属性都是true可删除配置。configurable为false时、writable、enumerable和configurable都不能被修改了。
                        }
                 </pre>
             </div>
@@ -523,33 +690,99 @@
         <h3>4、js对象常见的静态方法</h3>
         <div>
             所谓静态方法就是指部署在Object对象自身的方法,比较常见常用的如下:
+            <pre>
             原型链相关方法
-                Object.create() 该方法可以指定原型对象和属性,返回一个新的对象。
-                Object.getPrototypeOf() 获取对象的Prototype对象。
+                Object.create() 该方法接受一个对象作为参数必传、然后一它为原型对象,返回一个新的实例对象。实质相当于是新建一个空的构造函数F、然后让F.prototype属性指向传入的参数对象obj、最后返回一个F的实例、从而实现让该实例继承obj的属性。所以生成的对象会继承它的原型对象的构造函数。
+                Object.getPrototypeOf() 获取参数对象的原型对象 prototype、这是获取原型对象的标准方法。之前的无论是显示原型还是隐式原型其实都是宿主环境提供的、而这个是JavaScript语言标准提供的。
+                Object.setPrototypeOf() 为参数对象设置原型、返回该参数对象。它接受两个参数、第一个是现有对象、第二个是原型对象。
             对象属性模型的相关方法
-                Object.defineProperty() 通过描述对象,定义某个属性。
-                Object.defineProperties() 通过描述对象,定义多个属性
-                Object.getOwnPropertyDescriptor() 获取某个属性的描述对象
-                Object.getOwnPropertyDescriptors() 获取某个对象所有属性的描述对象
-            对象属性迭代的相关方法
-                Object.keys()
-                Object.getOwnPropertyNames()
-                Object.values()
-                Object.entries()
-                Object.fromEntries()方法是Object.entries()的逆操作  ,用于将一个键值对数组转为对象。该方法的一个用处是配合URLSearchParams对象  ,将查询字符串转为对象。Object.fromEntries(new URLSearchParams('foo=bar&baz=qux'))
-            控制对象状态的方法
-                Object.freeze() 冻结一个对象。
+                Object.defineProperty() 通过对象的属性描述对象,给对象定义或修改某个属性、返回修改后的对象。接受三个参数、依次如下。object: 属性所在的对象、propertyName: 字符串表示属性名、attributesObject: 属性描述对象。
+                Object.getOwnPropertyDescriptor() 获取目标对象自身某个属性的描述对象(不能用于继承属性)、它的第一个参数是目标对象、第二个参数是一个字符串、对应目标对象的某个属性名。
+            对象键值对迭代的相关方法
+            
+                Object.keys() 传入一个参数对象、返回这个对象自身所有可枚举的属性名(不包括继承的)组成的字符串数组。
+                    const obj = {
+                        p1: 123,
+                        p2: 456
+                    };
+                    Object.keys(obj) // ["p1", "p2"] 
+                    
+                Object.getOwnPropertyNames() 和Object.keys()作用和用法基本一致、区别在于它会返回不可枚举的属性名。
+                    const  a = ['Hello', 'World'];
+                    console.log(Object.keys(a)) // ["0", "1"]
+                    console.log(Object.getOwnPropertyNames(a)) // ["0", "1", "length"]、返回了不可枚举属性length
+
+                Object.values() ES2017 引入的跟Object.keys()配套使用方法作为遍历对象的补充手段、供for of 循环使用。
+                传入一个参数对象、返回这个对象自身的所有可遍历属性对应的属性值组成的数组。
+                    const obj = {
+                        p1: 123,
+                        p2: 456
+                    };
+                    Object.values(obj) // [123, 456] 
+
+                Object.entries() ES2017 引入的跟Object.keys()配套使用方法作为遍历对象的补充手段、供for of 循环使用。
+                返回一个二维数组、数组成员是由参数对象自身所有可遍历属性的键值对数组。
+                    const obj = {
+                        p1: 123,
+                        p2: 456
+                    };
+                    Object.entries(obj) // [['p1',123],['p2',456]] 
+
             其它方法
-                Object.assign()方法用于对象的合并  ,将源对象(source)的所有可枚举属性  ,复制到目标对象(target)。
+                Object.assign()es6新增方法用于对象的合并  ,将源对象(source)自身所有的可枚举属性,复制到目标对象(target)同名属性后面覆盖前面。第一个参数是目标对象、后面的参数都是源对象。
+                const obj = {
+                    name: 'zhangsan',
+                    age: 28,
+                    gender: 'male'
+                  }
+                  const target = {
+                    tag:'目标对象'
+                  }
+                  
+                  const bb = {
+                    title:'测试',
+                    hobbies: {
+                      name:'足球'
+                    }
+                  }
+                  Object.assign(target,obj,bb)
+                  console.log('target', target)
+                  // {
+                  //   age: 28
+                  //   gender: male
+                  //   hobbies:
+                  //   {
+                  //     name: 足球
+                  //   }
+                  //   name: zhangsan
+                  //   tag: 目标对象
+                  //   title: 测试
+                  // }
+            </pre>
         </div>
         <h3>5、js对象常见的实例属性和方法</h3>
         <div>
-            定义在Object.prototype对象上的属性和方法它们称为实例属性和方法。所有Object的实例对象都继承了这些方法。
+            定义在 Object.prototype 原型对象上的属性和方法它们称为实例属性和方法。所有Object的实例对象都继承了这些方法。
             Object实例对象的方法,主要有以下六个。
-                Object.prototype.valueOf()  返回当前对象对应的值。
-                Object.prototype.toString()  返回当前对象对应的字符串形式,默认情况下返回类型字符串。
-                Object.prototype.toLocaleString()  返回当前对象对应的本地字符串形式。
+                Object.prototype.toString()  返回当前对象对应的字符串形式,默认情况下返回对象的类型字符串。在js数据类型一章中讲过、它就是用来判断数据类型的。
+                为了防止实例对象重写这个方法我们都是直接使用对象冒充 call()方法直接调用 Object 对象原型上的toString() 方法的。
+                <pre>
+                    数值：返回[object Number]。
+                    字符串：返回[object String]。
+                    布尔值：返回[object Boolean]。
+                    undefined: 返回[object Undefined]。
+                    null: 返回[object Null]。
+                    数组：返回[object Array]。
+                    arguments 对象：返回[object Arguments]。
+                    函数：返回[object Function]。
+                    Error 对象：返回[object Error]。
+                    Date 对象：返回[object Date]。
+                    RegExp 对象：返回[object RegExp]。
+                    其他对象：返回[object Object]。
+                </pre>
                 Object.prototype.hasOwnProperty()  判断某个属性是否为当前对象自身的属性,还是继承自原型对象的属性。
+                Object.prototype.valueOf()  返回当前对象对应的值。
+                Object.prototype.toLocaleString()  返回当前对象对应的本地字符串形式。
                 Object.prototype.isPrototypeOf()  判断当前对象是否为另一个对象的原型。
                 Object.prototype.propertyIsEnumerable()  判断某个属性是否可枚举。
             Object.prototype.toString()方法使用最多用来判断一个变量的数据类型。
