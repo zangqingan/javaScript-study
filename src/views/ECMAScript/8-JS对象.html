@@ -198,26 +198,66 @@
                     </pre>
                 </p>
                 <h5>4.对象的解构和扩展: 扩展(三点)运算符...</h5>
+                <pre>
+                    在es5中对变量赋值是使用 '=' ,且如果是要把对象的属性或者数组的元素赋值给变量只能一个一个赋值。
+                    所以在es6中提供了对赋值运算符(=)的扩展即：解构赋值。
+                    所谓解构(Destructuring)赋值是指按照一定模式,按照对应位置从数组或对象中提取值,并将其赋值给变量。
+                    
+                    解构赋值的规则是:解构源如果不是对象或数组,就先将其转为对象,undefined和null无法转为对象解构报错。<br>
+                    解构模型: let {解构的目标} =  解构的源     
+                        解构的源,解构赋值表达式的右边部分。<br>
+                        解构的目标,解构赋值表达式的左边部分。<br>
+                    优点:在代码书写上简洁且易读,语义更加清晰明了也方便了复杂对象或数组中数据字段获取。
+                    对象的解构不同于数组的解构是按元素下标(index)排列的,对象的解构赋值是根据对象的属性名来一一对应的与顺序无关。<br>
+                    接收变量必须与对象的属性同名,数组的解构一样,解构失败,变量值为undefined,也可以嵌套,不完全解构,或者加默认值。<br>
+                    基本对象: <br>
+                        obj = { username: 'zhangsan', age: 25 }<br>
+                        let { username, age} = obj <br>
+                        let { username, age} = { username: 'zhangsan', age: 25 }<br>
+                        username // zhangsan<br>
+                        age // 25<br>
+                    es5是这样赋值的:<br>
+                        var username= obj.username<br>
+                        var age= obj.age<br>
+                    或者通过键名取值<br>
+                        var username= obj["username"]<br>
+                        var age= obj["age"]<br>
+                    注意:对象的解构赋值是es6中对象的扩展,当属性名和值同名时可以只写一个<br>
+                        let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    可以简写成下面,找对象中有没有foo属性有则将它的值赋值给foo变量所以可以这样使用<br>
+                        let { foo, bar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    本质是:在对象中找有没有foo属性,有则将属性名对应的属性值赋值给别名变量myfoo。真正被赋值的是变量而不是解构模式<br>
+                        let { foo: myfoo(别名), bar: mybar } = { foo: 'aaa', bar: 'bbb' };<br>
+                    注意:所有可以被遍历的对象都是可以被解构赋值的,也常常和res运算符(即... 三点运算符)一起使用。
+                </pre>
                 <p>
                     对象的结构用于从一个对象中取值、然后赋值给其它变量(这里的赋值是浅拷贝)、一般是和对象的增强语法属性简写一起使用。这样解构出来就可以直接使用,而不用通过 .点运算符操作。
                     特别是在模块系统中、和后端接口返回数据时解构是非常常见的。还有一个是剩余操作、即将在解构时除了已解构变量剩余的其它变量放到一个参数对象里。
                     <pre> 
-                        a.js 导出
-                        export const peopleObj = {
-                            name:'zhangsan',
-                            age:28,
-                            gender:male,
-                            province:'guangxi',
-                            sayHi() {}
-                        }
-                        b.js
-                        引入 
-                        import { peopleObj } from './a.js'
+                        输入模块的指定方法,加载模块时,往往需要指定输入哪些方法。非常常用！！！
+                        解构赋值使得输入语句非常清晰:
+                        const { SourceMapConsumer, SourceNode } = require("source-map");
+                        import {SourceMapConsumer, SourceNode} from '/source-map'
                         let {name:Rename,age,gender} = peopleObj
                         let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
                         x // 1
                         y // 2
                         z // { a: 3, b: 4 }
+                        从函数返回多个值(返回数组或对象),通过解构赋值直接取出来也比较常用
+                        // 返回一个数组
+                        function example() {
+                            return [1, 2, 3];
+                        }
+                        let [a, b, c] = example();
+        
+                        // 返回一个对象
+                        function example() {
+                            return {
+                                foo: 1,
+                                bar: 2
+                            };
+                        }
+                        let { foo, bar } = example();
                     </pre>
                     扩展运算符... ES2018 将这个运算符引入了对象。
                     对已知对象使用扩展运算符 ... 则会取出参数对象自身的、可枚举的所有属性,浅拷贝到当前对象之中。跟剩余操作相反。
@@ -449,9 +489,9 @@
                 在实例化时,如果不传入参数,构造函数后面的括号()也可以不加,但是建议都加。<br>
                 <pre>
                     面试题:描述new一个对象的过程?手动实现一个new操作符?
-                    1.立刻在内存中创建一个新的空对象{},
+                    1.立刻在内存中创建一个新的空对象{}作为将要返回的对象实例,
                     2.将这个空对象的原型特性指向构造函数的显示原型prototype上,即: {}.prototype = 构造函数.prototype。
-                    3.将新建的空对象{}设置为构造函数内部中的this,即this指向这个新的空对象。
+                    3.将新建的空对象{}赋值给构造函数内部中的this,即this指向这个新的空对象。
                     所以this指每次新生成的那个空对象,即每次new出来的那一个,所以针对this的操作都会发生到new出来的那个空对象上。
                     4.逐行执行构造函数中的代码,给新对象添加属性。
                     5.执行完后,如果构造函数返回非空对象,则直接返回该非空对象。否则将新建的空对象作为返回值返回即返回this。
@@ -763,10 +803,10 @@
         <h3>5、js对象常见的实例属性和方法</h3>
         <div>
             定义在 Object.prototype 原型对象上的属性和方法它们称为实例属性和方法。所有Object的实例对象都继承了这些方法。
-            Object实例对象的方法,主要有以下六个。
+            Object实例对象的方法,主要有以下六个。<br>
+            <pre>
                 Object.prototype.toString()  返回当前对象对应的字符串形式,默认情况下返回对象的类型字符串。在js数据类型一章中讲过、它就是用来判断数据类型的。
                 为了防止实例对象重写这个方法我们都是直接使用对象冒充 call()方法直接调用 Object 对象原型上的toString() 方法的。
-                <pre>
                     数值：返回[object Number]。
                     字符串：返回[object String]。
                     布尔值：返回[object Boolean]。
@@ -779,274 +819,446 @@
                     Date 对象：返回[object Date]。
                     RegExp 对象：返回[object RegExp]。
                     其他对象：返回[object Object]。
-                </pre>
-                Object.prototype.hasOwnProperty()  判断某个属性是否为当前对象自身的属性,还是继承自原型对象的属性。
-                Object.prototype.valueOf()  返回当前对象对应的值。
-                Object.prototype.toLocaleString()  返回当前对象对应的本地字符串形式。
+                
+                Object.prototype.hasOwnProperty()  判断某个属性是否为当前对象自身的属性,还是继承自原型对象的属性。接受一个字符串作为参数，返回一个布尔值，表示该实例对象自身是否具有该属性: true-自身的、false-继承的。
+                    var obj = {
+                        p: 123
+                    };
+                    obj.hasOwnProperty('p') // true
+                    obj.hasOwnProperty('toString') // false
+
                 Object.prototype.isPrototypeOf()  判断当前对象是否为另一个对象的原型。
-                Object.prototype.propertyIsEnumerable()  判断某个属性是否可枚举。
-            Object.prototype.toString()方法使用最多用来判断一个变量的数据类型。
+                    var o1 = {};
+                    var o2 = Object.create(o1);
+                    var o3 = Object.create(o2);
+                    
+                    o2.isPrototypeOf(o3) // true
+                    o1.isPrototypeOf(o3) // true
             属性:
                 construtor 指向用于创建当前对象的构造函数,即Object()构造函数。
+            </pre>
         </div>
         <h3>6、js面向对象编程</h3>
         <div>
             <h4>1.面向对象概述</h4>
             <div>
                 面向对象编程(Object Oriented Programming,缩写为 OOP)是目前主流的编程范式。
-                它将真实世界各种复杂的关系,抽象为一个个对象,然后由对象之间的分工与合作,完成对真实世界的模拟。
-                每一个对象都是功能中心,具有明确分工,可以完成接受信息、处理数据、发出信息等任务。对象可以复用,通过继承机制还可以定制。
-                而继承是面向对象编程中讨论最多的话题,一般有接口继承和实现继承两种方式,ECMAScript中只支持实现继承,而且是通过上面说的原型链实现的。
+                它将真实世界的各种东西: 一本书、一辆车、一个人、一个塑料袋等等, 以及这些东西之间各种复杂的关系,抽象为一个个对象,然后由对象之间的分工与合作,完成对真实世界实物的模拟。
+                而在JavaScript中我们知道、对象就是一个由无序的键值对组成的集合、它就是一个容器。
+                比如包一条狗抽象成一个对象 - 狗对象: 它多大、多重、多高等状态信息就抽象为对象的属性, 它会奔跑、休息、吃饭等行为就抽象为对象的方法。<br><br>
+
+                面向对象编程第一步就是要生成一个对象、这个在对象的创建方法一节中已经详细列出。
+                在es6之前JavaScript是基于基于构造函数(constructor)和原型链(prototype)来实现、在es6之后引入了 类 class关键字实现。<br>
+
+                面向对象的3大基本特征是: 封装、继承、多态。也是我们学习的主要方向。
+                    其中封装就是将客观事物抽象成编程语言中的类,
+                    而继承是面向对象编程中讨论最多的话题,一般有接口继承和实现继承两种方式,ECMAScript中只支持实现继承,而且是通过上面说的原型链实现的。
+                    多态就是指一个类实例的相同方法在不同情形下有不同的表现形式、也就是子类可以重写实例方法。
             </div>
-            <h4>2.js实现继承的方法</h4>
-            <div>   
-                <h5>1.原型链继承</h5>
-                <p>
-                    每一个构造函数都有一个原型对象prototype,原型对象中都有constructor属性指回构造函数,而实例也有[[Prototype]]特性称为隐式原型属性也指向原型对象。
-                    那如果这个原型对象是另一个构造函数生成的实例对象呢?,这时它本身也有[[Prototype]]特性即隐式原型属性,它也是指向另一个原型对象。这样一层一层也就有了继承的样子了。
-                    也就是父类 new 出来的实例赋值给子类型的原型对象。
-                    子类.prototype = new 父类();,这种改变原型对象的指向之后 子类.prototype 上的constructor属性也被修改成了 父类()。
-                    而且,子类要重写父类的方法或者新增方法都要在原型赋值之后再添加到子类的原型上。
-                    另一个问题是如果父类原型中包含了引用类型的值时,那么父类的所有实例对象都会共享,而实例对象又被赋值给了另一个子类的原型对象,这就导致实例属性变成了原型属性。
-                    第二个问题是子类型在实例化时是不能给父类型的构造函数传参的。 
-
-                </p>
-                <h5>2.对象冒充继承</h5>
-                <p>
-                    为了解决原型包含引用值导致的继承问题以及不能向父类构造函数传参的问题,就可以使用对象冒充继承方法(也叫对象伪装/经典继承)。
-                    基本思路是:在子类构造函数内调用父类构造函数,通过call()或apply()方法以新创建的对象作为上下文执行构造函数并传入参数。
-                    相当于子类对象上运行了父类构造函数中的所有初始化代码,就会让子类实例具有父类实例的属性,这时原型上同名的属性会被遮蔽。
-                    但是冒充构造函数继承也有问题:只能访问定义在构造函数中定义方法因此函数不能重用,也就是子类不能访问父类原型上定义的方法。
-
-                </p>
-                <h5>3.组合继承</h5>
-                <p>
-                    有时候也叫伪经典继承,它是综合了原型链继承和对象冒充继承将两者的优点集中起来的一种继承方法。
-                    基本思路是:使用原型链继承原型上的属性和方法,使用对象冒充继承实例属性和传参。
-                    它解决了原型链继承和对象冒充继承的不足,是JavaScript中使用最多的继承方式。而且也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
-                    组合继承也存在效率问题:父类构造函数始终会被调用两次,第一次是父类实例赋值给子类原型时,第二次是子类构造函数内冒充父类时。
-                    
-                </p>
-                <h5>4.原型式继承</h5>
-                <p>
-                    即使不定义构造函数也可以通过原型实现对象之间的信息共享:
-                    function object(o){
-                        function F(){}
-                        F.prototype = o
-                        return new F()
-                    }
-                    通过创建一个临时的构造函数将传入的对象赋值给这个临时构造函数的原型,然后返回这个临时类型的一个原型。
-                    本质是对传入对象的一次浅拷贝。如果你有一个对象,想在这个对象的基础上再创建一个新的对象。你就可以使用原型式继承。
-                    ECMAScript5中增加了 Object.create() 方法将原型式继承的概念规范化,也就是用来代替这个object这个函数。
-                    Object.create(新对象原型的对象,{})接收两个参数,作为新对象原型的对象,给新对象自身定义额外属性的对象和Object.defineProperties()方法第二个参数一样的对象。
-                    生成的新对象以给定的对象为原型并继承它所有的属性和方法。
-                    Object.create()实际上也可以看作是对object()的再封装,只是把它挂载在了Object上。
-                    if (typeof Object.create !== 'function') {
-                        Object.create = function (obj) {
-                          function F() {}
-                          F.prototype = obj;
-                          return new F();
-                        };
-                      }
-                </p>
-                <h5>5.寄生式继承</h5>
-                <p>
-                    和原型式继承类似,基本思路是另外创建一个实现继承的函数,以某种方式增强对象,然后再返回这个对象。
-                    有点类似工厂模式,可以说是对原型式继承的一种封装。
-                    function createObj(o){
-                        let clone = object(o);//通过调用函数创建一个新对象
-                        clone.sayHi = function(){//以某种方式增强这个新对象
-                            console.log('hi')
-                        }
-                        return clone;//返回这个对象
-
-                    }
-                    es5提供了Object.create(新对象原型的对象,{})方法之后当然是应该使用它来替换object(o)函数。
-                    let person = {
-                        name:"zhangsan",
-                        friends:["lisi","wangwu","maliu"]
-                    }
-                    function createAnothor(original){
-                        let clone = Object.create(original);
-                        clone.sayHi = function(){
-                            console.log(`hi`)
-                        }
-                        return clone;
-                    }
-                    // 继承
-                    let anothor = createAnothor(person);
-                    console.log(anothor.name)//zhangsan
-                    anothor.sayHi()//hi
-                    它跟原型式继承一样适合只关注对象,而不在乎类型和构造函数的场景。缺点是类似构造函数因为是在方法里添加函数难以重用。
-                </p>
-                <h5>6.寄生式组合继承</h5>
-                <p>
-                    它是通过冒充构造函数继承属性,使用混合式原型链继承方法。
-                    基本思路是不再通过调用父类构造函数赋值给子类原型,而是使用寄生式继承获取父类原型的一个副本来赋值给子类原型。
-                    即使用寄生式继承来继承父类原型,然后将返回的新对象赋值给子类原型。
-                    关键是寄生式继承函数 inheritPrototype(),接收两个参数,子类构造函数和父类构造函数。
-                    函数内部第一步就是使用原型式继承创建父类原型的一个副本并赋值给子类原型。
-                    第二步是重新指定子类原型上的constructor属性为子类自己,解决由于重写原型导致默认constructor丢失的问题。
-                    第二步是因为Object.create()方法生成的对象,继承了它的原型对象的构造函数,所以要重新指定。
-                    function Box(age){
-                        this.names=['wang','pan','Hello']
-                        this.age=age;
-                    }
-                    Box.prototype.run = function(){
-                        return this.names  +','+  this.age +','+ '父类原型run方法运行中....';
-                    };
-                
-                    function Desk(age){
-                        //对象冒充,继承实例属性
-                        Box.call(this,age);
-                    }
-                    //不再使用这个方法
-                    // Desk.prototype = new Box();
-                    // 使用寄生式继承
-                    function inheritPrototype(subType,superType){
-                        // 子类原型等于父类原型的一个副本
-                        subType.prototype = Object.create(superType.prototype);//创建对象
-                        subType.prototype.constructor = subType;//重新指定constructor属性,增强对象
-                    }
-                    // 继承
-                    inheritPrototype(Desk,Box);
-                    Desk.prototype.sayAge = function(){
-                        return this.age
-                    };
-                    let desk1 = new Desk(23);
-                    desk1.names.push('zhangsan')
-                    console.log(desk1.names)//[ "wang", "pan", "Hello", "zhangsan" ]
-                    console.log(desk1.run());//wang,pan,Hello,zhangsan,23,父类原型run方法运行中....
-                    console.log(desk1.sayAge());//23
-                    console.log(desk1 instanceof Desk)//true
-                    console.log(desk1 instanceof Box)//true
-                    console.log(desk1 instanceof Object)//true
-                    let desk2 = new Desk(27);
-                    console.log(desk2.names)// [ "wang", "pan", "Hello" ]
-                    console.log(desk2.run());//wang,pan,Hello,27,父类原型run方法运行中....
-                    console.log(desk2.sayAge());//27
-
-                    最终只调用了一次父类构造函数,而且跟组合式继承一样也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
-                    可以说这个继承方式是引用类型继承的最佳模式了。
-                </p>
-                <h5>7.ECMAScript6类继承</h5>
-                <p>
-                    ECMAScript5中使用了多种方法来模拟类似于类的行为,但是每种方法都有自己的问题和妥协。所以实现继承的代码也显得非常冗长和混乱。
-                    而在ECMAScript6引入类定义之后继承是非常方便的,它是原生支持类继承机制的。
-                    支持单继承,使用 extends 关键字来实现继承,它会继承了父类的所有属性和方法。
-                        子类必须在constructor方法中使用super()方法调用父类构造函数,否则新建实例时会报错。这是因为子类自己的this对象,必须先通过父类的构造函数完成塑造,
-                    继承得到与父类所有的实例属性和方法,然后再对其进行加工,加上子类自己的实例属性和方法。
-                    如果不调用super方法,子类就得不到this对象。而且子类this要在super()之后引用否则报错。
-                    语法:
-                    class 子类名 extends 父类名{
-                        constructor(x,y,z){
-                            super(x,y)//继承父类实例属性和方法 相当于 super.constructor()
-                            父类.prototype.constructor.call(this)
-                            this.z = z
-                        }
-                        addChild(){
-                            return this.z
-                        }
-                        //在静态方法中
-                        static sub(){
-                            super.sub();
-                        }
-                    }
-                    注意:es6中为类构造函数和静态方法都添加了一个内部特性[[HomeObject]],它是一个指针指向定义该方法的对象。
-                    而super始终会定义为这个特性的原型。
-                    所以super只能在子类的类构造函数和静态方法中使用,要么使用它调用构造函数,要么使用它调用静态方法。
-                    需要给父类构造函数传参就手动传入,子类声明了constructor方法,就必须在其中调用super()。
-                </p>
-                <h5>8.多重继承</h5>
-                <p>
-                    JavaScript 不提供多重继承功能,即不允许一个对象同时继承多个对象。但是,可以通过变通方法,实现这个功能。
-                    主要是通过Object.assign()方法实现的。
-                </p>
-            </div>
-            <h4>4.变量的解构赋值</h4>
+            <h4>2.ES6之前js面向对象编程的方法</h4>
             <div>
-                <h5>1.解构概述</h5>
-                    在es5中对变量赋值是使用 '=' ,且如果是要把对象的属性或者数组的元素赋值给变量只能一个一个赋值。
-                    所以在es6中提供了对赋值运算符(=)的扩展即：解构赋值。
-                    所谓解构(Destructuring)赋值是指按照一定模式,按照对应位置从数组或对象中提取值,并将其赋值给变量。
-                    
-                    解构赋值的规则是:解构源如果不是对象或数组,就先将其转为对象,undefined和null无法转为对象解构报错。<br>
-                    解构模型: let {解构的目标} =  解构的源     
-                        解构的源,解构赋值表达式的右边部分。<br>
-                        解构的目标,解构赋值表达式的左边部分。<br>
-                    优点:在代码书写上简洁且易读,语义更加清晰明了也方便了复杂对象或数组中数据字段获取。
-                <h5>2.数组的解构:</h5>
-                <p>
-                    数组是按照下标作为对应关系的进行解构的,变量的取值由它在数组中的位置决定。<br>
-                    基本数组:<br>
-                    let arr = [1, 2, 3]<br>
-                        let [a, b, c] = [1, 2, 3];<br>
-                        let [a, b, c] = arr;<br>
-                    解构的源:arr = [1, 2, 3],一个含有三个元素的数组。<br>
-                    解构的目标:[a, b, c]。即从数组中提取值,按照对应位置(下标)用a,b,c三个变量接收对应下标的数组值。<br>
-                    es5是这样赋值的:<br>
-                        var a = arr[0]<br>
-                        var b = arr[1]<br>
-                        var c = arr[2] <br>
-                    只要两边的模式相同,左边的变量就会被赋予对应的值。如果解构不成功,变量的值就等于undefined。<br>
-                    可以不完全解构,也可以设置变量的默认值,还可以多重嵌套解构。<br>
-                    注意:ES6 内部使用严格相等运算符(===)判断一个位置是否有值。所以只有当一个数组成员严格等于undefined时设置的默认值才会生效。
-                </p>
-                <h5>3.对象的解构:</h5>
-                <p>            
-                    对象的解构不同于数组的解构是按元素下标(index)排列的,对象的解构赋值是根据对象的属性名来一一对应的与顺序无关。<br>
-                    接收变量必须与对象的属性同名,数组的解构一样,解构失败,变量值为undefined,也可以嵌套,不完全解构,或者加默认值。<br>
-                    基本对象: <br>
-                        obj = { username: 'zhangsan', age: 25 }<br>
-                        let { username, age} = obj <br>
-                        let { username, age} = { username: 'zhangsan', age: 25 }<br>
-                        username // zhangsan<br>
-                        age // 25<br>
-                    es5是这样赋值的:<br>
-                        var username= obj.username<br>
-                        var age= obj.age<br>
-                    或者通过键名取值<br>
-                        var username= obj["username"]<br>
-                        var age= obj["age"]<br>
-                    注意:对象的解构赋值是es6中对象的扩展,当属性名和值同名时可以只写一个<br>
-                        let { foo: foo, bar: bar } = { foo: 'aaa', bar: 'bbb' };<br>
-                    可以简写成下面,找对象中有没有foo属性有则将它的值赋值给foo变量所以可以这样使用<br>
-                        let { foo, bar } = { foo: 'aaa', bar: 'bbb' };<br>
-                    本质是:在对象中找有没有foo属性,有则将属性名对应的属性值赋值给别名变量myfoo。真正被赋值的是变量而不是解构模式<br>
-                        let { foo: myfoo(别名), bar: mybar } = { foo: 'aaa', bar: 'bbb' };<br>
-                    注意:所有可以被遍历的对象都是可以被解构赋值的,也常常和res运算符(即... 三点运算符)一起使用。
-                </p>
-                <h5>4.应用</h5>
-                <p>
-                    1.交换变量的值<br>
-                        let x = 1;<br>
-                        let y = 2;<br>
-                        [x, y] = [y, x];<br>
+                <h5>1. this 对象 </h5>
+                <div>
+                    在使用new 构造函数时、生成的定义在构造函数内容的对象 this、它也可以用在别的场合。但是它总是返回一个对象即指向一个对象。
+                    实质是js变量作用域的问题: 因为js函数内部是可以引用当前环境的其它变量的、而为了保证在函数体内部获取当前的运行环境(context)准确就需要一种机制。
+                    而this 设计的目的就是用来指代函数当前的运行环境。在js变量作用域一节我们知道在JavaScript中有全局作用域、函数作用域、以及块级作用域。
+                    <h6>1. 使用场合</h6>
+                    <pre>
+                        全局环境浏览器 this 指的是顶层对象 window
+                        全局node环境 this 指的是global 对象
+                        构造函数 this 指的是 每次new时初始化时的实例对象
+                        对象的方法 this 指的是方法运行时所在的对象
+                    </pre>
+                    <h6>2. 对象冒充</h6>
+                    JavaScript 提供了call、apply、bind这三个方法、来切换或者固定this的指向。它们都是Function.prototype上的方法即函数实例方法。
+                    <pre>
+                        Function.prototype.call() 、传入一个对象(如果参数为空、null、undefined则默认为window对象)、指定前面调用函数内部的this指向出入的参数对象。
+                        也就是相当于调用函数是在传入对象中执行的,第二个参数是: 逗号分隔的函数调用时需要的实参列表。
+                        它的一个应用就是用来调用对象的原生方法、防止被重写。比如之前用来判断数据类型的 toString()方法
+                          const zhangsan = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                              name: '足球'
+                            },
+                          }
+                          const lisi = {
+                            name: 'zhangsan',
+                            age: 22,
+                            gender: 'male',
+                            hobbies: {
+                              name: '篮球'
+                            },
+                          }
+                          const age = 12
+                          function callThis(base) {
+                            console.log(this.age + base)
+                          }
+                          callThis.call(window,12) // 24
+                          callThis.call(zhangsan,12) // 40
+                          callThis.call(lisi,12) // 34
+                          防止被覆盖
+                            var obj = {};
+                            obj.hasOwnProperty('toString') // false
+
+                            // 覆盖掉继承的 hasOwnProperty 方法
+                            obj.hasOwnProperty = function () {
+                            return true;
+                            };
+                            obj.hasOwnProperty('toString') // true
+
+                            Object.prototype.hasOwnProperty.call(obj, 'toString') // false
+
+                    </pre>
+                    <pre>
+                        Function.prototype.apply() 和call方法类似、区别在于第二个参数是接收一个数组作为函数执行时需要传入的实参。
+                        const zhangsan = {
+                            name: 'zhangsan',
+                            age: 28,
+                            gender: 'male',
+                            hobbies: {
+                              name: '足球'
+                            },
+                          }
+                          const lisi = {
+                            name: 'zhangsan',
+                            age: 22,
+                            gender: 'male',
+                            hobbies: {
+                              name: '篮球'
+                            },
+                          }
+                          const age = 12
+                          function applyThis(base1,base2) {
+                            console.log(this.age + base1+ base2)
+                          }
+                          
+                          applyThis.apply(window,[6,2]) // 20
+                          applyThis.apply(zhangsan, [6, 2]) // 36
+                          applyThis.apply(lisi, [6, 2]) // 30
+                          应用1: 可以快速找出一个纯数数组的最大元素
+                          var a = [10, 2, 4, 15, 9];
+                          Math.max.apply(null, a) // 15
+                          应用2: 将类数组对象转为真正的数组、es6之前非常常用
+                          Array.prototype.slice.apply({0: 1, length: 1}) // [1]
+                    </pre>
+                    <pre>
+                        Function.prototype.bind() 不会立即执行而是将函数体内的this绑定到某个对象、然后每次执行都会返回一个新的函数。
+                    </pre>
+                </div>
+                <h5>2.js实现继承的方法</h5>
+                面向对象编程很重要的一个方面就是继承、我们知道JavaScript是只支持实现继承的、通过构造函数和原型链来实现、下面介绍常见的继承方法。
+                <div>   
+                    <h6>1.原型链继承</h6>
+                    <p>
+                        也就是子类原型对象等于一个父类实例、子类.prototype = new 父类(),这种改变原型对象的指向之后 子类.prototype 上的constructor属性也被修改成了 父类()。
+                        而且,子类要重写父类的方法或者新增方法都要在原型赋值之后再添加到子类的原型上。
+                        另一个问题是如果父类原型中包含了引用类型的值时,那么父类的所有实例对象都会共享,而实例对象又被赋值给了另一个子类的原型对象,这就导致实例属性变成了原型属性。
+                        也就是每个实例对引用类型的修改都会影响其它的子类实例。
+                        第二个问题是子类型在实例化时是不能给父类型的构造函数传参的。 
+                        <pre>
+                            // Box()构造, 被继承的函数叫做超类型（父类, 基类）
+                                function Box() {
+                                this.name = '张三';
+                                }
+                                Box.prototype.sayName = function () {
+                                console.log(`我是父类原型上定义的方法${this.name}`)
+                                }
+                                //Desk()构造,继承的函数叫做子类型（子类,派生类）
+                                function Desk() {
+                                this.age = 23;
+                                }
+                                // 实现继承 Box
+                                Desk.prototype = new Box();
+                                // 必须在原型赋值之后才能添加或重写实例方法
+                                Desk.prototype.deskTalk = function () {
+                                console.log('hello desk')
+                                }
+                                let desk = new Desk();
+                                console.log('desk.age is', desk.age); // 自身属性 - desk.age is 23
+                                console.log('desk.name is', desk.name);//继承来的属性 - desk.name is 张三
+                                desk.sayName();//继承来的方法 - 我是父类原型上定义的方法张三
+                                function Table() {//Table()构造
+                                this.level = 'aaaaaa';
+                                }
+                                Table.prototype = new Desk();
+                                let table = new Table();
+                                console.log('table.level is', table.level);//自身属性 - table.level is aaaaaa
+                                console.log('table.age is', table.age);//继承了Desk的age - table.age is 23
+                                console.log('table.name is', table.name);//继承了Box的name - table.name is 张三
+                                table.sayName();//继承来的方法
+                        </pre>
     
-                    2.从函数返回多个值(返回数组或对象,通过解构赋值取出来比较常用<br>
-                        函数只能返回一个值,如果要返回多个值,只能将它们放在数组或对象里返回。<br>
-                        // 返回一个数组<br>
-                        function example() {<br>
-                            return [1, 2, 3];<br>
-                        }<br>
-                        let [a, b, c] = example();<br>
-        
-                        // 返回一个对象<br>
-                        function example() {<br>
-                            return {<br>
-                                foo: 1,<br>
-                                bar: 2<br>
-                            };<br>
-                        }<br>
-                        let { foo, bar } = example();<br>
+                    </p>
+                    <h6>2.对象冒充继承</h6>
+                    <p>
+                        为了解决原型包含引用值导致的继承问题以及不能向父类构造函数传参的问题,就可以使用对象冒充继承方法(也叫对象伪装/经典继承)。
+                        基本思路是:在子类构造函数内调用父类构造函数,通过call()或apply()方法以新创建的对象作为上下文执行构造函数并传入参数。
+                        相当于子类对象上运行了父类构造函数中的所有初始化代码,就会让子类实例具有父类实例的属性,这时父类原型上同名的属性会被遮蔽。
+                        但是冒充构造函数继承也有问题:只能访问定义在构造函数中定义的方法因此函数不能重用,也就是子类不能访问父类原型上定义的方法。
+                        <pre>
+                            function Box(name, age) {
+                                this.name = name;
+                                this.age = age;
+                                this.family = ['哥哥', '姐姐', '弟弟',];
+                                this.sayHi = function () {
+                                  console.log(`hi${this.name}`)
+                                }
+                              }
+                              Box.prototype.family = '家庭';
+                              Box.prototype.sayName = function () {
+                                console.log(`hello${this.name}`)
+                              };
+                              
+                              function Desk(name, age) {
+                                //对象冒充继承且可以给父类构造函数传参
+                                Box.call(this, name, age);
+                              }
+                              let desk1 = new Desk('wang', 23);
+                              desk1.family.push("妹妹");
+                              console.log(desk1.family)//[ "哥哥", "姐姐", "弟弟", "妹妹" ]
+                              console.log(desk1.name)//'wang'
+                              desk1.sayHi()//只能访问构造函数内的方法 - hiwang
+                              desk1.sayName()//desk1.sayName is not a function
+                              console.log(desk1.age)//23
+                              let desk2 = new Desk('qiao', 22);
+                              console.log(desk2.family)// [ "哥哥", "姐姐", "弟弟" ]
+                              console.log(desk2.name)//'qiao'
+                              console.log(desk2.age)//22
+                              desk2.sayHi()//只能访问构造函数内的方法
+                              desk2.sayName()//desk2.sayName is not a function报错
+                        </pre>
+                    </p>
+                    <h6>3.组合继承</h6>
+                    <p>
+                        有时候也叫伪经典继承,它是综合了原型链继承和对象冒充继承将两者的优点集中起来的一种继承方法。
+                        基本思路是:使用原型链继承父类原型上的属性和方法,使用对象冒充继承父类构造函数内的属性(即实例属性)和传参。
+                        它解决了原型链继承和对象冒充继承的不足,是JavaScript中使用最多的继承方式。而且也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
+                        组合继承也存在效率问题:父类构造函数始终会被调用两次,第一次是父类实例赋值给子类原型时,第二次是子类构造函数内冒充父类时。
+                        <pre>
+                            function Box(age){
+                                this.name=['wang','pan','Hello']
+                                this.age=age;
+                            }
+                            Box.prototype.run = function(){
+                                return this.name  +  this.age +  '运行中....';
+                            };
                         
-                    3.输入模块的指定方法,加载模块时,往往需要指定输入哪些方法。非常常用！！！
-                        解构赋值使得输入语句非常清晰:
-                        const { SourceMapConsumer, SourceNode } = require("source-map");
-                        import {SourceMapConsumer, SourceNode} from '/source-map'
+                            function Desk(age){
+                                //对象冒充,继承实例属性
+                                Box.call(this,age);
+                            }
+                            //原型链继承,继承原型方法
+                            Desk.prototype = new Box();
+                            // 修正构造器属性指向
+                            Desk.prototype.constructor = Desk
+                            Desk.prototype.sayAge = function(){
+                                return this.age
+                            };
+                            let desk1 = new Desk(23);
+                            desk1.name.push('zhangsan')
+                            console.log(desk1.name)//[ "wang", "pan", "Hello", "zhangsan" ]
+                            console.log(desk1.run());//wang,pan,Hello23运行中....
+                            console.log(desk1.sayAge());//23
+                        
+                            let desk2 = new Desk(27);
+                            console.log(desk2.name)// [ "wang", "pan", "Hello" ]
+                            console.log(desk2.run());//wang,pan,Hello27运行中....
+                            console.log(desk2.sayAge());//27
+                        
+                            console.log(desk1 instanceof Desk)//true
+                            console.log(desk1 instanceof Box)//true
+                            console.log(desk1 instanceof Object)//true
+                        
+                            console.log(Object.prototype.isPrototypeOf(Box))
+                            console.log(Box.prototype.isPrototypeOf(desk1))
+                            console.log(Desk.prototype.isPrototypeOf(desk1))
+                        </pre>
+                    </p>
+                    <h6>4.原型式继承</h6>
+                    <p>
+                        即使不定义构造函数或者不知道构造函数名时也可以通过原型实现对象之间的信息共享这就是原型式继承:
+                        <pre>
+                            // 原型式继承
+                            function createObject(o){
+                                function F(){}
+                                F.prototype = o
+                                return new F()
+                            }
+                            const person = {
+                                name:"zhangsan",
+                                friends:["lisi","wangwu","maliu"]
+                            }
+                            let objectPerson = createObject(person)
+                            console.log(objectPerson.friends)// [ "lisi", "wangwu", "maliu", "rob", "bab" ]
+                        </pre>
+                        它的本质是通过创建一个临时的构造函数将传入的对象赋值给这个临时构造函数的原型,然后返回这个临时类型的一个原型。
+                        本质是对传入对象的一次浅拷贝。如果你有一个对象,想在这个对象的基础上再创建一个新的对象。你就可以使用原型式继承。
+                        ECMAScript5中增加了 Object.create() 方法将原型式继承的概念规范化,也就是用来代替这个object这个函数。
+                        Object.create(新对象原型的对象,{})接收两个参数,作为新对象原型的对象,给新对象自身定义额外属性的对象和Object.defineProperties()方法第二个参数一样的对象。
+                        生成的新对象以给定的参数对象为原型并继承它所有的属性和方法。
+                        缺点和原型链继承一样引用类型属性被所有子类实例共享。
+                        <pre>
+                            Object.create()实际上也可以看作是对object()的再封装,只是把它挂载在了Object上。
+                            if (typeof Object.create !== 'function') {
+                                Object.create = function (obj) {
+                                  function F() {}
+                                  F.prototype = obj;
+                                  return new F();
+                                };
+                            }
+                        </pre>
+                        <pre>
+                            const person = {
+                                name: "zhangsan",
+                                friends: ["lisi", "wangwu", "maliu"]
+                              }
+                              let anothorPerson1 = Object.create(person, {
+                                name: {
+                                  value: 'anothor1'
+                                }
+                              })
+                              anothorPerson1.friends.push("rob")
+                              let anothorPerson2 = Object.create(person, {
+                                name: {
+                                  value: 'anothor2'
+                                }
+                              })
+                              anothorPerson2.friends.push("bab")
+                              console.log(anothorPerson1.name)// anothor1
+                              console.log(anothorPerson2.name)// anothor2
+                              console.log(anothorPerson1.friends)// [ "lisi", "wangwu", "maliu", "rob", "bab" ]
+                        </pre>
+                    </p>
+                    <h6>5.寄生式继承</h6>
+                    <p>
+                        和原型式继承类似,基本思路是另外创建一个实现继承的函数,以某种方式增强对象,然后再返回这个对象。
+                        有点类似工厂模式,可以说是对原型式继承的一种封装。
+                        function createObj(o){
+                            let clone = object(o);//通过调用函数创建一个新对象
+                            clone.sayHi = function(){//以某种方式增强这个新对象
+                                console.log('hi')
+                            }
+                            return clone;//返回这个对象
     
-                </p>
+                        }
+                        es5提供了Object.create(新对象原型的对象,{})方法之后当然是应该使用它来替换object(o)函数。
+                        <pre>
+                            let person = {
+                                name: "zhangsan",
+                                friends: ["lisi", "wangwu", "maliu"]
+                              }
+                              function createAnothor(original) {
+                                let clone = Object.create(original);
+                                // 增强对象
+                                clone.sayHi = function () {
+                                  console.log(`hi`)
+                                }
+                                return clone;
+                              }
+                              // 寄生式继承
+                              let anothor = createAnothor(person);
+                              console.log(anothor.name)//zhangsan
+                              console.log(anothor.friends)// [ "lisi", "wangwu", "maliu" ]
+                              anothor.sayHi()//hi                              
+                        </pre>
+                        它跟原型式继承一样适合只关注对象,而不在乎类型和构造函数的场景。缺点是类似对象冒充因为是在方法里添加函数难以重用同时每次创建对象都会创建一遍方法。
+                    </p>
+                    <h6>6.寄生式组合继承</h6>
+                    <p>
+                        它是通过冒充构造函数继承属性,使用混合式原型链继承方法。
+                        <pre>
+                            基本思路是不再通过调用父类构造函数赋值给子类原型,而是使用寄生式继承获取父类原型的一个副本来赋值给子类原型。
+                            即使用寄生式继承来继承父类原型,然后将返回的新对象赋值给子类原型。
+                            关键是寄生式继承函数 inheritPrototype(),接收两个参数,子类构造函数和父类构造函数。
+                            函数内部第一步就是使用原型式继承创建父类原型的一个副本并赋值给子类原型。
+                            第二步是重新指定子类原型上的constructor属性为子类自己,解决由于重写原型导致默认constructor丢失的问题。
+                            第二步是因为Object.create()方法生成的对象,继承了它的原型对象的构造函数,所以要重新指定。
+                            function Box(age){
+                                this.names=['wang','pan','Hello']
+                                this.age=age;
+                            }
+                            Box.prototype.run = function(){
+                                return this.names  +','+  this.age +','+ '父类原型run方法运行中....';
+                            };
+                        
+                            function Desk(age){
+                                //对象冒充,继承实例属性、给父类构造传参
+                                Box.call(this,age);
+                            }
+                            //不再使用这个方法
+                            // Desk.prototype = new Box();
+                            // 使用寄生式继承
+                            function inheritPrototype(subType,superType){
+                                // 子类原型等于父类原型的一个副本
+                                subType.prototype = Object.create(superType.prototype);//创建对象
+                                subType.prototype.constructor = subType;//重新指定constructor属性,增强对象
+                            }
+                            // 继承
+                            inheritPrototype(Desk,Box);
+                            Desk.prototype.sayAge = function(){
+                                return this.age
+                            };
+                            let desk1 = new Desk(23);
+                            desk1.names.push('zhangsan')
+                            console.log(desk1.names)//[ "wang", "pan", "Hello", "zhangsan" ]
+                            console.log(desk1.run());//wang,pan,Hello,zhangsan,23,父类原型run方法运行中....
+                            console.log(desk1.sayAge());//23
+                            console.log(desk1 instanceof Desk)//true
+                            console.log(desk1 instanceof Box)//true
+                            console.log(desk1 instanceof Object)//true
+                            let desk2 = new Desk(27);
+                            console.log(desk2.names)// [ "wang", "pan", "Hello" ]
+                            console.log(desk2.run());//wang,pan,Hello,27,父类原型run方法运行中....
+                            console.log(desk2.sayAge());//27
+
+                            最终只调用了一次父类构造函数,而且跟组合式继承一样也保留了instanceof操作符和isPrototypeOf()方法识别合成对象的能力。
+                            可以说这个继承方式是引用类型继承的最佳模式了。
+                        </pre>
+                    </p>
+                    <h6>7.ECMAScript6类继承</h6>
+                    <p>
+                        ECMAScript5中使用了多种方法来模拟类似于类的行为,但是每种方法都有自己的问题和妥协。所以实现继承的代码也显得非常冗长和混乱。
+                        而在ECMAScript6引入类定义之后继承是非常方便的,它是原生支持类继承机制的。
+                        <pre>
+                            支持单继承,使用 extends 关键字来实现继承,它会继承了父类的所有属性和方法。
+                            子类必须在constructor方法中使用super()方法调用父类构造函数,否则新建实例时会报错。这是因为子类自己的this对象,必须先通过父类的构造函数完成塑造,
+                        继承得到与父类所有的实例属性和方法,然后再对其进行加工,加上子类自己的实例属性和方法。
+                        如果不调用super方法,子类就得不到this对象。而且子类this要在super()之后引用否则报错。
+                        语法:
+                        class 子类名 extends 父类名{
+                            constructor(x,y,z){
+                                super(x,y)//继承父类实例属性和方法 相当于 super.constructor()
+                                父类.prototype.constructor.call(this)
+                                this.z = z
+                            }
+                            addChild(){
+                                return this.z
+                            }
+                            //在静态方法中
+                            static sub(){
+                                super.sub();
+                            }
+                        }
+                        注意:es6中为类构造函数和静态方法都添加了一个内部特性[[HomeObject]],它是一个指针指向定义该方法的对象。
+                        而super始终会定义为这个特性的原型。
+                        所以super只能在子类的类构造函数和静态方法中使用,要么使用它调用构造函数,要么使用它调用静态方法。
+                        需要给父类构造函数传参就手动传入,子类声明了constructor方法,就必须在其中调用super()。
+                        </pre>
+                    </p>
+                    <h6>8.多重继承</h6>
+                    <p>
+                        JavaScript 不提供多重继承功能,即不允许一个对象同时继承多个对象。但是,可以通过变通方法,实现这个功能。
+                        主要是通过Object.assign()方法实现的。
+                    </p>
+                </div>
             </div>
+            <h4>3.ES6之后js面向对象编程的方法</h4>
+            <div>
+
+            </div>
+
         </div>
     </div>
 <!-- js -->
@@ -1513,6 +1725,8 @@ window.onload = function (){
     // }
     // //原型链继承,继承原型方法
     // Desk.prototype = new Box();
+    // //修正构造器属性指向
+    // Desk.prototype.constructor = Desk
     // Desk.prototype.sayAge = function(){
     //     return this.age
     // };
@@ -1588,7 +1802,7 @@ window.onload = function (){
     // };
 
     // function Desk(age){
-    //     //对象冒充,继承实例属性
+    //     //对象冒充,继承实例属性、给父类构造传参
     //     Box.call(this,age);
     // }
     // //不再使用这个方法
@@ -1668,12 +1882,6 @@ window.onload = function (){
     // let s = new S();
     // console.log( s.hello )// 'hello'
     // console.log( s.world )// 'world'
-
-
-
-
-
-
 
 
 }
