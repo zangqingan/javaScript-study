@@ -31,7 +31,8 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [js对象](./src/views/ECMAScript/8-JS对象.html "js对象")
 ### 2.1.9 js数组
 * [js数组](./src/views/ECMAScript/9-JS数组.html "js数组")
-### 2.1.10 JavaScript内置Math对象
+### 2.1.10 js函数
+* [js函数](./src/views/ECMAScript/10-JS函数.html "js函数")
 ### 2.1.11 JavaScript基本包装类型
 ### 2.1.12 JavaScript变量和作用域
 ### 2.1.13 JavaScript对象高级
