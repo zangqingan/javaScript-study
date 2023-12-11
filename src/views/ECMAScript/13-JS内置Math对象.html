@@ -3,52 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <title>JavaScript内置Math对象</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <h3>1、Math对象概述</h3>
-    <div>
-        所谓内置对象就是 ECMAScript提供实现与宿主环境无关,在JavaScript程序执行时就存在的对象。可以直接使用。
-        ECMAScript 原生提供了Math对象,Math对象和其它的对象不同,它不是一个构造函数所以不能生成实例。
-        而是一个工具类对象,封装了与数学计算的相关属性和方法。所有的属性和方法都必须在Math对象上调用。
-        语法:Math.属性名/方法名();
+    <div class="content">
+        <h3>1、Math对象概述</h3>
+        <div>
+            所谓内置对象就是 ECMAScript提供实现与宿主环境无关,在JavaScript程序执行时就存在的对象。可以直接使用。
+            ECMAScript 原生提供了Math对象,Math对象和其它的对象不同,它不是一个构造函数所以不能生成实例。
+            而是一个工具类对象,封装了与数学计算的相关属性和方法。所有的属性和方法都必须在Math对象上调用。
+            语法:Math.属性名/方法名();
+        </div>
+        <h3>2、Math对象常见的静态属性</h3>
+        <div>
+            <pre>
+                Math对象的一些静态属性主要是用来保存数学中的一些特殊值,都是只读的。基本不用。
+                语法:Math.属性名;
+                常见有:
+                    Math.PI:表示圆周率π
+                    Math.E:常数e。
+                    Math.LN2:2 的自然对数。
+                    Math.LN10:10 的自然对数。
+                    Math.LOG2E:以 2 为底的e的对数。
+                    Math.LOG10E:以 10 为底的e的对数。
+                    Math.SQRT1_2:0.5 的平方根。
+                    Math.SQRT2:2 的平方根。  
+                    Math.SQRT2:2 的平方根。  
+            </pre>
+        </div>
+        <h3>3、Math对象常见的静态方法</h3>
+        <div>
+            <pre>
+                Math对象提供的辅助执行简单或复杂数学运算的方法。
+                 语法:Math.方法名();
+                 常见有:
+                     1.Math.random():生成一个0-1之间的伪随机数,包括0但是不包括1。
+                         指定范围的随机数 start-end
+                         total = end-start+1
+                         Math.floor(Math.random()*total+start),
+                     2.Math.floor():向下取整
+                     3.Math.ceil():向上取整
+                     4.Math.round():四舍五入
+                     5.Math.max():最大值
+                     6.Math.min():最小值
+                     7.Math.abs():绝对值
+                     8.Math.pow():幂运算
+                     9.Math.sqrt():平方根
+                     10.Math.log():自然对数
+                     11.Math.exp():e的指数
+                 常用的是前面6个。
+            </pre>
+        </div>
+        <h3>4、常见应用</h3>
+        <div>
+            <pre>
+                1.生成一个指定范围的随机整数
+                2.生成指定长度的一个随机字符串(字符串的组成可以自定义)
+            </pre>
+        </div>
     </div>
-    <h3>2、Math对象常见的静态属性</h3>
-    <div>
-        Math对象的一些静态属性主要是用来保存数学中的一些特殊值,都是只读的。基本不用。
-        语法:Math.属性名;
-        常见有:
-            Math.PI:表示圆周率π
-            Math.E:常数e。
-            Math.LN2:2 的自然对数。
-            Math.LN10:10 的自然对数。
-            Math.LOG2E:以 2 为底的e的对数。
-            Math.LOG10E:以 10 为底的e的对数。
-            Math.SQRT1_2:0.5 的平方根。
-            Math.SQRT2:2 的平方根。  
-    </div>
-    <h3>3、Math对象常见的静态方法</h3>
-    <div>
-       Math对象提供的辅助执行简单或复杂数学运算的方法。
-        语法:Math.方法名();
-        常见有:
-            1.Math.random():生成一个0-1之间的伪随机数,包括0但是不包括1。
-                指定范围的随机数 start-end
-                total = end-start+1
-                Math.floor(Math.random()*total+start),
-            2.Math.floor():向下取整
-            3.Math.round():四舍五入
-            4.Math.max():最大值
-            5.Math.min():最小值
-            6.Math.ceil():向上取整
-            7.Math.abs():绝对值
-            8.Math.pow():幂运算
-            9.Math.sqrt():平方根
-            10.Math.log():自然对数
-            11.Math.exp():e的指数
-        常用的是前面6个。
-    </div>
-
-
+    <br>
+    <br>
+    <br>
 <!-- js -->
 <script>
 window.onload = function(){

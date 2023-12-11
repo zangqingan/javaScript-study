@@ -37,7 +37,8 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [js正则表达式](./src/views/ECMAScript/11-JS正则表达式.html "js正则表达式")
 ### 2.1.12 js日期对象
 * [js日期对象](./src/views/ECMAScript/12-JS日期对象.html "js日期对象")
-### 2.1.13 JavaScript对象高级
+### 2.1.13 js
+* [js日期对象](./src/views/ECMAScript/12-JS日期对象.html "js日期对象")
 ### 2.1.14 JavaScript函数高级
 ### 2.1.15 JavaScript数组高级
 ### 2.1.16 JavaScript内置json对象
