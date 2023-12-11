@@ -3,122 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <title>JavaScript日期对象</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
     <style>
         #showtime{
-
+            display: flex;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <h3>1、js日期对象概述</h3>
-    <div>
-        Date对象是 JavaScript 原生的时间库,参考了java早期版本的java.util.Date。可以用它来处理与时间和日期有关的问题。
-        所以它也以国际标准时间(UTC)1970年1月1日00:00:00作为时间的零点,从它至今经过的毫秒数来保存日期。
-        社区有现成的库datejs等如果需要百度即可。
-    </div>
-    <h3>2、创建方法</h3>
-    <div>
-        <h4>1.普通函数调用</h4>
+    <div class="content">
+        <h3>1、js日期对象概述</h3>
         <div>
-            直接调用时返回一个代表当前时间的字符串,无论有没有参数。
-            Date()
+            Date对象是 JavaScript 原生的时间库本身也是一个对象,参考了java早期版本的java.util.Date。可以用它来处理与时间和日期有关的问题。
+            所以它也以国际标准时间(UTC)1970年1月1日00:00:00作为时间的零点,从它至今经过的毫秒数来保存日期。
+            社区有现成的库dayjs、momentjs等如果需要百度即可。最常用是时间格式转换问题、计算问题。
         </div>
-        <h4>2.构造函数调用</h4>
+        <h3>2、创建方法</h3>
         <div>
-            使用new操作符调用时,返回一个日期对象。语法:let now = new Date();//创建了一个日期对象实例,Mon Mar 30 2020 18:01:58 GMT+0800 (中国标准时间)
-            构造方法可以传参即可指定日期的时间(参数格式:月份/日/年份 时:分:秒),不传就是默认当前的时间。
-            各个参数的取值范围如下:
-                年:使用四位数年份,比如2000。
-                月:0表示一月,依次类推,11表示12月。
-                日:1到31。
-                小时:0到23。
-                分钟:0到59。
-                秒:0到59
-                毫秒:0到999
+            <h4>1.普通函数调用</h4>
+            <div>
+                直接调用时、总是返回一个代表当前时间的字符串,无论有没有参数。
+                Date()// Mon Dec 11 2023 09:07:07 GMT+0800 (中国标准时间)
+            </div>
+            <h4>2.构造函数调用</h4>
+            <div>
+                使用new操作符调用时,返回一个日期对象实例。语法:let now = new Date();//创建了一个日期对象实例,Mon Mar 30 2020 18:01:58 GMT+0800 (中国标准时间)
+                对日期实例求值实际相当于调用toString方法、所以返回的是一个字符串表示当前实例创建时对应的当前所在时区的时间。<br>
+                构造方法可以传参即可指定日期的时间(参数格式:月份/日/年份 时:分:秒),不传就是默认当前的时间。
+                各个参数的取值范围如下:
+                    年:使用四位数年份,比如2000。
+                    月:0表示一月,依次类推,11表示12月。
+                    日:1到31。
+                    小时:0到23。
+                    分钟:0到59。
+                    秒:0到59。
+                    毫秒:0到999。
+            </div>
         </div>
-    </div>
-    <h3>3、js日期对象常用的静态方法</h3>
-    <div>   
-        <h4>1.Date.now()</h4>
+        <h3>3、js日期对象常用的静态方法</h3>
+        <div>   
+            <h4>1.Date.now()</h4>
+            <div>
+                Date.now方法返回当前时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数,相当于 Unix 时间戳乘以1000。
+                可以方便地用在代码分析中。
+                console.log(Date.now()) // 1702258918759
+                常用于比较两个日期的大小
+            </div>
+            <h4>2.Date.parse()</h4>
+            <div>
+                Date.parse方法用来解析日期字符串,返回该时间距离时间零点(1970年1月1日 00:00:00)的毫秒数。解析失败返回NaN。
+                支持的日期格式:日期字符串应该符合 RFC 2822 和 ISO 8061 这两个标准。
+                    "月/日/年",如"5/10/2022";
+                    "月名 日,年",如"May 10,2022";
+                    "周几 月名 日 年 时:分:秒 时区",如"Tue May 23 2019 00:00:00 GMT-0700";
+                例子:创建一个 "2019年5月23日" 的日期对象
+                    let date = new Date(Date.parse("May  23,2019"))
+                常用于比较两个日期的大小
+            </div>
+            <h4>3.Date.UTC()</h4>
+            <div>
+                Date.UTC方法接受年、月、日等变量作为参数,返回该时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数。
+                参数用法与Date构造函数完全一致,区别在于Date.UTC方法的参数会被解释为 UTC 时间(世界标准时间),Date构造函数的参数会被解释为当前所在时区的时间。
+                // 格式
+                Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
+    
+            </div>
+        </div>
+        <h3>4、js日期对象常用的实例方法</h3>
         <div>
-            Date.now方法返回当前时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数,相当于 Unix 时间戳乘以1000。
-            可以方便地用在代码分析中。
+            <h4>1.继承方法</h4>
+            <div>
+                因为它也是一个对象,所以也继承了 toLocaleString()、toString()、和valueOf()这三个方法并重写了。
+                重写之后返回值不一样了
+                valueOf方法返回实例对象距离时间零点(1970年1月1日00:00:00 UTC)对应的毫秒数。预期为数值时日期实例对象会自动调用。比如两个日期对象相减时。
+                toString方法返回一个当前时区格式完整的日期字符串。
+            </div>
+            <h4>2.to-日期格式化方法</h4>
+            <div>
+                <pre>
+                    专门用于将Date对象格式化为指定的日期格式,都返回字符串。
+                    1.toDateString()方法返回日期字符串(不含小时、分和秒)。
+                    2.toTimeString()方法返回时间字符串(不含年月日星期)。
+                    3.toLocaleDateString()方法返回本地日期(不含小时、分和秒)。
+                    4.toLocaleTimeString()方法返回本地时间(不含年月日)。
+                    5.toUTCString()方法返回对应的 UTC 时间,也就是比北京时间晚8个小时。
+                    6.toISOString()方法返回对应时间的 ISO8601 写法(UTC时区)。
+                    7.toJSON()方法返回一个符合 JSON 格式的 ISO 日期字符串与toISOString方法的返回结果完全相同。
+                    // 常用实例方法 - to 日期格式化类
+                    const nowDate = new Date()
+                    console.log(nowDate.toString())// Mon Dec 11 2023 10: 14: 51 GMT + 0800(中国标准时间)
+                    console.log(nowDate.toUTCString())// Mon, 11 Dec 2023 02: 14: 51 GMT
+                    console.log(nowDate.toISOString())// 2023 - 12 - 11T02: 14: 51.953Z
+                    console.log(nowDate.toJSON())// 2023 - 12 - 11T02: 14: 51.953Z
+                    console.log(nowDate.toDateString())// Mon Dec 11 2023
+                    console.log(nowDate.toTimeString())// 10: 14: 51 GMT + 0800(中国标准时间)
+                </pre>
+            </div>
+            <h4>3.get-获取日期实例对象值的方法</h4>
+            <div>
+                <pre>
+                    Date对象提供了一系列get*方法,用来获取日期实例对象某个方面的值。
+                    1.getTime():返回实例距离1970年1月1日00:00:00的毫秒数,等同于valueOf方法。
+                    2.getFullYear():返回四位的年份。
+                    3.getMonth():返回月份(0-11、0表示1月,11表示12月)。
+                    4.getDate():返回实例对象对应每个月的几号(1-31、从1开始)。
+                    5.getDay():返回星期几,0-6、星期日为0,星期一为1,以此类推。
+                    6.getHours():返回小时(0-23)。
+                    7.getMinutes():返回分钟(0-59)。
+                    8.getSeconds():返回秒(0-59)。
+                    9.getMilliseconds():返回毫秒(0-999)。
+                    所有这些get*方法返回的都是整数,不同方法返回值的范围不一样。
+                    // 常用实例方法 - get 获取日期实例对象某个方面的值类
+                    const nowDate = new Date()
+                    console.log(nowDate.getTime())// 1702261356538
+                    console.log(nowDate.getFullYear())// 2023
+                    console.log(nowDate.getMonth())// 11
+                    console.log(nowDate.getDate())// 11
+                    console.log(nowDate.getDay())// 1
+                    console.log(nowDate.getHours())// 10
+                    console.log(nowDate.getMinutes())// 21
+                    console.log(nowDate.getSeconds())// 40
+                    console.log(nowDate.getMilliseconds())// 355
+                    对应的 UTC(世界标准时间)-get后面加上UTC即可
+                    如: getFullYear ==> getUTCFullYear
+                </pre>
+            </div>
+            <h4>4.set-设置日期实例对象值的方法</h4>
+            <div>
+                Date对象提供了一系列set*方法,用来设置实例对象的各个方面。基本和get*方法一一对应的但是没有setDay方法。
+                1.setTime(milliseconds):设置毫秒时间戳。
+                2.setFullYear(year [, month, date]):设置四位年份。
+                3.setMonth(month [, date]):设置月份(0-11)。
+                4.setDate(date):设置实例对象对应的每个月的几号(1-31),返回改变后毫秒时间戳。
+                5.setHours(hour [, min, sec, ms]):设置小时(0-23)。
+                6.setMinutes(min [, sec, ms]):设置分钟(0-59)。
+                7.setSeconds(sec [, ms]):设置秒(0-59)。
+                8.setMilliseconds():设置毫秒(0-999)。
+            </div>
+            无论是获取还是设置方法,它们都有对应的 UTC 版本,即获取或设置 UTC(世界标准时间) 时区的时间。在get或者set后面加上UTC即可。
+    
         </div>
-        <h4>2.Date.parse()</h4>
-        <div>
-            Date.parse方法用来解析日期字符串,返回该时间距离时间零点(1970年1月1日 00:00:00)的毫秒数。
-            支持的日期格式:日期字符串应该符合 RFC 2822 和 ISO 8061 这两个标准。
-                "月/日/年",如"5/10/2022";
-                "月名 日,年",如"May 10,2022";
-                "周几 月名 日 年 时:分:秒 时区",如"Tue May 23 2019 00:00:00 GMT-0700";
-            例子:创建一个 "2019年5月23日" 的日期对象
-                let date = new Date(Date.parse("May  23,2019"))
-        </div>
-        <h4>3.Date.UTC()</h4>
-        <div>
-            Date.UTC方法接受年、月、日等变量作为参数,返回该时间距离时间零点(1970年1月1日 00:00:00 UTC)的毫秒数。
-            参数用法与Date构造函数完全一致,区别在于Date.UTC方法的参数会被解释为 UTC 时间(世界标准时间),Date构造函数的参数会被解释为当前所在时区的时间。
-            // 格式
-            Date.UTC(year, month[, date[, hrs[, min[, sec[, ms]]]]])
-
-        </div>
-    </div>
-    <h3>4、js日期对象常用的实例方法</h3>
-    <div>
-        <h4>1.继承方法</h4>
-        <div>
-            因为它也是一个对象,所以也继承了 toLocaleString()、toString()、和valueOf()这三个方法并重写了。
-            重写之后返回值不一样了
-            valueOf方法返回实例对象距离时间零点(1970年1月1日00:00:00 UTC)对应的毫秒数。
-            toString方法返回一个完整的日期字符串。
-        </div>
-        <h4>2.to-日期格式化方法</h4>
-        <div>
-            专门用于格式化日期的方法,都返回字符串。
-            1.toDateString()方法返回日期字符串(不含小时、分和秒)。
-            2.toTimeString()方法返回时间字符串(不含年月日)。
-            3.toLocaleDateString()方法返回本地日期(不含小时、分和秒)。
-            4.toLocaleTimeString()方法返回本地时间(不含年月日)。
-            5.toUTCString()方法返回对应的 UTC 时间,也就是比北京时间晚8个小时。
-            6.toISOString()方法返回对应时间的 ISO8601 写法。
-            7.toJSON()方法返回一个符合 JSON 格式的 ISO 日期字符串
-        </div>
-        <h4>3.get-获取日期实例对象值的方法</h4>
-        <div>
-            Date对象提供了一系列get*方法,用来获取日期实例对象某个方面的值。
-            1.getTime():返回实例距离1970年1月1日00:00:00的毫秒数,等同于valueOf方法。
-            2.getFullYear():返回四位的年份。
-            3.getMonth():返回月份(0表示1月,11表示12月)。
-            4.getDate():返回实例对象对应每个月的几号(从1开始)。
-            5.getDay():返回星期几,星期日为0,星期一为1,以此类推。
-            6.getHours():返回小时(0-23)。
-            7.getMinutes():返回分钟(0-59)。
-            8.getSeconds():返回秒(0-59)。
-            9.getMilliseconds():返回毫秒(0-999)。
-            10.getTimezoneOffset():返回当前时间与 UTC 的时区差异,以分钟表示,返回结果考虑到了夏令时因素。
-            所有这些get*方法返回的都是整数,不同方法返回值的范围不一样。
-        </div>
-        <h4>4.set-设置日期实例对象值的方法</h4>
-        <div>
-            Date对象提供了一系列set*方法,用来设置实例对象的各个方面。基本和get*方法一一对应的
-            1.setTime(milliseconds):设置毫秒时间戳。
-            2.setFullYear(year [, month, date]):设置四位年份。
-            3.setMonth(month [, date]):设置月份(0-11)。
-            4.setDate(date):设置实例对象对应的每个月的几号(1-31),返回改变后毫秒时间戳。
-            5.setHours(hour [, min, sec, ms]):设置小时(0-23)。
-            6.setMinutes(min [, sec, ms]):设置分钟(0-59)。
-            7.setSeconds(sec [, ms]):设置秒(0-59)。
-            8.setMilliseconds():设置毫秒(0-999)。
-        </div>
-        无论是获取还是设置方法,它们都有对应的 UTC 版本,即获取或设置 UTC 时区的时间。
-
     </div>
     <hr>
-
+    <br>
     <!-- 练习 -->
     <p id="showdate"></p>
     <div id="showtime">
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
 <!-- js -->
 <script>
 window.onload = function(){
@@ -173,9 +211,9 @@ window.onload = function(){
         //创建当前日期对象
         let now = new Date();
         //创建指定时间戳即未来时间点
-        let str="2022/12/30 00:00:00";
+        let str="2023/12/31 00:00:00";
         let future = new Date(str);
-        //获取相差的时间毫秒数除以1000得到秒数
+        //获取两个日期实例对象相差的时间毫秒数除以1000得到秒数
         let diff = future.getTime() - now.getTime();
         // console.log(diff);
         //对时间进行格式处理
@@ -186,7 +224,7 @@ window.onload = function(){
         //获取页面元素
         let showtime = document.getElementById("showtime");
         //在div中显示
-        showtime.innerHTML = "距离今年工作结束(2020/12/25)还有:" + d + "天" + h + "小时" + m + "分钟" + s + "秒";
+        showtime.innerHTML = "距离今年工作结束(2023/12/31)还有:" + d + "天" + h + "小时" + m + "分钟" + s + "秒";
         //开启一个定时器定时更新
         timer = setInterval(function(){
             showDiff();
