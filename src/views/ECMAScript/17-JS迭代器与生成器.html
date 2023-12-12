@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>JavaScript迭代器与生成器</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <div>
+    <div class="content">
         <h3>1、迭代器Iterator</h3>
-        <div>
-            iterator是一种接口机制,为各种不同的数据结构提供统一的简便的访问机制,
-            即只要数据结构上部署了Symbol.iterator接口,就可以使用for of遍历数据结构中的成员。
-            一种数据结构只要部署了 Iterator 接口,我们就称这种数据结构是“可遍历的”(iterable)。   
+        <pre>
+            iterator是一种接口机制,为JavaScript中各种不同的数据结构提供统一的简便的访问机制,
+            即只要数据结构上部署了Symbol.iterator接口,就可以完成遍历操作(即依次处理该数据结构的所有成员)
+            一种数据结构只要部署了 Iterator 接口(默认接口是部署在数据结构的Symbol.iterator属性),我们就称这种数据结构是“可遍历的”(iterable)。也就可以使用es6新增的 for of循环变量所有的成员。
             工作原理：
                 创建一个指针对象(遍历器对象),指向数据结构的起始位置。
                 第一次调用next()方法,指针自动指向数据结构的第一个成员。
@@ -21,20 +22,20 @@
                 遍历结束时value= undefined,done=false.
 
             原生具备 Iterator 接口的数据结构如下,它们都可以直接使用for of 循环。
-                Array
-                Map
-                Set
-                String
-                TypedArray
+                Array-数组
+                Map-映射
+                Set-集合
+                String-字符串包装类对象
+                TypedArray-类数组对象
                 函数的 arguments 对象
                 NodeList 对象
                 扩展运算符(...)也会调用默认的 Iterator 接口。
 
             for...of循环,作为遍历所有数据结构的统一的方法,部署了 Iterator 接口就可以使用。
             
-        </div>
+        </pre>
         <h3>2、生成器Generator</h3>
-        <div>
+        <pre>
             es6提供的解决异步编程的方法之一。
             generator函数是一个状态机,内部封装了不同状态的数据
             用来生成遍历器对象
@@ -51,7 +52,7 @@
             4.调用next方法函数内部逻辑开始执行,遇到yield表达式停止,返回yield后面的值
             5.再次调用next方法会从上一次停止时的yield处开始,直到最后。
             6.yield语句 返回结果通常为undefined,
-        </div>
+        </pre>
 
 
     </div>
