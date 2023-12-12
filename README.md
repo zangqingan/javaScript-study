@@ -42,7 +42,8 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [js内置JSON对象](./src/views/ECMAScript/14-JS内置JSON对象.html "js内置JSON对象")
 ## 2.15 js内置原始值包装对象
 * [js内置原始值包装对象](./src/views/ECMAScript/15-JS内置原始值包装对象.html "js内置原始值包装对象")
-## 2.16 JavaScript内置json对象
+## 2.16 js新增引用类型Set和Map
+* [js新增引用类型Set和Map](./src/views/ECMAScript/16-JS新增引用类型Set和Map.html "js新增引用类型Set和Map")
 ## 2.17 JavaScript代码执行过程
 
 # 三、文档对象模型DOM
