@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript内置原始值包装对象</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
+</head>
+<body>
+    <div class="content">
+        <h3>1、js原始值包装对象概述</h3>
+        <div>
+            <pre>
+                为了方便操作原始类型值,ECMAScript提供了3种特殊的引用类型:Boolean、Number、String。
+            它们与其他引用类型相似,但同时也具有各自的原始类型相应的特殊行为。
+            它与引用类型的主要区别是对象的声明周期不同,自动创建的原始值包装类型只存在于访问它的那行代码执行期间,执行完了就销毁。
+            原始值包装类型基本都是浏览器后台创建的,非必要不要使用new 创建。
+            每当用到某个原始值的方法或属性时,后台就会创建一个相应原始包装类型的对象,从而暴露出操作原始值的各种方法。
+            如:
+                let str1 = 'hello';
+                let str2 = str1.substring(2);
+            str1是一个字符串变量,原始值按说不能调用substring(),但是实际上执行了。
+            这是因为后台进行了很多操作,从而实现原始值可以调用了对象的方法。
+            执行操作如下:
+                1.创建一个String类型的实例
+                2.调用实例上的特定方法
+                3.销毁这个实例
+            类似下面的操作:
+                let str1 = new String('hello')
+                let str2 = str1.substring(2);
+                str1 = null;
+    
+            字符串、布尔值、数值通过这三个包装类可以将基本数据类型的数据(包装成)转换为对象。
+            所以把它们叫做原始值包装类型或者基本包装类型。
+            Boolean()
+            Number()
+            String()
+            
+            总结:
+                这三个对象作为构造函数使用(带有new)时,可以将原始类型的值转为对象。
+                作为普通函数使用时(不带有new),可以将任意类型的值,转为原始类型的值。
+            </pre>
+        </div>
+        <h3>2、js原始包装类型分类</h3>
+        <div>
+            <h4>1.Boolean 对象</h4>
+            <pre>
+                对应布尔值的引用类型,let bool = new Boolean(true/false);
+                typeof bool; //object
+                重写了valueOf和toString方法,建议永远不要使用Boolean 对象。
+                作为普通函数调用时就是数据类型一章中学过的强制类型转换: 将任意值转为布尔值、此时它就是一个工具方法。
+            </pre>
+            <h4>2.Number对象</h4>
+            <div>
+                对应数值的引用类型,let num = new Number(10);
+                typeof num; //object
+                也重写了valueOf、toLocalString和toString,也不建议直接实例化使用。
+                作为工具方法使用时: 将任意值转为数值。
+            </div>
+            <h4>3.String对象</h4>
+            <div>
+                对应字符串的引用类型,let str = new String("hello world");
+                typeof str; //object
+                它有很多方法用来处理字符串。
+            </div>
+        </div>
+        <h3>3、String对象常用实例方法</h3>
+        <div>
+            String对象是JavaScript内置的3个原始值包装对象之一用来生成字符串对象。它是一个类数组对象、所有也有length属性返回字符串的长度。
+            做工具方法使用时是将任意类型的值转为字符串。
+            <h4>1.字符串操作方法</h44>
+            <pre>
+                1. String.prototype.concat()、连接两个字符串返回一个新的字符串、不改变原字符串。多个参数(不是字符串会先转成字符串)时一次拼接到末尾
+                2. String.prototype.slice()、从一个字符串中截取一个子字符串并返回、不改变原字符串、第一个参数是开始位置、第二个参数是结束位置(不包括)
+                3. String.prototype.substr()、也是从一个字符串中截取一个子字符串并返回，不改变原字符串、第一个参数是开始位置、第二个参数截取的长度也就是子字符串的长度、省略就是直到末尾。
+                4. String.prototype.substring()、也是从一个字符串中截取一个子字符串并返回，不改变原字符串、第一个参数是开始位置、第二个参数是结束位置(不包括)和slice很像不建议使用。
+                const str1 = 'hello-'
+                const str2 = 'world'
+                const result = str1.concat(str2,'拼接')
+                console.log('result', result)// result hello - world拼接
+                console.log(str1.slice(1,2))// e
+                console.log(str1.substr(1,2))// el
+                console.log(str1.substring(1,2))// e
+                console.log('str1', str1)// hello-
+                console.log('str2', str2)// world
+
+            </pre>
+            <h4>2.字符串包含方法</h4>
+            <pre>
+                用来确定一个字符串是否包含在另一个字符串中。
+                1. String.prototype.indexof()、确定一个字符串在另一个字符串中第一次出现的位置(下标)、不匹配返回-1。第二个参数表示查找开始位置。
+                2. String.prototype.lastIndexOf()、和indexOf一样不过是从后往前找
+                es6之后新增了3个
+                3. String.prototype.includes():返回布尔值,表示是否找到了参数字符串。
+                4. String.prototype.startsWith():返回布尔值,表示参数字符串是否在原字符串的头部。
+                5. String.prototype.endsWith():返回布尔值,表示参数字符串是否在原字符串的尾部。
+                // String包装对象常用实例方法
+                const str1 = 'helalo-'
+                const str2 = 'world'
+                console.log(str1.indexOf('l')) // 2
+                console.log(str1.indexOf('l',3)) // 4
+                console.log(str1.indexOf('k'))// -1
+                console.log(str1.lastIndexOf('l'))// 4
+                console.log(str1.lastIndexOf('k'))// -1
+                console.log(str1.includes('a'))// true
+                console.log(str1.startsWith('h'))// true
+                console.log(str1.endsWith('lo-'))// true
+            </pre>
+            <h4>3.字符串大小写转换方法</h4>
+            <pre>
+                1. String.prototype.toLowerCase()方法用于将一个字符串全部转为小写,返回一个新字符串,不改变原字符串。
+                2. String.prototype.toUpperCase()则是全部转为大写,返回一个新字符串,不改变原字符串。
+                // String包装对象常用实例方法
+                const str1 = 'HelDAlo-'
+                console.log(str1.toLowerCase())// heldalo-
+                console.log(str1.toUpperCase())// HELDALO-
+                console.log(str1)// HelDAlo-
+            </pre>
+            <h4>4.字符串正则匹配方法</h4>
+            <pre>   
+                1. String.prototype.match()方法用于确定原字符串是否匹配某个子字符串,返回一个数组,成员为匹配的第一个字符串。如果没有找到匹配,则返回null。
+                2. String.prototype.search()方法的用法基本等同于match,但是返回值为匹配的第一个位置(下标)。如果没有找到匹配,则返回-1。
+                3. String.prototype.replace()方法用于替换匹配的子字符串,一般情况下只替换第一个匹配(除非使用带有g修饰符的正则表达式开启全局匹配)它是返回一个替换后的新字符串、原字符串不变。
+                4. String.prototype.split()方法按照给定规则分割字符串,返回一个由分割出来的子字符串组成的数组。分割规则为空字符串返回所有字符
+                // String包装对象常用实例方法
+                const str1 = 'HelDAlo-,i am sorry that you are fired. am i can win'
+                const str2 = 'hello'
+                console.log(str1.match('am'))// Array [ am ]
+                console.log(str1.search('am')) // 11
+                console.log(str1.replace('am', '替换')) // HelDAlo-,i 替换 sorry that you are fired. am i can win
+                console.log(str1)// HelDAlo-,i am sorry that you are fired. am i can win
+                console.log(str2.split(''))// [h,e,l,l,o]
+            </pre>
+            <h4>5.其它方法</h4>
+            <pre>
+                1. String.prototype.trim()方法用于去除字符串两端的空格、制表符\t、换行符\n、回车符\r,返回一个新字符串,不改变原字符串。
+                2. String.prototype.repeat()方法返回一个新字符串,表示将原字符串重复n次。
+                // String包装对象常用实例方法
+                const str1 = '  hello world  '
+                const str2 = 'am'
+                console.log(str1.trim())// hello world
+                console.log(str1)//  hello world  
+                console.log(str2.repeat(3))// amamam
+                console.log(str2) // am
+
+            </pre>
+        </div>
+        <h3>4、Number对象常用实例方法</h3>
+        <pre>
+            1. Number.prototype.toString()Number对象部署了自己的toString方法、用来将一个数值转为字符串形式。可以接受一个参数、表示输出的进制。如果省略这个参数、默认将数值先转为十进制、再输出字符串。
+            console.log((10).toString())//默认十进制输出 10
+            console.log((10).toString(2))//二进制输出 1010
+            console.log((10).toString(8))//八进制输出 12
+            console.log((10).toString(16))//十六进制输出 a
+
+            2. Number.prototype.toFixed() 先将一个数转为指定位数的小数、然后返回这个小数对应的字符串。接收一个参数表示小数的位数0-100之间。
+            注意返回的是字符串!!!、同时为浮点数时、小数5的四舍五入不确定。
+            一般会会使用社区成熟的库作为精度计算的方法。
+            // Number包装对象常用实例方法
+            console.log((10.018).toFixed(2))// 10.02
+            console.log((10.015).toFixed(2))// 10.02
+            console.log((10.025).toFixed(2))// 10.03
+            console.log((10.035).toFixed(2))// 10.04
+            console.log((10.045).toFixed(2))// 10.04
+            console.log((10.055).toFixed(2))// 10.05
+            console.log((10.065).toFixed(2))// 10.06
+            console.log((10.075).toFixed(2))// 10.07
+            console.log(typeof (10.075).toFixed(2))// string
+        </pre>
+    </div>
+    <br>
+    <br>
+    <br>
+<!-- js -->
+<script>
+window.onload = function(){
+    //字符串的方法:字符串在底层是以字符数组的形式存储的
+    //创建一个对象
+    // var str = "hello world";
+    // //length属性:获取字符串的长度
+    // console.log(str.length);//11
+
+    // //charAt()根据索引返回指定位置的字符,原字符串不变。
+    // var  result =str.charAt(6);
+    // console.log(str);//hello world,原字符不变
+    // console.log(result);//返回指定位置的字符
+
+    // //charCodeAt()获取指定位置字符的Unicode字符编码,原字符串不变。
+    // result = str.charCodeAt(6);
+    // console.log(result);//119
+
+    // //concat()连接两个或多个字符串,原字符串不变。
+    // result= str.concat("你好","再见");
+    // console.log(result);//hello world你好再见
+
+    //indexof():检查一个字符串中是否含有指定的字符内容,含有则返回其第一次出现的索引,没有返回-1.原字符串不变。
+    //可以指定一个第二个参数:表示开始查找的位置。
+    // var  result= str.indexOf("l");
+    // var  result= str.indexOf("l",5);
+    // console.log(result);//9
+
+    //lastindexof()与indexof()类似不过它是从后往前找,而indexof是从前往后找。原字符串不变。
+    // var  result= str.lastIndexOf("l");//9
+    // var  result= str.lastIndexOf("l",3);//3
+    // console.log(result);
+
+    //slice(参数1,参数2)从字符串中截取指定的内容返回,原字符串不变。
+    //参数1:开始截取的索引(包括开始索引)
+    //参数2:结束位置的索引(不包括结束索引)
+    //参数为负数时从后边计算。
+    // var result = str.slice(1,4);
+    // console.log(str);//hello world
+    // console.log(result);//ell
+
+    //substring()也可以用来截取一个字符串,和slice()类似,原字符串不变。
+    //参数情况一样,不同在与不能接收负值,负值时默认为0,自动调整参数的顺序(由小到大)
+    // var result = str.substring(1,4);
+    // console.log(str);//hello world
+    // console.log(result);//ell
+
+    // //substr(参数1,参数2),原字符串不变。
+    // //参数1:开始截取的索引(包括开始索引)
+    // //参数2:截取的个数
+    // var result = str.substr(1,4);
+    // console.log(str);//hello world
+    // console.log(result);//ello
+
+    //split(参数):将一个字符串拆分成一个数组,原字符串不变。
+    //参数,数组根据这个参数类拆分
+    //空串,每一个字符都拆分。
+    // var str1 = "abc,bcd,efg,hij";
+    // var result = str1.split(",");
+    // console.log(str1);//abc,bcd,efg,hij
+    // console.log(result);//Array(4) [ "abc", "bcd", "efg", "hij" ]
+
+    //toLowerCase(),将一个字符串转换为小写并返回,原字符串不变。
+    // var str = "HELLO WORLD";
+    // var result = str.toLowerCase();
+    // console.log(result);//hello world
+
+    //toUpperCase(),将一个字符串转换为大写并返回,原字符串不变。
+    // var str = "hello world";
+    // var result = str.toUpperCase();
+    // console.log(result);//HELLO WORLD
+}
+</script>
+</body>
+</html>
