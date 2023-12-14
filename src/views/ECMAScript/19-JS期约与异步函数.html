@@ -5,29 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>JavaScript期约与异步函数</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <div>
+    <div  class="content">
         <h3>1、期约Promise</h3>
         <div>
             <h4>1.Promise概述</h4>
-            <div>
+            <pre>
                 ECMAScript5中异步编程的解决方法是回调函数和事件,在异步操作很多时会形成回调地狱非常的麻烦。
                 ECMAScript6 新增了Promise引用类型,将异步操作以更加优雅地同步的流程表达出来,避免了层层嵌套的回调函数问题。
                 Promise它是一种异步程序执行的机制,可以理解为一个容器,里面保存(约定了)了未来某个将要发生的事件(通常是一个异步操作如实现超时处理,处理Ajax请求等。)。
                 Promise对象的特点:自身的状态不受外界影响,而是通过异步操作的结果修改自身的状态。而且一旦状态改变,就不会再变。
                 在new生成promise实例对象时,promise实例对象的状态为pending:即表示刚初始化待定状态。此时promise对象的值为undefined。
                 然后根据异步操作的返回结果,在内部的执行器函数中修改promise的状态:只有两种可能
-                    异步操作成功的结果会使用 resolve(data)方法 将promise对象的状态从pending变为fulfilled,并将结果data返回到 then()方法的第一个回调函数中。此时promise对象的值为resolve()方法中传递的参数
-                    异步操作失败的结果会使用 reject(error)方法 将promise对象的状态从pending变为rejected,并将错误信息error返回到 then()方法的第二个回调函数中。此时promise对象的值为reject()方法中传递的参数
+                    异步操作成功的结果会使用 resolve(data)方法 将promise对象的状态从pending变为fulfilled,并将结果data返回到实例方法 then()的第一个参数回调函数中。此时promise对象的值为resolve()方法中传递的参数
+                    异步操作失败的结果会使用 reject(error)方法 将promise对象的状态从pending变为rejected,并将错误信息error返回到实例方法 then()的第二个参数回调函数中。此时promise对象的值为reject()方法中传递的参数
 
                 所以promise是一个有状态的对象有以下三个状态:
-                    待定pending:初始化时的状态
-                    兑现fullfilled(有时候也叫resolved):成功
-                    拒绝rejected:失败
-            </div>
+                    待定(进行中)pending:初始化时的状态
+                    兑现(已成功)fullfilled(有时候也叫resolved):成功
+                    拒绝(已失败)rejected:失败
+            </pre>
             <h4>2.Promise创建方法</h4>
-            <div>
+            <pre>
                 ECMAScript6新增的引用类型Promise,它是一个构造函数,用来生成promise实例对象。
                 初始化时必须传入一个执行器函数(executor)作为参数,不然会报错。
                 如果调用resolve函数和reject函数时带有一个参数,那么它们的这个参数会被传递给then()方法的回调函数的唯一参数。
@@ -55,6 +56,7 @@
                 });
                 
                 2. 调用 promise.then(回调函数1,回调函数2)分别指定resolved状态和rejected状态的回调函数。
+                它会在其他同步任务执行完毕之后才执行、因为它是一个微任务。
                 回调函数1,说明异步操作成功并把结果返回,指定resolved状态。
                 回调函数2,说明异步操作失败并把错误信息返回,指定rejected状态。
                 这两个回调函数都接受Promise对象传出的值作为参数。
@@ -66,11 +68,11 @@
                     console.log(error,'失败了');
                 });
                 
-            </div>
+            </pre>
             <h4>3.Promise对象常用静态方法</h4>
             <div>
                 <h5>1.Promise.resolve()</h5>
-                <p>
+                <pre>
                     有时需要将现有对象转为 Promise 对象,给Promise.resolve()方法传入这个对象就可以将其转换成一个期约。
                     Promise.resolve()方法允许调用时不带参数,直接返回一个resolved状态的 Promise 对象。
                     语法:
@@ -81,9 +83,9 @@
                         console.log(s)// Hello
                     });
                     
-                </p>
+                </pre>
                 <h5>2.Promise.reject()</h5>
-                <p>
+                <pre>
                     Promise.reject(new Error('message'))方法返回一个状态为rejected的 Promise 实例并抛出一个异步错误。
                     注意:这个错误不能被try/catch语句捕获,而是通过then()方法的第二个函数参数接收,或者promise的catch()方法里的函数参数。
                     语法:
@@ -94,9 +96,9 @@
                         console.log(s) // 出错了
                     });
                    
-                </p>
+                </pre>
                  <h5>3.Promise.all()</h5>
-                 <p>
+                 <pre>
                     将多个期约实例组合包装成一个新期约的静态方法,接收一个promise对象实例组成的可迭代对象,返回一个新期约。
                     所有的成功后返回一个arr到then中。
                     const p = Promise.all([p1, p2, p3]);
@@ -111,9 +113,9 @@
                     p.then(values => {
                         console.log('values is',values)//Array(3) [ "zhangsan", 12, undefined ]
                     })
-                </p>
+                </pre>
                 <h5>4.Promise.race()</h5>
-                <p>
+                <pre>
                     接收一个promise对象实例组成的可迭代对象,返回一个新期约。竞速模式有一个成功就返回了.
                     const p = Promise.race([p1, p2, p3]);
                     只要p1、p2、p3之中有一个实例率先改变状态,p的状态就跟着改变。那个率先改变的 Promise 实例的返回值,就传递给p的回调函数。
@@ -125,13 +127,13 @@
                     p.then(values => {
                         console.log('values is',values)//values is zhangsan
                     })
-                </p>
+                </pre>
             </div>
             <h4>4.Promise对象常用实例方法</h4>
             <div>
                 期约实例的方法是连接外部同步代码与内部异步代码之间的桥梁。这些方法可以访问到异步操作返回的数据,处理期约成功和失败时的结果,连续链式调用对期约求值等。
-                <h5>1.then()</h5>
-                <p>
+                <h5>1. Promise.prototype.then()</h5>
+                <pre>
                     then()方法:由Thenable接口定义的,作用是为 Promise 实例对象添加状态改变时对应的回调函数。
                     返回的是一个新的Promise实例(注意,不是原来那个Promise实例),因此可以采用链式写法继续调用。即then方法后面再调用另一个then方法。
                     then()方法接收两个参数:都是可选的。
@@ -157,11 +159,13 @@
 
                     注意:then()方法是一个微任务,会放到任务队列里的。而不是立即执行,这被称为"非重入"特性。
                     事实上"非重入"特性适用于then(),catch(),finally()这三个方法的函数参数。
-                </p>
-                <h5>2.catch()</h5>
-                <p>
+                </pre>
+                <h5>2. Promise.prototype.catch()</h5>
+                <pre>
                     catch()方法用于指定期约发生错误时的回调函数,也返回一个新的期约。只接收一个参数rejected状态的回调函数,即期约rejected()后执行。 
                     本质上是 then(null, rejection) 或 then(undefined, rejection)的别名。它捕获的是 reject,不能捕获throw抛出的错误。
+                    也就是异步操作抛出错误状态变为rejected就会调用catch()方法指定的回调函数处理这个错误。
+                    同时也可以捕获前面then方法执行中的错误,也更接近同步的写法(try/catch)。
                     // 写法一
                     const p = new Promise(function(resolve, reject) {
                         try {
@@ -183,10 +187,9 @@
                     });
                     注意:Promise 对象的错误具有“冒泡”性质,会一直向后传递,直到被捕获为止。
                     一般来说,不要在then()方法里面定义 Reject 状态的回调函数(即then的第二个参数),总是使用catch方法。
-                    因为可以捕获前面then方法执行中的错误,也更接近同步的写法(try/catch)。
-                </p>
+                </pre>
                 <h5>3.finally()</h5>
-                <p>
+                <pre>
                     ES2018引入了 finally()方法 指定不管 Promise 对象最后状态如何,都会执行的回调函数。
                     不接受任何参数,这意味着没有办法知道,前面的 Promise 状态到底是fulfilled还是rejected。
                     说明它是与promise状态无关的,不依赖于 Promise 的执行结果,而是用来作一些其它操作比如添加清理代码。
@@ -195,10 +198,10 @@
                     .then(result => {···})
                     .catch(error => {···})
                     .finally(() => {···});
-                </p>
+                </pre>
             </div>
             <h4>5.Promise对象和回调函数的区别</h4>
-            <div>
+            <pre>
                 主要是写法的不同,promise可以让回调函数划分出来在 then方法中执行实现解耦。
                 和异步函数的区别,本质上异步函数是promise的语法糖,在底层编译之后会自动转化为promise的写法。
                 es5:
@@ -209,7 +212,7 @@
                     async function getAjax(){
                         const res = await getAjax(url)
                     }
-            </div>
+            </pre>
             <h4>6.Promise对象实现的原理</h4>
             <div>
                 在 then()方法里的回调并不会立即执行,而是把回调对象存放到一个队列里。
@@ -223,12 +226,12 @@
         <h3>2、异步函数</h3>
         <div>
             <h4>1.异步函数概述</h4>
-            <div>
+            <pre>
                 异步函数也称为"async/await",是ES2017规范新增的,是ES6期约在ECMAScript函数中的应用。
                 旨在真正意义上的解决异步回调的问题,即用同步流程方式写异步操作代码。 
-            </div>
+            </pre>
             <h4>2.异步函数创建方法</h4>
-            <div>
+            <pre>
                 异步函数就是在普通函数前面加上 async关键字 其实还是一个函数.本质是生成器(Generator)函数的语法糖(在原有的基础上更好)。
                 async函数就是将生成器Generator 函数的星号(*)替换成async,将yield替换成await,仅此而已。
                 语法:可在函数声明,函数表达式,箭头函数和方法上使用。
@@ -246,9 +249,39 @@
                     3,async取代generator函数的 * ,await取代yield。
                     4,语义上更加明确,使用简单。
                     5,return语句返回的值,会成为then方法回调函数的参数。
+                    6,异步函数体内抛出错误会导致返回的 Promise 对象变为reject状态。同时抛出的错误对象会被catch方法回调函数接收到。
 
-                await 关键字可以暂停异步函数代码的执行,等待的是一个promise对象,只能在async 函数内部使用。如果不是 Promise 对象,就直接返回对应的值。
-                它跟then()的"非重入"特性一样,会阻塞代码执行,最好把await命令放在try...catch代码块中。
+                await 关键字可以暂停异步函数代码的执行,等待的是一个promise对象,只能在async 函数内部使用在普通函数中使用会报错。如果不是 Promise 对象,就直接返回对应的值。
+                await语句后面的 Promise 对象变为reject状态那么整个async函数都会中断执行。
+                所以如果异步操作之间不存在继发关系(也就是先后依赖关系)最好让它们同时触发缩短程序的执行时间。这个是要注意的。
+                // 写法一
+                let [foo, bar] = await Promise.all([getFoo(), getBar()]);
+
+                // 写法二
+                let fooPromise = getFoo();
+                let barPromise = getBar();
+                let foo = await fooPromise;
+                let bar = await barPromise;
+
+                它跟then()的"非重入"特性一样,会阻塞代码执行,所以最好把await命令放在try...catch代码块中。
+                async function myFunction() {
+                    try {
+                      await somethingThatReturnsAPromise();
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }
+                  
+                // 另一种写法
+                
+                async function myFunction() {
+                    await somethingThatReturnsAPromise()
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                }
+
+
                 async function foo(){
                     console.log('1')
                     await null;
@@ -263,7 +296,7 @@
 
                 async函数内部return语句返回的值,会成为then方法回调函数的参数。
                 注意:还是改变不了js单线程异步的本质,只是写法上看着像同步。
-            </div>
+            </pre>
         </div>
     </div>
 <!-- js -->

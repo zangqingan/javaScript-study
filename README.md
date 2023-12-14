@@ -48,6 +48,9 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [js迭代器与生成器](./src/views/ECMAScript/17-JS迭代器与生成器.html "js迭代器与生成器")
 ## 2.18 js代理与反射
 * [js代理与反射](./src/views/ECMAScript/18-JS代理与反射.html "js代理与反射")
+## 2.19 js期约与异步函数
+* [js期约与异步函数](./src/views/ECMAScript/19-JS期约与异步函数.html "js期约与异步函数")
+
 
 # 三、文档对象模型DOM
 ## 3.1 DOM概述
