@@ -5,172 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>JavaScript模块系统</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <h3>1、模块系统概述</h3>
-    <div>
-        现代JavaScript开发会遇到代码量大和广泛使用第三方库的问题。解决这个问题的方案通常是把代码拆分成很多部分,然后再通过某种方法(机制)将它们连接起来。
-        这也就是模块化的思想,在ECMAScript6模块规范出现之前,JavaScript 一直是没有模块(module)体系的。
-        社区制定了一些模块加载方案用来实现这种功能,最主要的有 CommonJS 和 AMD 两种。前者用于服务器,后者用于浏览器。
-        ECMAScript6 在语言标准的层面上,实现了模块功能,而且实现得相当简单,完全可以取代 CommonJS 和 AMD 规范,成为浏览器和服务器通用的模块解决方案。
-        <h4>1.模块模式</h4>
+    <div class="content">
+        <h3>1、模块系统概述</h3>
         <div>
-            要想构建一个模块系统(机制),即如何将代码拆分成独立的块,然后再把这些块连接起来就是通过模块模式实现的。
-            基本思路是:把逻辑代码分块、各自封装、相互独立、每个块自行决定对外暴露什么、同时自行决定引入执行哪些外部代码。
-            它主要包括以下几个方面:
-            <h5>1.模块标识符</h5>
-            <p>
-                模块系统本质上是键值实体,每个模块都有一个可用的唯一标识用来引用它。可以是字符串文件名或者模块文件所在的实际路径。
-                也就是每个模块都有唯一的标识能让模块系统中的其它任意模块无歧义地引用到它。
-            </p>
-            <h5>2.模块依赖</h5>
-            <p>
-                所谓依赖就相当于一个环境,有些模块需要依赖其它特殊的环境或者条件才能成立。
-                那么一个完整的模块系统就必须要管理这些依赖,保证模块在本地运行时能正常初始化。
-            </p>
-            <h5>3.模块加载</h5>
-            <p>
-                当模块被执行时,依赖已经准备好并已初始化。你就要提供一种方法让浏览器能正确的加载模块。
-            </p>
-            <h5>4.入口</h5>
-            <p>
-                模块之间相互依赖,在加载时必须指定一个模块作为入口,也就是代码开始执行的起点。这样浏览器才能正确的开始执行。
-            </p>
-            <h5>5.异步依赖</h5>
-            <p>
-                因为JavaScript是可以异步执行的,所以如果模块的依赖也能按需加载就非常好了。
-                也就是说模块系统应该能实现按需加载新模块,且在模块加载完成后提供回调。
-            </p>
-            <h5>6.动态依赖</h5>
-            <p> 
-                就是根据代码的运行条件,动态的加载模块。
-            </p>
+            现代JavaScript开发会遇到代码量大和广泛使用第三方库的问题。解决这个问题的方案通常是把代码拆分成很多部分,然后再通过某种方法(机制)将它们连接起来。
+            这也就是模块化的思想,在ECMAScript6模块规范出现之前,JavaScript 一直是没有模块(module)体系的。
+            社区制定了一些模块加载方案用来实现这种功能,最主要的有 CommonJS 和 AMD 两种。前者用于服务器,后者用于浏览器。
+            ECMAScript6 在语言标准的层面上,实现了模块功能,而且实现得相当简单,完全可以取代 CommonJS 和 AMD 规范,成为浏览器和服务器通用的模块解决方案。
+            <h4>1.模块模式</h4>
+            <pre>
+                要想构建一个模块系统(机制),即如何将代码拆分成独立的块,然后再把这些块连接起来就是通过模块模式实现的。
+                基本思路是:把逻辑代码分块、各自封装、相互独立、每个块自行决定对外暴露什么、同时自行决定引入执行哪些外部代码。
+                它主要包括以下几个方面:
+                <h5>1.模块标识符</h5>
+                <p>
+                    模块系统本质上是键值实体,每个模块都有一个可用的唯一标识用来引用它。可以是字符串文件名或者模块文件所在的实际路径。
+                    也就是每个模块都有唯一的标识能让模块系统中的其它任意模块无歧义地引用到它。
+                </p>
+                <h5>2.模块依赖</h5>
+                <p>
+                    所谓依赖就相当于一个环境,有些模块需要依赖其它特殊的环境或者条件才能成立。
+                    那么一个完整的模块系统就必须要管理这些依赖,保证模块在本地运行时能正常初始化。
+                </p>
+                <h5>3.模块加载</h5>
+                <p>
+                    当模块被执行时,依赖已经准备好并已初始化。你就要提供一种方法让浏览器能正确的加载模块。
+                </p>
+                <h5>4.入口</h5>
+                <p>
+                    模块之间相互依赖,在加载时必须指定一个模块作为入口,也就是代码开始执行的起点。这样浏览器才能正确的开始执行。
+                </p>
+                <h5>5.异步依赖</h5>
+                <p>
+                    因为JavaScript是可以异步执行的,所以如果模块的依赖也能按需加载就非常好了。
+                    也就是说模块系统应该能实现按需加载新模块,且在模块加载完成后提供回调。
+                </p>
+                <h5>6.动态依赖</h5>
+                <p> 
+                    就是根据代码的运行条件,动态的加载模块。
+                </p>
+            </pre>
+            <h4>2.ES6之前的模块系统</h4>
+            <pre>
+                在ECMAScript6模块规范出现之前,都是按照某种规范的模块语法编写代码以及对应的模块工具才能将这些模块语法和JavaScript运行连接起来。
+                <h5>1.CommonJS</h5>
+                <p>
+                    主要用于node服务器端实现模块化的模块规范,CommonJS模块语法是不能直接在浏览器中运行的。
+                    使用 require()方法加载依赖也就是加载模块,在加载模块后会缓存。
+                    使用 exports对象定义自己暴露导出的公共API。
+                </p>
+                <h5>2.AMD</h5>
+                <p>
+                    异步模块定义是以浏览器为目标执行环境的一种模块系统。实现核心是利用函数包装模块的定义。
+                    包装模块的函数是全局define的参数,由AMD加载器库实现。
+                    //例子:id为moduleA的模块定义,它又依赖moduleB
+                    define("moduleA",["moduleB"],function(moduleB){
+                        return {
+                            stuff:moduleB.sayName();
+                        }
+                    });
+                </p>
+            </pre>
         </div>
-        <h4>2.ES6之前的模块系统</h4>
-        <div>
-            在ECMAScript6模块规范出现之前,都是按照某种规范的模块语法编写代码以及对应的模块工具才能将这些模块语法和JavaScript运行连接起来。
-            <h5>1.CommonJS</h5>
-            <p>
-                主要用于node服务器端实现模块化的模块规范,CommonJS模块语法是不能直接在浏览器中运行的。
-                使用 require()方法加载依赖也就是加载模块,在加载模块后会缓存。
-                使用 exports对象定义自己暴露导出的公共API。
-            </p>
-            <h5>2.AMD</h5>
-            <p>
-                异步模块定义是以浏览器为目标执行环境的一种模块系统。实现核心是利用函数包装模块的定义。
-                包装模块的函数是全局define的参数,由AMD加载器库实现。
-                //例子:id为moduleA的模块定义,它又依赖moduleB
-                define("moduleA",["moduleB"],function(moduleB){
-                    return {
-                        stuff:moduleB.sayName();
-                    }
-                });
-            </p>
-        </div>
-    </div>
-    <h3>2、ECMAScript6模块系统</h3>
-    <div>
-        ES6提供了JavaScript语言原生的模块规范,它是作为一整块JavaScript代码存在的。
-        在script标签中使用 type="module"属性告诉浏览器,这个脚本文件是一个模块。
-        模块内的代码是在加载后执行的,且模块只能加载一次。
-        ES6模块默认是在严格模式下执行的。
-        所谓的模块可以理解成就是一个 .js文件。
-        ES6 模块不是对象,而是通过export命令显式指定输出的代码,再通过import命令输入
-        <h4>1.模块导出</h4>
-        <div>
-            一个模块就是一个独立的文件。该文件内部的所有变量,外部都无法获取。
-            ES6模块提供了export命令用于规定模块的哪些部分是外部可以访问的。
-            ES6模块支持两种导出:命名导出和默认导出,区别在于不同的导出方式对应不同的导入方式。
-            不管哪种导出方式,在实际开发中一般声明、赋值语句和导出标识符都是分开的。
-            同时一般将要导出的API都放到一个对象里然后导出这个对象。
-                export { firstName, year, v1 as multiply, Yee};
-                export default{ firstName, year, v1 as multiply, Yee};
-            <h5>1.命名导出</h5>
-            <p>
-                使用export关键字声明一个变量、函数、类并导出,导出语句可以出现在模块的任何位置但必须是模块顶级,不能嵌套在块中。
-                命名导出是将模块当成一个容器,所以可以声明多个导出语句。
-                通常情况下导出语法是:
-                // profile.js
-                    export let firstName = 'Michael'; //行内命名导出
-                    export let year = 1958;
-                    export function multiply(x, y) {
-                        return x * y;
-                    };
-                    export class Yee {
-                        return x * y;
-                    };
-                或者导出声明分组,在声明分组里可以使用as关键字重命名
-                // profile.js
-                    let firstName = 'Michael';
-                    let year = 1958;
-                    function v1() { ... };
-                    class Yee {
-                        return x * y;
-                    };
+        <h3>2、ECMAScript6模块系统</h3>
+        <pre>
+            ES6提供了JavaScript语言原生的模块规范,它是作为一整块JavaScript代码存在的。
+            在script标签中使用 type="module"属性告诉浏览器,这个脚本文件是一个模块。
+            模块内的代码是在加载后执行的,且模块只能加载一次。
+            ES6模块默认是在严格模式下执行的。
+            所谓的模块可以理解成就是一个 .js文件。
+            ES6 模块不是对象,而是通过export命令显式指定输出的代码,再通过import命令输入
+
+            <h4>1.模块导出</h4>
+            <pre>
+                一个模块就是一个独立的文件。该文件内部的所有变量,外部都无法获取。
+                ES6模块提供了export命令用于规定模块的哪些部分是外部可以访问的。
+                ES6模块支持两种导出:命名导出和默认导出,区别在于不同的导出方式对应不同的导入方式。
+                不管哪种导出方式,在实际开发中一般声明、赋值语句和导出标识符都是分开的。
+                同时一般将要导出的API都放到一个对象里然后导出这个对象。
                     export { firstName, year, v1 as multiply, Yee};
-
-                所以就以下3种导出方式:
-                // 写法一
-                    export var m = 1;
-                // 写法二
-                    var m = 1;
-                    export {m};
-                // 写法三
-                    var n = 1;
-                    export {n as m};
-            </p>
-            <h5>2.默认导出</h5>
-            <p>
-                使用 export default命令为模块指定默认导出。
-                它可以和命名导出一起使用,但是每个模块只能有一个默认导出。
-                本质上,export default就是输出一个叫做default的变量或方法,然后系统允许你为它取任意名字。
-                // export-default.js
-                function foo () {//默认输出是一个函数
-                    console.log('foo'); 
-                }  
-                export {foo as default};
-                // 等同于
-                // export default add;
-                export default class{};
-                export default 100;
-                export default "hello";
-            </p>
-        </div>
-        <h4>2.模块导入</h4>
-        <div>
-            使用export命令定义了模块的对外接口以后,其他模块(也就是JS 文件)就可以通过import命令使用其它模块导出的值。
-            它也可以出现在模块的任何位置但必须是模块顶级,不能嵌套在块中。
-            只读,只执行一次。
-            命名导出时:用户需要知道所要加载的变量名或函数名否则无法加载。
-                整体加载模块,可以使用*标识一个对象,将所有命名导出的东西都集中在这个对象上。同时也可以通过as设置别名,用的不多。
-                另一种是接受一对大括号,里面指定要从其他模块导入的变量名。大括号里面的变量名必须与被导入模块对外导出的接口名称相同。
-            // main.js
-            import * as Profile from './profile.js';
-            // 访问
-                Profile.firstName
-                Profile.lastName
-                Profile.year
-            import { firstName, year , multiply, Yee } from './profile.js';
-
-            默认导出时:
-                import命令可以为默认导出指定任意名字接收,同时也不需要使用大括号。
-            //本质是这个
-                import { default as foo } from './export-default.js';
-                import foo from './export-default.js'; // 输入
-                import MyClass from './export-default.js';
-            <h5>1.动态加载import()</h5>
-            <p>
-                ES2020 引入import()函数,支持动态加载模块。它返回一个 Promise 对象
-                适用于按需加载
-            </p>
-            
-        </div>
-
+                    export default{ firstName, year, v1 as multiply, Yee};
+                <h5>1.命名导出</h5>
+                <p>
+                    使用export关键字声明一个变量、函数、类并导出,导出语句可以出现在模块的任何位置但必须是模块顶级,不能嵌套在块中。
+                    命名导出是将模块当成一个容器,所以可以声明多个导出语句。
+                    通常情况下导出语法是:
+                    // profile.js
+                        export let firstName = 'Michael'; //行内命名导出
+                        export let year = 1958;
+                        export function multiply(x, y) {
+                            return x * y;
+                        };
+                        export class Yee {
+                            return x * y;
+                        };
+                    或者导出声明分组,在声明分组里可以使用as关键字重命名
+                    // profile.js
+                        let firstName = 'Michael';
+                        let year = 1958;
+                        function v1() { ... };
+                        class Yee {
+                            return x * y;
+                        };
+                        export { firstName, year, v1 as multiply, Yee};
+    
+                    所以就以下3种导出方式:
+                    // 写法一
+                        export var m = 1;
+                    // 写法二
+                        var m = 1;
+                        export {m};
+                    // 写法三
+                        var n = 1;
+                        export {n as m};
+                </p>
+                <h5>2.默认导出</h5>
+                <p>
+                    使用 export default命令为模块指定默认导出。
+                    它可以和命名导出一起使用,但是每个模块只能有一个默认导出。
+                    本质上,export default就是输出一个叫做default的变量或方法,然后系统允许你为它取任意名字。
+                    // export-default.js
+                    function foo () {//默认输出是一个函数
+                        console.log('foo'); 
+                    }  
+                    export {foo as default};
+                    // 等同于
+                    // export default add;
+                    export default class{};
+                    export default 100;
+                    export default "hello";
+                </p>
+            </pre>
+            <h4>2.模块导入</h4>
+            <pre>
+                使用export命令定义了模块的对外接口以后,其他模块(也就是JS 文件)就可以通过import命令使用其它模块导出的值。
+                它也可以出现在模块的任何位置但必须是模块顶级,不能嵌套在块中。
+                只读,只执行一次。
+                命名导出时:用户需要知道所要加载的变量名或函数名否则无法加载。
+                    整体加载模块,可以使用*标识一个对象,将所有命名导出的东西都集中在这个对象上。同时也可以通过as设置别名,用的不多。
+                    另一种是接受一对大括号,里面指定要从其他模块导入的变量名。大括号里面的变量名必须与被导入模块对外导出的接口名称相同。
+                // main.js
+                import * as Profile from './profile.js';
+                // 访问
+                    Profile.firstName
+                    Profile.lastName
+                    Profile.year
+                import { firstName, year , multiply, Yee } from './profile.js';
+    
+                默认导出时:
+                    import命令可以为默认导出指定任意名字接收,同时也不需要使用大括号。
+                //本质是这个
+                    import { default as foo } from './export-default.js';
+                    import foo from './export-default.js'; // 输入
+                    import MyClass from './export-default.js';
+                <h5>1.动态加载import()</h5>
+                <p>
+                    ES2020 引入import()函数,支持动态加载模块。它返回一个 Promise 对象
+                    适用于按需加载
+                </p>
+                
+            </pre>
+    
+        </pre>
     </div>
 
 <!-- js -->
 <script type="module">
-    import myPromise from '../../js/myPromise.js'
+    import myPromise from '../../utils/myPromise.js'
     var promise = new myPromise((resolve,reject) => {
         setTimeout(() => {
             const data = {name:'zhangsan',age:24}
