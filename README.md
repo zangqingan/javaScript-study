@@ -54,7 +54,9 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [js模块系统](./src/views/ECMAScript/20-JS模块系统.html "js模块系统")
 
 # 三、文档对象模型DOM
-## 3.1 DOM概述
+
+## 3.1 DOM核心综合
+* [DOM核心综合](./src/views/DOM/1-DOM核心综合.html "DOM核心综合")
 ## 3.2 DOM组成
 ## 3.3 Node接口
 ## 3.4 document节点对象

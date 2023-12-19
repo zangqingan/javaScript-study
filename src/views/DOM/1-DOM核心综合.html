@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM综合</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
+</head>
+<body>  
+    <div class="content">
+        <h3>1、DOM 概述</h3>
+        <pre>
+            DOM(document object model) 文档对象模型
+                D:文档表示整个HTML网页文档。
+                O:对象,将网页中的每一个部分(元素,文本等)都转换为一个节点对象。
+                M:模型 ,使用模型(文档树结构)来表示节点对象(HTML标签)之间的层级关系,方便获取对象。
+            它是JavaScript操作网页的接口、它的作用是将网页转成一个JavaScript对象进而通过脚本可以进行各种操作如增删改查。
+            本质是: 浏览器根据DOM这个模型将结构化文档(如html文档、xml文档)解析成一系列的节点(Node)对象、然后根据这些节点对象之间的层级关系最终会组成一个树形的结构称为DOM Tree。
+            无论是DOM Tree 还是树上的所有节点对象都有定义好的规范的对外接口、JavaScript语言就可以通过这些接口对其进行操作。其它语言自然也可以根据这些接口规范实现对DOM的各种操作。
+        </pre>
+        <h3>2、DOM 规范分类</h3>
+        <div> 
+            <h4>1.DOM Level 1</h4>
+            <div>   
+                DOM Level 1 是1998年成为W3C推荐标准的,提供了基本的文档结构和查询接口。
+                在这之后又诞生了描述DOM Level 1扩展的如下两个标准:它们又新增了很多有用的属性和方法。
+            </div>
+            <h4>2.Selectors API(css选择器接口)</h4>
+            <pre>
+                W3C推荐的标准,规定了浏览器原生支持的CSS查询API。
+                Document节点类型和Element节点类型都实现了它。
+                主要有两个方法:
+                    querySelector()
+                    querySelectorAll()
+            </pre>
+            <h4>3.HTML5</h4>
+            <pre>   
+                它是新一代的HTML语言标准,为标准DOM提供了大量的扩展。
+                主要有一个是css类扩展方法:Document节点类型和Element节点类型都实现了它。
+                    getElementsByClassName()
+                给HTML元素自定义属性时,规范统一使用 前缀 data-属性名形式告知浏览器,通过元素的 dataset属性来访问。
+
+            </pre>
+            <h4>4.DOM Level 2和 DOM Level 3</h4>
+            <pre>
+                DOM Level 2和.DOM Level 3提供了更多的交互能力,更高的XML特性。
+                它是按照模块化的思路来指定标准的,主要有下面这些:
+                DOM Core:在DOM1核心基础上,继续为节点增加方法和属性。
+                DOM Events:定义事件实现DOM文档交互,这个是学习重点。
+                DOM Style:定义以编程方式访问和修改CSS样式的接口。这个是学习重点。
+                DOM Views:定义基于样式信息的不同视图。
+                DOM Traveral and Range:新增遍历DOM文档和选择文档内容的接口。
+                DOM HTML:在DOM1 HTML部分基础上,增加属性、方法和接口。
+                DOM Mutation Observers:定义基于DOM变化触发回调的接口
+                主要是 DOM Events和DOM Style。其它暂时用不到。
+
+            </pre>
+        </div>   
+        <h3>3、DOM 组成</h3> 
+        <div>
+            <h4>1、节点</h4>
+            <div>
+                DOM 的最小组成单位是节点(node),文档中所有不同类型的节点组成了整个文档的树形结构(即DOM 树)。
+                DOM 中总共有12种节点类型,这些类型都继承一种基本类型-Node类型。
+                但浏览器并不支持所有的节点类型而且常用的也就如下5种。
+                    文档节点就是document对象,
+                    元素节点表示HTML元素,
+                    属性节点表示HTML元素的属性,
+                    文本节点就是HTML元素之间的内容,
+                    注释节点就是HTML注释。
+                <h5>1、常见节点类型</h5>
+                <pre>
+                    1.Document类型节点
+                    Document类型是JavaScript中表示文档节点的类型,是整个文档对象的顶层节点表示整个HTML页面。
+                    在JavaScript里的 document 对象就是这个类型, document也是window对象的一个属性,所以是一个全局对象。
+                    使用document对象可以获取页面信息以及操纵页面外观和底层结构。
+
+                    2.Element类型节点
+                    网页的各种HTML标签(比如body、a等)一个标签就是一个元素节点。
+
+                    3.Attr类型节点
+                    HTML标签的属性(比如class="right")。
+
+                    4.Text类型节点
+                    标签之间或标签包含的文本内容、空格或换行符
+
+                    5.Comment类型节点
+                    html注释内容。
+                </pre>
+            </div>
+            <h4>2、 DOM tree(文档树)</h4>
+            <pre>
+                DOM tree(文档树):一个文档的所有节点,按照所在的层级抽象而成的一种树状结构。
+                其中,文档节点类型的document节点是每个文档的根节点,代表当前整个文档。
+                下一层是根节点的子节点,然后子节点又有自己的子节点,就这样层层衍生出一个金字塔结构就像一棵树了。
+                根节点下面有两个子节点：
+                    第一个是文档类型节点(!doctype html),
+                    第二个是 HTML 网页的顶层容器标签html元素它也被称为文档元素,一个页面中只能有一个。
+                html元素节点是文档树结构的最外层元素节点,所有其他节点都是它的子节点。
+                这些其他节点都有三种层级关系。
+                    父节点关系(parentNode):直接的那个上级节点
+                    子节点关系(childNodes):直接的下级节点
+                    兄弟(同级)节点关系(sibling):拥有同一个父节点的节点
+                DOM 都提供了相关的操作接口,用来获取这三种关系的节点。
+            </pre>
+        </div>
+        <h3>4、DOM 常见内置接口</h3>
+        <div>
+            <h4>1、Node接口</h4> 
+            <div>
+                <h5>1.概述</h5>
+                <div>
+                    Node接口是 DOM Level 1 提供的所有12种 DOM 节点类型都必须实现的接口,这个接口主要是描述节点的类型和节点的关系(相邻兄弟,父子,子孙),这是 DOM 操作的基础。
+                    简单说就是在 Node.prototype 原型对象上定义了一些共同的属性和方法、实现接口的节点类型都能继承过来直接使用。
+                </div>
+                <h5>2.Node类型常用实例属性</h5>
+                <pre>
+                    主要是节点自身描述信息属性,节点关系属性
+
+                    1、Node.prototype.nodeType 属性返回一个整数值,表示节点的类型。Node对象还定义了对应的常量。
+                    12种DOM节点的类型值由定义在Node类型上的12个数值常量表示,是一一对应的。
+                    比如Document节点类型的nodeType值为9,定义的数值常量是 Node.DOCUMENT_NODE。
+                    通过与数值常量比较可以确定是什么节点类型的节点。
+                    if(a.nodeType === Node.DOCUMENT_NODE){
+                        console.log('这是文档类型节点');
+                    }
+                    常见节点类型对应 nodeType 值以及对应常量如下:
+                        文档类型节点(document):9,对应常量Node.DOCUMENT_NODE
+                        元素类型节点(element):1,对应常量Node.ELEMENT_NODE
+                        属性类型节点(attr):2,对应常量Node.ATTRIBUTE_NODE
+                        文本类型节点(text):3,对应常量Node.TEXT_NODE
+                        注释类型节点(Comment):8,对应常量Node.COMMENT_NODE
+                    
+                    2.Node.prototype.nodeName 属性返回节点的名称。
+                    
+                    常见节点类型对应 nodeName 值如下:
+                        文档类型节点(document):  #document
+                        元素类型节点(element): 对应大写的标签名
+                        属性类型节点(attr): 对应属性的名称
+                        文本类型节点(text): #text
+                        注释类型节点(Comment): #comment
+
+                    3.Node.prototype.nodeValue 属性返回一个字符串,表示当前节点本身的文本值,该属性可读写。
+                        只有文本节点(text)、注释节点(comment)和属性节点(attr)有文本值
+                        因此这三类节点的nodeValue可以返回结果,其他类型的节点一律返回null。
+                    常见节点类型对应 nodeValue 值如下:
+                            文档节点(document): null
+                            元素节点(element): null
+                            属性节点(attr): 对应的属性内容
+                            文本节点(text): 对应的文本内容
+                            注释节点(Comment): 对应对应的注释内容
+
+                    4.节点关系类属性: 描述节点之间关系的属性,父子、兄弟这些。
+
+                        1. Node.prototype.childNodes, 这个属性返回一个NodeList接口实例,它是一个类似数组的对象(NodeList集合),成员包括当前节点的所有子节点。
+                        注意: 它是包括文本节点、注释节点的。它是对DOM结构的查询,而且DOM结构改变也会自动地在这个属性反映出来,所以说它是一个实时的活动对象。
+
+                        2. Node.prototype.parentNode,属性返回当前节点的父节点。对于一个节点来说,它的父节点只可能是三种类型:元素节点(element)、文档节点(document)和文档片段节点(documentfragment)。
+
+                        3. Node.prototype.parentElement,属性返回当前节点的父元素类型节点、没有为null。对于一个节点来说,它的父节点只可能是三种类型:元素节点(element)。
+
+                        4. Node.prototype.previousSibling,属性返回当前节点前面的、距离最近的一个同级节点。如果当前节点前面没有同级节点,则返回null。
+                        注意,该属性还包括文本节点和注释节点(<!-- comment -->)。因此如果当前节点后面有空格,该属性会返回一个文本节点,内容为空格
+
+                        5. Node.prototype.nextSibling,属性返回紧跟在当前节点后面的第一个同级(兄弟)节点。如果当前节点后面没有同级节点,则返回null。
+                        注意,该属性还包括文本节点和注释节点(<!-- comment -->)。因此如果当前节点后面有空格,该属性会返回一个文本节点,内容为空格。
+                        
+                        6. Node.prototype.firstChild,返回当前节点的第一个子节点,如果当前节点没有子节点,则返回null。返回的除了元素节点,还可能是文本节点或注释节点。
+                            a.firstChild == a.childNodes[0]
+
+                        7. Node.prototype.lastChild,属性返回当前节点的最后一个子节点,如果当前节点没有子节点,则返回null。返回的除了元素节点,还可能是文本节点或注释节点。
+                            a.firstChild == a.childNodes[a.childNodes.length - 1]
+                </pre>
+                <h5>3.Node类型常用实例方法</h5>
+                <pre>
+                    主要是DOM提供的用于操作(增删改查)节点的方法,以及一些其它方法。操纵前必须先获取到父节点。
+                    1. Node.prototype.appendChild()
+                        接受一个节点对象作为参数,将其作为最后一个子节点,插入当前节点。该方法的返回值就是插入文档的新子节点。
+                        如果节点是已存在的就会将其从原位置移动到新位置
+
+                    2. Node.prototype.insertBefore()
+                        如果想把节点插入到指定位置就使用insertBefore(newNode, referenceNode)方法。
+                        它接受两个参数,第一个参数是所要插入的节点newNode,第二个参数是父节点parentNode内部的一个子节点referenceNode。
+                        newNode将插在referenceNode这个子节点的前面。返回值也是插入的新节点newNode。
+
+                    3. Node.prototype.replaceChild()
+                        replaceChild(newChild, oldChild),用于将一个新的节点,替换当前节点的某一个子节点。
+                    返回值是被替换走的那个节点oldChild。
+
+                    4. Node.prototype.removeChild()
+                        要移除节点而不是替换就使用 removeChild()方法,接受一个子节点作为参数,用于从当前节点移除该子节点。
+                    返回值是移除的子节点。
+
+                    5. Node.prototype.cloneNode()
+                        用于克隆一个节点。它接受一个布尔值作为参数,表示是否深入复制即同时克隆子节点。它的返回值是一个克隆出来的新节点。
+
+                    6. Node.prototype.normalize()
+                        normalize()方法用于清理当前节点内部的所有文本节点(text)。
+                    它会去除空的文本节点,并且将毗邻的文本节点合并成一个,也就是说不存在空的文本节点,以及毗邻的文本节点。
+
+                </pre>
+            </div>
+            <h4>2、NodeList和HTMLCollection接口</h4>
+            <div>
+                <h5>1.概述</h5>
+                <div>
+                        节点都是单个对象,有时需要一种数据结构,能够容纳多个节点对象。DOM 提供了两种节点集合对象(类数组对象),用于容纳多个节点:NodeList和HTMLCollection。
+                    许多 DOM 属性和方法返回的结果是NodeList实例对象或HTMLCollection实例对象。
+                    主要区别是,NodeList可以包含各种类型的节点,HTMLCollection只能包含 HTML 元素节点类型。<br>
+                </div>
+                <h5>2.NodeList接口</h5>
+                <pre>
+                    NodeList实例是一个类数组对象,它的成员是多个节点对象。所以可以使用length属性和forEach方法但是不能使用数组原型上的方法。
+                    下面的属性和方法返回的就是NodeList实例:
+                        Node.childNodes 实现
+                        document.querySelectorAll()等节点搜索方法可以获得NodeList实例对象。
+                    常用实例属性和方法:
+                        length,返回 NodeList 实例包含的节点数量,也就是元素个数。
+                        forEach(),遍历 NodeList 的所有成员。
+                        item()方法接受一个整数值作为参数,表示成员的位置,返回该位置上的成员。
+                        和通过使用方括号运算符取出成员是一样的作用,而且一般也是使用方括号运算符而不是item()方法。
+                    和其它类数组对象一样也支持迭代器方法
+                        keys()返回键名的遍历器
+                        values()返回键值的遍历器
+                        entries()返回的遍历器同时包含键名和键值的信息。
+                    
+                </pre>
+                <h5>3.HTMLCollection接口</h5>
+                <pre>
+                    HTMLCollection实例是一个HTML元素节点对象的集合也是一个类似数组的对象,也有length属性。
+                    但是与NodeList接口不同,HTMLCollection没有forEach方法,只能使用for循环遍历。
+                    下面的属性和方法返回的就是HTMLCollection实例:
+                        Document对象的集合属性比如document.links、document.forms、document.images等都返回HTMLCollection实例。
+                        ParentNode.children,返回一个HTMLCollection实例,成员是当前节点的所有元素子节点。该属性只读。
+                        document.getElementsByTagName("HTML标签名")返回一个HTMLCollection实例
+                        document.getElementsByClassName("class属性值")返回一个HTMLCollection实例
+                    常用实例属性和方法:
+                        length,返回HTMLCollection实例包含的成员数量。
+                        item()方法接受一个整数值作为参数,表示成员的位置,返回该位置上的成员。
+    
+                </pre>
+            </div>
+            <h4>3、ParentNode和ChildNode接口</h4>
+            <div>
+                <h5>1.概述</h5>
+                <div>
+                    DOM的所有节点类型除了继承 Node 接口以外,为了方便操作父子节点之间的关系浏览器还提供了ParentNode和ChildNode接口。
+                </div>
+                <h5>2.ParentNode接口</h5>
+                <pre>
+                    当前节点是父节点就会混入了(mixin)ParentNode接口、就能使用ParentNode接口提供的一些处理子节点属性和方法。
+                    由于只有文档节点、元素节点、和文档片段节点拥有子节点。因此只有这三中节点类型会拥有ParentNode接口、其中主要还是document和HTML元素两种,
+
+                    1. ParentNode.children,返回一个HTMLCollection实例,成员是当前节点的所有元素子节点。该属性只读。
+                    2. ParentNode.firstElementChild,返回当前节点的第一个元素子节点。如果没有任何元素子节点,则返回null。
+                    3. ParentNode.lastElementChild,返回当前节点的最后一个元素子节点,如果不存在任何元素子节点,则返回null。
+
+                    4. ParentNode.append(), 为当前节点追加一个或多个子节点、位置是最后一个元素子节点的后面。该方法没有返回值。
+                        和Node的实例方法 appendChild()有三点不同。
+                        append()允许字符串作为参数(作为文本子节点)、appendChild()只允许子节点作为参数。
+                        append()没有返回值、而appendChild()返回添加的子节点。
+                        append()可以添加多个子节点和字符串即允许多个参数、appendChild()只能添加一个节点即只允许一个参数。
+                </pre>
+                <h5>3.ChildNode接口</h5>
+                <pre>
+                    如果一个节点有父节点,那么该节点就拥有了ChildNode接口。
+                    1.remove(),用于从父节点移除当前节点。
+                    2.before()方法用于在当前节点的前面,插入一个或多个同级节点。两者拥有相同的父节点。注意,该方法不仅可以插入元素节点,还可以插入文本节点。
+                    3.after()方法用于在当前节点的后面,插入一个或多个同级节点,两者拥有相同的父节点。用法与before方法完全相同。
+                    4.replaceWith()方法使用参数节点,替换当前节点。参数可以是元素节点,也可以是文本节点。
+    
+                    var span = document.createElement('span');
+                    el.remove()//移除el节点
+                    el.before(span);//在el节点前插入span元素节点
+                    el.replaceWith(span);//el节点将被span元素节点替换。
+                </pre>
+            </div>
+        </div>
+        <h3>5、DOM 常见节点类型对象</h3>
+        <div>
+            <h4>1、document文档节点对象</h4>
+            <div>
+                <h5>1.概述</h5>
+                <pre>   
+                    Document 节点类型对象只有一个、就是 document 对象它代表整个html文档,每张网页(一个HTML页面)都有自己的document对象。
+                    只要浏览器开始载入 HTML 文档,就会创建这个对象在JavaScript中就可以直接使用 document 或 window.document 获取到。
+                    document对象继承了Node接口和EventTarget接口,有子节点所以也混入(mixin)了ParentNode接口。
+                    这意味着,这些接口上定义的属性和方法都可以在document对象上调用。通过document.属性名/方法名 的形式使用。
+                    除此之外,document对象还有很多自己的属性和方法,主要是获取页面信息以及操纵页面外观和底层结构的API。
+                </pre>
+                <h5>2.document 对象常用的属性</h5>
+                <pre>
+                    1.document.title = "title";显示在浏览器窗口的标题栏,通过它可以读写页面的标题。
+                    2.document.head,指向head标签、总是存在省略时浏览器会自动创建。
+                    3.document.body,指向body标签。总是存在省略时浏览器会自动创建。这是使用最多的元素了,经常document.body.xxx调用。                    
+                    4.document.URL返回一个字符串,表示当前文档的网址。
+                </pre>
+                <h5>3.document 对象常用方法</h5>
+                <div>
+                    <h5>1.获取页面元素的方法</h5>
+                    <pre> 
+                        1.document.getElementById(),返回匹配指定id属性的元素节点。如果没有发现匹配的节点,则返回null。
+                        注意:该方法的参数是大小写敏感的。
+                        注意:这个方法只能在document对象上使用,不能在其他元素节点上使用。
+    
+                        2.document.getElementsByName("name属性值"),用于选择拥有name属性的属性值为传入参数的 HTML 元素(比如form、radio、img等)。
+                        注意:该方法返回一个类数组 NodeList 实例对象因为name属性相同的元素可能不止一个。
+    
+                        3.document.getElementsByTagName("HTML标签名"),接受一个HTML元素名,返回符合条件的元素,它是一个类数组HTMLCollection实例对象。
+                        如果没有任何匹配的元素,就返回一个空集。
+                        注意:HTML 标签名是大小写不敏感的,因此getElementsByTagName方法也是大小写不敏感的。另外,返回结果中,各个成员的顺序就是它们在文档中出现的顺序。
+                        
+                        Selectors API:对DOM的扩展标准提供了两个支持css查询的API、document对象实现了这个扩展接口标准。
+                        1.document.querySelector(),接收css选择器作为参数,返回匹配的第一个后代元素没有则返回null。
+                        2.document.querySelectorAll(),接收css选择器作为参数,返回匹配的所有元素,是一个 NodeList 实例对象包含所有匹配给定选择器的节点。
+    
+                        HTML5:对DOM的扩展标准提供了一个方便使用css类的API、document对象实现了这个扩展接口标准。
+                        1.document.getElementsByClassName("class属性值"),通过HTML元素的class属性的值来返回一个HTMLCollection实例。
+                        包括了所有class名字符合指定条件的元素,元素的变化实时反映在返回结果中。   
+
+                    </pre>
+                    <h5>2.生成新节点方法</h5>
+                    <pre>
+                        1. document.createElement("HTML元素名"),用来生成元素类型节点,并返回该节点。
+                        注意:传入的参数是HTML元素的标签名,即元素节点标签名tagName属性,且大小写不敏感。
+
+                        2. document.createTextNode("文本节点的内容"),用来生成文本类型节点(Text实例),并返回该节点。
+                        它的参数是文本节点的内容(字符串)。
+
+                        3. document.createAttribute("新的属性"),生成一个新的属性节点(Attr实例),并返回它。
+                       
+                        配合继承自Node接口的appendChild()方法就可以实现动态往网页中添加元素节点。
+                        如: 新增一个div元素并添加文本内容
+                            const newDiv = document.createElement('div');
+                            const newContent = document.createTextNode('Hello');
+                            newDiv.appendChild(newContent);
+                    </pre>                                         
+                </div>
+            </div>
+            <h4 id="element">2、element元素节点对象</h4>
+            <div>
+                <h5>1.概述</h5>
+                <pre>
+                    element元素节点对象对应网页的 HTML 元素,每一个 HTML 元素浏览器会使用不同的构造函数,生成不同的元素节点类型并在 DOM 树上都会转化成一个Element节点对象。
+                    element元素节点对象也继承了Node接口和EventTarget接口,有子节点所以也混入(mixin)了ParentNode接口。它又是文档节点的子节点所以又有ChildNode接口。
+                    同时也实现了Selectors API,HTML5,所以元素节点都可以调用它们的属性和方法。
+                    同时element节点本身又都是HTMLElement 类型表示,HTMLElement 类型又是继承Element类型的,所以又拥有一些Element类型定义的属性和方法。
+                </pre>
+                <h4>2. Element 对象常用实例属性</h4>
+                <div>
+                    主要是访问元素标签名、子节点和属性相关的API。
+                    <h5>1.元素的标准属性</h5>
+                    <pre>
+                        它是所有HTML元素都有的、也就是都可以在标签内声明定义的属性。
+                        1. id,属性返回指定元素的id属性,该属性可读写。大小写敏感
+                        2. title,属性用来读写当前元素的 HTML 属性title。该属性通常用来指定,鼠标悬浮时弹出的文字提示框。
+                        3. className,属性用来读写当前元素节点的class属性。它的值是一个字符串,每个class之间用空格分割。
+                        <!-- // HTML 代码 <div class="one two three" id="myDiv"></div> -->
+                        const div = document.getElementById('myDiv');
+                        div.className
+                        // "one two three"
+                    </pre>
+                    <h5>2.元素关系和内容相关属性</h5>
+                    <pre>
+                        1. Element.innerHTML,返回一个字符串,等同于该元素包含的所有 HTML 代码。该属性可读写,常用来设置某个节点的内容。
+
+                        2. Element.outerHTML,返回一个字符串,表示当前元素节点的所有 HTML 代码,包括该元素本身和所有子元素。
+
+                        3. Element.tagName属性,返回指定元素的大写标签名,与继承的nodeName属性的值相等。
+
+                        在Node接口中是返回子节点,下面的是返回元素子节点,为遍历元素提供便利。
+                        是W3C通过的新的规范Element Traversal,添加的属性对node接口方法的一个添加。
+                        ie9及以上,以及所有现代浏览器都支持。
+                        1. Element.childElementCount,返回子元素的个数。
+                        2. Element.firstElementChild,返回当前元素的第一个元素子节点,没有返回返回null。
+                        3. Element.lastElementChild,返回最后一个元素子节点,没有返回返回null。
+                        4. Element.previousElementSibling,返回当前元素节点的前一个同级元素节点,如果没有则返回null。
+                        5. Element.nextElementSibling,返回当前元素节点的后一个同级元素节点,如果没有则返回null。
+                    </pre>
+                    <h5>3.元素行内样式相关属性</h5>
+                    <pre>           
+                        1.style,每个元素节点都有style用来读写该元素的行内样式信息。注意获取或设置的都只是行内样式。
+                        style 属性本身是一个对象,部署了 CSSStyleDeclaration 接口所以可以操作元素的行内样式。
+                        CSSStyleDeclaration接口是DOM Level2 中 DOM Style模块里定义的用来操作元素的样式,即可以直接读写 CSS 的样式属性。
+                        不过,短横线连接的属性需要变成驼峰拼写法。属性名是JavaScript关键字、保留字时需要加上前缀css
+                        比如: background-color 写成 backgroundColor、float写成cssFloat。
+                        如下:
+                        设置样式: 属性值是字符串、必须包括单位但不含规则结尾的分号';'
+                            Element.style.backgroundColor = 'red';//小驼峰
+                            Element.style.border = '1px solid black';
+                            Element.style.width = '100px';
+                            Element.style.height = '100px';
+                            Element.style.fontSize = '10em';
+                        读取样式:
+                            Element.style.backgroundColor // red
+                            Element.style.border // 1px solid black
+                            Element.style.height // 100px
+                            Element.style.width // 100px
+                    </pre>
+                </div>
+                <h4>3.Element 对象常用实例方法</h4>
+                <div>
+                    <h5>1. 获取页面元素方法</h5>
+                    <pre>
+                        用法和document对象的一样、
+                        1.Element.getElementsByTagName("HTML标签名"),接受一个HTML元素名,返回符合条件的元素,它是一个类数组HTMLCollection实例对象。
+                        如果没有任何匹配的元素,就返回一个空集。
+                        注意:HTML 标签名是大小写不敏感的,因此getElementsByTagName方法也是大小写不敏感的。另外,返回结果中,各个成员的顺序就是它们在文档中出现的顺序。
+                        
+                        Selectors API:对DOM的扩展标准提供了两个支持css查询的API、Element对象也实现了这个扩展接口标准。
+                        1.Element.querySelector(),接收css选择器作为参数,返回匹配的第一个后代元素没有则返回null。
+                        2.Element.querySelectorAll(),接收css选择器作为参数,返回匹配的所有元素,是一个 NodeList 实例对象包含所有匹配给定选择器的节点。
+    
+                        HTML5:对DOM的扩展标准提供了一个方便使用css类的API、Element对象也实现了这个扩展接口标准。
+                        1.Element.getElementsByClassName("class属性值"),通过HTML元素的class属性的值来返回一个HTMLCollection实例。
+                        包括了所有class名字符合指定条件的元素,元素的变化实时反映在返回结果中。   
+                    </pre>
+                    <h5>2.属性操作方法</h5>
+                    <pre>
+                        元素节点提供了六个方法,用来操作元素节点的属性,属性本身是一个属性节点对象(Attr对象),但是实际上,这个对象极少使用。
+                        而是通过元素节点对象来操作属性、这里的属性(attribute)是HTML元素的特性,如id,class,style,title,src,value等这些,它是键值对 id= "zhangsan"的形式。
+                        注意:6个方法对所有属性都适用,主要使用前四个。
+                        1. Element.getAttribute():当前元素节点的指定属性。如果指定属性不存在则返回null。
+                        // HTML 代码为
+                        <!-- <div id="div1" align="left"> -->
+                        var div = document.getElementById('div1');
+                        div.getAttribute('align') // "left"
+
+                        2. Element.setAttribute():写入属性值
+                        // HTML 代码为
+                        <!-- // <button>Hello World</button> -->
+                        var b = document.querySelector('button');
+                        b.setAttribute('name', 'myButton');
+                        b.setAttribute('disabled', true);
+
+                        3. Element.hasAttribute(): 方法返回一个布尔值、表示当前元素节点是否包含指定属性。
+
+                        4. Element.removeAttribute():删除属性
+                        5. Element.getAttributeNames():返回当前元素的所有属性名
+                        6. Element.hasAttributes():返回一个布尔值、表示当前元素是否有属性、如果没有任何属性、就返回false、否则返回true。
+                        
+                        注意:HTML 元素的标准属性(即在标准中定义的属性),会自动成为元素节点对象的属性,且这些属性都是直接访问改写。
+                        如:img的src属性可以重新赋值,img.src = "newAddress"
+                    </pre>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+    <form name="x"></form>
+    <div class="content"></div>
+<!-- js -->
+<script>
+window.onload = function(){
+/*节点实例属性和方法*/
+    console.log('document节点类型:',document.nodeType)
+    console.log('document节点名称:',document.nodeName)
+    console.log('document节点值:',document.nodeValue)
+    let div = document.createElement("div")
+    let str = document.createTextNode("我是使用document节点对象创建的div元素里的文本内容")
+    div.appendChild(str)
+   
+    // element节点
+    let h3 = document.getElementById('element')
+    h3.appendChild(div)
+    console.log(h3)
+    console.log(h3.nodeType)
+    console.log(h3.nodeName)
+    console.log(h3.nodeValue)
+
+};
+</script>
+</body>
+</html>
