@@ -2,101 +2,251 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DOM事件模型综合</title>
+    <title>DOM事件模型</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <div>
+    <div class="content">
         <h3>1、DOM事件模型</h3>
         <div> 
             <h4>1.概述</h4>
-            <div>
-                JavaScript和HTML页面的交互就是通过事件实现的,事件就是文档或浏览器窗口中某个有意义的时刻。
-                浏览器的事件模型是通过监听函数(listener)对事件做出反应,也就是事件发生后,浏览器就会监听到了这个事件,然后执行对应的监听函数。
+            <pre>
+                这是 DOM Level2 中 DOM Events 模块中的内容、目的是通过JavaScript实现用户对HTML文档的交互功能。
+                而这种交互是通过事件实现的、事件又是由这个DOM事件模型定义具体规范的。
+                而DOM事件模型是通过监听函数(listener)对事件做出反应,进而实现交互的。
+                也就是说事件发生后,浏览器就会监听到了这个事件,然后执行对应的监听函数(函数里写了交互逻辑)进而实现交互。
                 这就是事件驱动编程模式(event-driven)的主要编程方式。
-                事件的本质是程序各个组成部分之间的一种通信方式,也是异步编程的一种实现,事件有哪些叫什么名都是浏览器给定的,而监听函数是开发者自己定义的。
-            </div>
+                事件的本质是程序各个组成部分之间的一种通信方式,也是异步编程的一种实现。
+                事件类型有哪些、叫什么名、怎么监听等都是浏览器和 DOM 事件模型规定好的,而监听函数以及交互逻辑则是开发者自己定义的。
+            </pre>
             <h4>2.DOM事件流</h4>
-            <div>
+            <pre>
                 事件流描述了页面接收事件的顺序,一个事件发生后,会在子元素节点和父元素节点之间传播(propagation)。
                 DOM2 Events规范规定事件流分成三个阶段。
-                第一阶段:从window对象传导到目标节点(上层传到底层),称为“捕获阶段”(capture phase)。
-                第二阶段:在目标节点上触发,称为“目标阶段”(target phase)。
-                第三阶段:从目标节点传导回window对象(从底层传回上层),称为“冒泡阶段”(bubbling phase)。
+                    第一阶段:从window对象传导到目标节点(上层传到底层),称为“捕获阶段”(capture phase)。
+                    第二阶段:在目标节点上触发,称为“目标阶段”(target phase)。
+                    第三阶段:从目标节点传导回window对象(从底层传回上层),称为“冒泡阶段”(bubbling phase)。
                 这种三阶段的传播模型,使得同一个事件会在多个节点上触发。
                 注意:
                     事件传播的最上层对象是window,接着依次是document,html(document.documentElement)和body(document.body)。
                     事件冒泡(bubble):事件冒泡就是指事件的向上传导,当后代元素上的事件被触发时,其祖先元素的相同事件也会触发。
-                    注意:是向上传递相同类型的事件,在开发中大部分冒泡都是有用的。
-    
+                    是向上传递相同类型的事件,在开发中大部分事件冒泡都是有用的。
                 事件的代理:
                     利用事件会在冒泡阶段向上传播到父节点,因此可以把子节点的监听函数定义在父节点上,由父节点的监听函数统一处理多个子元素的事件。
                 这种方法叫做事件的代理(delegation)。好处是,只要定义一个监听函数,就能处理多个子节点的事件。
                 
-            </div>
-            <h4>3.事件处理程序的绑定方式</h4>
+            </pre>
+            <h4>3. DOM事件模型常见内置接口</h4>
             <div>
-                JavaScript 有三种方法,可以为事件绑定监听函数。
-                <h5>1.HTML 的 on- 属性</h5>
-                <p>
-                    允许在HTML元素在开始标签内以HTML属性的形式指定: on-事件名的形式 ,直接定义某些事件的监听代码。一旦事件发生,就会执行这段代码。
+                <h5>1、GlobalEventHandlers接口</h5>
+                <pre>
+                    DOM0的事件处理程序是使用节点对象的事件属性指定的,它是由 GlobalEventHandlers 接口实现的,Element、Document节点类型和Window对象都继承了这个接口。
+                    也就是说,各种 HTML 元素、document对象、window对象都可以直接使用。
+                    使用方法: 它比HTML原生属性事件多了 on-事件名而已。
+                    优点是使用比较方便,缺点是只能为每个事件指定一个回调函数,并且只在冒泡阶段触发。
+                    // HTML 代码如下
+                    // button accesskey="h" id="btn">点击/button
+                    const btn = document.getElementById('btn');
+                    btn.onclick = clickHandler;//clickHandler是一个封装了交互逻辑的处理函数
+
+                    常见的事件类型基本都有一一对应的事件属性,不过是变成了: on事件类型名;
+                    1.用户界面事件属性
+                        1.onload,元素完成加载时会触发load事件执行onload()、它的典型使用场景是window对象和img元素。
+                        对于window对象来说,只有页面的所有资源加载完成(包括图片、脚本、样式表、字体等所有外部资源),才会触发load事件。
+                        2.onresize,
+                        3.onscroll,页面或元素滚动时会触发scroll事件导致执行onscroll()。
+
+                    2.焦点事件属性
+                        1.onblur,当前元素失去焦点时触发
+                        2.onfocus,当前元素获得焦点时触发
+                    
+                    3.鼠标和滚轮事件属性
+                        1.onclick
+                        2.onmousedown
+                        3.onmouseenter
+                        4.onmouseleave
+                        5.onmousemove
+                        1.onwheel
+
+                    4.输入和键盘事件属性
+                        1.onkeydown
+                        2.onkeypress
+                        3.onkeyup
+
+                    5.表单相关事件
+                        表单控件元素相关的属性:
+                        1.oninput
+                        2.onchange
+                        3.onsubmit
+                        4.onreset
+                        5.onselect
+                </pre>
+                <h5>2、EventTarget接口</h5>
+                <pre>
+                    DOM Level2中 DOM Events 模块提供的接口,更加规范的提供了如何实现用户交互的方法API。
+                    DOM的所有的节点类型对象都部署了这个接口
+                    所以都可以直接使用它提供的三个方法:
+                        EventTarget.addEventListener():绑定事件的监听函数
+                        EventTarget.removeEventListener():移除事件的监听函数
+                        EventTarget.dispatchEvent():触发定义好的事件
+
+                    1. EventTarget.addEventListener()
+                            用于在当前节点或对象上,定义一个特定事件的监听函数。一旦这个事件发生,就会执行监听函数。该方法没有返回值。
+                    该方法接受三个参数。target.addEventListener(type, listener,useCapture);
+                        type:字符串类型的事件名称,大小写敏感。
+                        listener:监听函数。事件发生时,会调用该监听函数。
+                        useCapture:可选布尔值参数,表示监听函数是否在捕获阶段(capture)触发,默认为false(即监听函数只在冒泡阶段被触发)。
+                        注意:第二个参数除了监听函数,还可以是一个具有handleEvent方法的对象。
+                        可以为当前对象的同一个事件,添加多个不同的监听函数,这些函数按照添加顺序触发,即先添加先触发。
+                        {
+                            handleEvent: function (event) {
+                                console.log('click');
+                            }
+                        }
+                        // HTML 代码如下
+                        // button accesskey="h" id="btn">点击/button
+                        const btn = document.getElementById('btn');
+                        function hello() {
+                            console.log('Hello world');
+                        }
+                        // 给按钮增加点击事件、事件处理程序是hello、只在冒泡阶段被触发
+                        btn.addEventListener('click', hello, false);
+
+                    2. EventTarget.removeEventListener()
+                            用来移除addEventListener方法添加的事件监听函数。该方法没有返回值。
+                            removeEventListener方法的参数,与addEventListener方法要完全一致。它的第一个参数“事件类型”,大小写敏感。
+                            注意,removeEventListener方法移除的监听函数,必须是addEventListener方法添加的那个监听函数,
+                            而且必须在同一个元素节点,否则无效。第三个参数也要一致。 
+                        btn.removeEventListener('click', hello, false);
+
+                    3. EventTarget.dispatchEvent()
+                            在当前节点上触发指定的事件,从而触发监听函数的执行。
+                            该方法返回一个布尔值,只要有一个监听函数调用了Event.preventDefault(),则返回值为false,否则为true。
+                            dispatchEvent方法的参数是一个Event对象的实例
+                        para.addEventListener('click', hello, false);
+                        const event = new Event('click');
+                        para.dispatchEvent(event);
+
+                    4. 常见内置事件类型
+                        web浏览器中可以发生很多事件,所发生的事件类型决定了事件对象里会保存什么信息。
+                        DOM2 Events和DOM3 Events定义了常用的如下事件类型:
+                        和GlobalEventHandlers 接口的事件属性基本一致不过没有了on前缀而已
+                           
+                        1.用户界面事件
+                            涉及与BOM交互的通用浏览器事件,常见如下:
+                            1.load加载事件,在window上当页面加载完成后触发,img元素上图片加载完成后也触发
+                            2.resize重置事件,当浏览器窗口被缩放到新的高度或宽度时触发。在window上触发。
+                            3.scroll 页面或元素滚动时触发
+                        2.焦点事件
+                            在元素获得和失去焦点时触发的事件
+                            1.blur,当元素失去焦点时触发,不冒泡
+                            2.focus,当元素获得焦点时触发,不冒泡
+                        3.鼠标和滚轮事件
+                            使用鼠标在页面上执行某种操作时触发的事件
+                            1.click,通常是鼠标左键点击或按键盘回车键时触发
+                            2.mousedown
+                            3.mouseenter
+                            4.mouseleave
+                            使用鼠标滚轮或类似设备时触发的事件
+                            1.mousewheel
+                        4.键盘和输入事件
+                            使用键盘在页面上执行某种操作时触发的事件,向文档中输入文本时触发的事件
+                            1.keydown,按下键盘上某个键时触发
+                            2.keyup,释放键盘上某个键时触发
+                            3.keypress,DOM3 Events已废除该事件
+                            对于keydown和keyup事件,event对象的keyCode属性会保存键盘按下键的键码,常见如下:
+                                左箭头37、上箭头38、右箭头39、下箭头40。
+                        5.表单相关事件
+                            表单控件元素相关的属性:
+                            1.input
+                            2.change
+                            3.submit
+                            4.reset
+                            5.select
+                        6.HTML5事件
+                            HTML5里增加的事件
+                            1.readystatechange 事件当 Document 对象和 XMLHttpRequest 对象的readyState属性发生变化时触发。
+                            document.readyState有三个可能的值:
+                                loading(网页正在加载)、
+                                interactive(网页已经解析完成,但是外部资源仍然处在加载状态)
+                                complete(网页和所有外部资源已经结束加载,load事件即将触发)。
+            
+                            2.hashchange
+                </pre>
+            </div>
+            <h4>4. DOM事件驱动编程的实现方式</h4>
+            <div>
+                我们知道 DOM 事件模型是通过监听函数(listener)对事件做出反应,进而实现交互的。
+                而除了两种DOM事件模型内置接口实现的方式外还有一种、也就是JavaScript 有三种方法,可以为事件绑定监听函数。
+                <h5>1. HTML 的 on- 属性</h5>
+                <pre>
+                    HTML 语言本身允许在HTML元素的开始标签内以HTML属性的形式( on-事件名的形式)直接定义某些事件的监听代码。一旦事件发生,就会执行这段代码。
                     如:div onclick="fun()" 注意,这些属性的值是将会执行的代码,而不是一个函数对象fun,且只会在冒泡阶段触发。
                     这是因为一旦指定的事件发生,on-属性的值是原样传入 JavaScript 引擎执行。所以要执行函数必须带上()。
-                </p>
-                <h5>2.Element节点的事件属性</h5>
-                <p>
-                    这个是 DOM0的事件处理程序
-                    元素节点对象的事件属性,同样可以指定监听函数,也是只会在冒泡阶段触发。
-                    它是由GlobalEventHandlers接口提供的,HTMLElement、Document和Window都继承了这个接口。
-                    所有都可以使用这个形式给事件绑定监听函数
-                    优点是使用比较方便,
-                    缺点是只能为每个事件指定一个回调函数,并且无法指定事件触发的阶段(捕获阶段还是冒泡阶段)。
-                    如:div.onclick = function (event) {
-                        console.log('触发事件');
-                    };
-                </p>
-                <h5>3.EventTarget.addEventListener()</h5>
-                <p>
-                    这个是DOM2 Events 的事件处理程序。
-                    EventTarget接口提供的方法,所有 DOM 节点实例都有addEventListener方法,因为都实现了EventTarget接口,用来为节点对象定义事件的监听函数。
-                    语法:节点对象.addEventListener('事件名', callback, false);
-                </p> 
-                <h5>4.三种方法比较</h5>
-                <p>
+                </pre>
+                <h5>2. GlobalEventHandlers接口提供的事件属性</h5>
+                <h5>3. EventTarget接口提供的方法</h5>
+                <h5>4. 三种方法比较</h5>
+                <pre>
+
                     第一种“HTML 的 on- 属性”,违反了 HTML 与 JavaScript 代码相分离的原则,将两者写在一起,不利于代码分工,因此不推荐使用。
-                    第二种“元素节点的事件属性”的缺点在于,同一个事件只能定义一个监听函数,也就是说,如果定义两次onclick属性,后一次定义会覆盖前一次。因此,也不推荐使用。
-                    第三种EventTarget.addEventListener是推荐的指定监听函数的方法。
+                    第二种“GlobalEventHandlers接口提供的事件属性”的缺点在于,同一个事件只能定义一个监听函数,也就是说如果定义两次onclick属性,后一次定义会覆盖前一次。因此,也不推荐使用。
+                    第三种“EventTarget接口提供的方法”是推荐的指定监听函数的方法。
                     它有如下优点:
-                    同一个事件可以添加多个监听函数。
-                    能够指定在哪个阶段(捕获阶段还是冒泡阶段)触发监听函数。
-                    除了 DOM 节点,其他对象(比如window、XMLHttpRequest等)也有这个接口,它等于是整个 JavaScript 统一的添加监听函数接口。
-                    
-                    注意:监听函数内部的this指向触发事件的那个元素节点。
-                </p>
+                        同一个事件可以添加多个监听函数。
+                        能够指定在哪个阶段(捕获阶段还是冒泡阶段)触发监听函数。
+                        除了 DOM 节点类型外,其他对象(比如window、XMLHttpRequest等)也有这个接口,它等于是整个 JavaScript 统一的添加监听函数接口。
+                </pre>
+                <h5>5. this指向问题</h5>
+                <pre>
+
+                    这三种方法无论哪一种、监听函数内部的this都是指向当前触发事件的那个对象。
+                    // 方式一
+                    button id="btn" onclick="console.log(this.id)">点击/button>
+                    const btn = document.getElementById('btn');
+                    // 方式二
+                    btn.onclick = function () {
+                        console.log(this.id);
+                    };
+
+                    // 方式三
+                    btn.addEventListener(
+                        'click',
+                        function (e) {
+                            console.log(this.id);
+                        },
+                        false
+                    );
+                    点击按钮后都会输出btn。
+                </pre>
             </div>
-            <h4>4.事件对象</h4>
+            <h4>5. Event 事件对象</h4>
             <div>
                 <h5>1.事件对象概述</h5>
-                <p>
-                    浏览器根据事件模型,在DOM中事件发生以后,所有相关信息都会被收集并存储到一个名为event的对象中。
-                    这个对象就是事件对象,它是传给事件处理程序的唯一参数,即所有的事件处理程序都有一个形参event,它是可选的可传可不传。
-                    这个事件对象里有当前触发事件的一些基本信息,比如触发事件的元素、发生的事件类型、鼠标的坐标,键盘那个键被按下等等。
+                <pre>
+
+                    浏览器根据事件模型,在事件发生以后就会产生一个事件对象、默认作为监听函数的参数传入。
+                    也就是说所有的事件处理程序默认都是有一个形参event的,它是可选的可传可不传。
+                    这个事件对象里保存了当前触发事件的一些基本信息,比如触发事件的元素、发生的事件类型、鼠标的坐标,键盘那个键被按下等等。
                     
-                    浏览器原生提供一个Event对象,所有实际上所有的事件都是这个Event对象的实例或者说继承了Event.prototype对象。
+                    浏览器原生提供一个Event对象,然后所有的其它事件都是这个Event对象的实例或者说继承了Event.prototype对象。
                     而Event对象本身是浏览器提供的一个构造函数,可以用来生成新的事件对象实例。
-                </p>
-                <h5>2.事件对象的创建方式</h5>
-                <p>
-                    语法:var  event = new Event(type, options);
-                        第一个参数type是字符串,表示事件的名称,可以自己定义也可以是浏览器提供的。
+                </pre>
+                <h5>2.事件对象实例的创建方式</h5>
+                <pre>
+
+                    Event 对象本身是一个构造函数、所以也是使用new生成新的实例对象。
+                    语法:const  event = new Event(type, options);
+                        第一个参数 type 是字符串,表示事件的名称,可以自己定义也可以是浏览器提供的事件类型名。
                         第二个参数options是一个对象,表示事件对象的配置
                     主要有下面两个属性:
-                        bubbles:布尔值,可选,默认为false,表示事件对象是否冒泡。
+                        bubbles:布尔值,可选,默认为false只在捕获阶段监听函数不冒泡,表示事件对象是否冒泡。
                         cancelable:布尔值,可选,默认为false,表示事件是否可以被取消,即能否用Event.preventDefault()取消这个事件。
                         一旦事件被取消,就好像从来没有发生过,不会触发浏览器对该事件的默认行为。
 
-                    然后使用EventTarget.dispatchEvent(event)触发该事件。
+                    然后使用 EventTarget.dispatchEvent(event) 触发该事件。
                     例子:
-                    var ev = new Event(
+                    const lookEv = new Event(
                         'look',
                         {
                             'bubbles': true,
@@ -104,172 +254,38 @@
                         }
                     );
                     document.dispatchEvent(ev);
-                </p>
-                <h5>3.事件对象常用的实例属性</h5>
-                <p>
-                    1.currentTarget,事件当前正在通过的节点对象,事件处理程序内的this一直等于它。
-                    2.target,事件的原始触发节点对象,即事件最初发生的节点,这个属性不会随着事件的传播而改变。
-                </p>
-                <h5>4.事件对象常用的实例方法</h5>
-                <p>
-                    1.preventDefault(),取消浏览器对当前事件的默认行为。比如点击链接后,浏览器默认会跳转到另一个页面,使用这个方法以后,就不会跳转了
+                </pre>
+                <h5>3.事件对象常用的实例属性和方法</h5>
+                <pre>
+
+                    1. Event.prototype.currentTarget,事件当前正在通过的节点对象,总是等同于事件处理程序内的this、它会随着事件的传播改变。
+
+                    2. Event.prototype.target,事件的原始触发节点对象,即事件最初发生的节点,这个属性不会随着事件的传播而改变。
+
+                    3. Event.prototype.preventDefault(),取消浏览器对当前事件的默认行为。比如点击链接后,浏览器默认会跳转到另一个页面,使用这个方法以后,就不会跳转了
                     注意,该方法只是取消事件对当前元素的默认影响,不会阻止事件的传播。
 
-                    2.stopPropagation(),阻止事件在 DOM 中继续传播,防止再触发定义在别的节点上相同事件的监听函数,但是不包括在当前节点上其他的事件监听函数。
-                </p>
-            </div>
-            <h4>5.事件类型</h4>
-            <div>
-                web浏览器中可以发生很多事件,所发生的事件类型决定了事件对象里会保存什么信息。
-                DOM2 Events和DOM3 Events定义了常用的如下事件类型:
-                它们基本都有对应的事件属性。
-                <h5>1.用户界面事件</h5>
-                <p>
-                    涉及与BOM交互的通用浏览器事件,常见如下:
-                    1.load加载事件,在window上当页面加载完成后触发,img元素上图片加载完成后也触发
-                    2.resize重置事件,当浏览器窗口被缩放到新的高度或宽度时触发。在window上触发。
-                    3.scroll 页面或元素滚动时触发
-                </p>
-                <h5>2.焦点事件</h5>
-                <p>
-                    在元素获得和失去焦点时触发的事件
-                    1.blur,当元素失去焦点时触发,不冒泡
-                    2.focus,当元素获得焦点时触发,不冒泡
-                </p>
-                <h5>3.鼠标和滚轮事件</h5>
-                <p>
-                    使用鼠标在页面上执行某种操作时触发的事件
-                    1.click,通常是鼠标左键点击或按键盘回车键时触发
-                    2.mousedown
-                    3.mouseenter
-                    4.mouseleave
-                    使用鼠标滚轮或类似设备时触发的事件
-                    1.mousewheel
-                </p>
-                <h5>4.键盘和输入事件</h5>
-                <p>
-                    使用键盘在页面上执行某种操作时触发的事件,向文档中输入文本时触发的事件
-                    1.keydown,按下键盘上某个键时触发
-                    2.keyup,释放键盘上某个键时触发
-                    3.keypress,DOM3 Events已废除该事件
-                    对于keydown和keyup事件,event对象的keyCode属性会保存键盘按下键的键码,常见如下:
-                        左箭头37、上箭头38、右箭头39、下箭头40。
-                </p>
-                <h5>5.表单相关事件</h5>
-                <p>
-                    表单控件元素相关的属性:
-                    1.input
-                    2.change
-                    3.submit
-                    4.reset
-                    5.select
-                </p>
-                <h5>6.HTML5事件</h5>
-                <p>
-                    HTML5里增加的事件
-                    1.readystatechange事件当 Document 对象和 XMLHttpRequest 对象的readyState属性发生变化时触发。
-                    document.readyState有三个可能的值:loading(网页正在加载)、interactive(网页已经解析完成,但是外部资源仍然处在加载状态)和complete(网页和所有外部资源已经结束加载,load事件即将触发)。
+                    4. Event.prototype.stopPropagation(),阻止事件在 DOM 中继续传播,防止再触发定义在别的节点上相同事件的监听函数,但是不包括在当前节点上其他的事件监听函数。
 
-                    2.hashchange
-                </p>
-            </div>
-        </div>
-        <h3>2、GlobalEventHandlers接口</h3>
-        <div>
-            DOM0的事件处理程序是使用元素节点的事件属性指定的,它是由GlobalEventHandlers 接口实现的,Element、Document节点类型和Window都继承了这个接口。
-            也就是说,各种 HTML 元素、document对象、window对象上面都可以使用。
-            它比HTML原生属性事件多了 on-事件名。
-            优点是使用比较方便,缺点是只能为每个事件指定一个回调函数,并且只在冒泡阶段触发。
-            常见的事件类型基本都有一一对应的事件属性,不过是变成了: on事件类型名;
-            <h5>1.用户界面事件属性</h5>
-            <p>
-                1.onload,它的典型使用场景是window对象和img元素。对于window对象来说,只有页面的所有资源加载完成(包括图片、脚本、样式表、字体等所有外部资源),才会触发load事件。
-            </p>
-            <h5>2.焦点事件属性</h5>
-            <p>
-                1.onblur,当前元素失去焦点时
-                2.onfocus,当前元素获得焦点时
-            </p>
-            <h5>3.鼠标和滚轮事件属性</h5>
-            <p>
-                1.onclick
-                2.onmousedown
-                3.onmouseenter
-                4.onmouseleave
-                5.onmousemove
-                1.onwheel
-            </p>
-            <h5>4.输入和键盘事件属性</h5>
-            <p>
-                1.onkeydown
-                2.onkeypress
-                3.onkeyup
-            </p>
-            <h5>5.表单相关事件</h5>
-            <p>
-                表单控件元素相关的属性:
-                1.oninput
-                2.onchange
-                3.onsubmit
-                4.onreset
-                5.onselect
-            </p>
-        </div>
-        <h3>3、EventTarget接口</h3>
-        <div>
-            <h4>1.概述</h4>
-            <div>
-                DOM2 Events提供的接口,js事件的本质是程序各个组成部分之间的一种通信方式,也是异步编程的一种实现。
-                Document、Element、以及XMLHttpRequest等都部署了这个接口:所以可以使用下面的方法。
-                它主要提供的三个实例方法:
-                EventTarget.addEventListener():绑定事件的监听函数
-                EventTarget.removeEventListener():移除事件的监听函数
-                EventTarget.dispatchEvent():触发定义好的事件
-            </div>
-            <h4>2.实例方法</h4>
-            <div>
-                <h5>1.addEventListener()</h5>
-                <p>
-                    用于在当前节点或对象上,定义一个特定事件的监听函数。
-                    一旦这个事件发生,就会执行监听函数。该方法没有返回值。
-                    target.addEventListener(type, listener,useCapture);
-                    该方法接受三个参数。
-                    type:字符串类型事件名称,大小写敏感。没有前缀 on
-                    listener:监听函数。事件发生时,会调用该监听函数。
-                    useCapture:可选布尔值,表示监听函数是否在捕获阶段(capture)触发,默认为false(即监听函数只在冒泡阶段被触发)。该参数可选。
-                    注意:第二个参数除了监听函数,还可以是一个具有handleEvent方法的对象。
-                    可以为当前对象的同一个事件,添加多个不同的监听函数,这些函数按照添加顺序触发,即先添加先触发。
-                    {
-                        handleEvent: function (event) {
-                            console.log('click');
-                        }
+                    // HTML 代码为
+                    // p id="para"Hello em>World /em> /p>
+                    function hide(e) {
+                        // 不管点击 Hello 或 World总是返回 true
+                        console.log(this === e.currentTarget);
+
+                        // 点击 Hello返回 true
+                        // 点击 World返回 false
+                        console.log(this === e.target);
                     }
-                </p>
-                <h5>2.removeEventListener()</h5>
-                <p>
-                    用来移除addEventListener方法添加的事件监听函数。该方法没有返回值。
-                    removeEventListener方法的参数,与addEventListener方法完全一致。它的第一个参数“事件类型”,大小写敏感。
-                    注意,removeEventListener方法移除的监听函数,必须是addEventListener方法添加的那个监听函数,而且必须在同一个元素节点,否则无效。第三个参数也要一致。 
-                </p>
-                <h5>3.dispatchEvent()</h5>
-                <p>
-                    在当前节点上触发指定的事件,从而触发监听函数的执行。
-                    该方法返回一个布尔值,只要有一个监听函数调用了Event.preventDefault(),则返回值为false,否则为true。
-                    dispatchEvent方法的参数是一个Event对象的实例
-                </p>
-            </div> 
+                    // 注册事件
+                    document.getElementById('para').addEventListener('click', hide, false);
+                </pre>
+            </div>
         </div>
     </div>
-
-
-
-
 <!-- js -->
 <script>
-window.onload = function(){
-
-
-}
+window.onload = function(){}
 </script>
 </body>
 </html>

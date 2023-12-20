@@ -57,15 +57,9 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 
 ## 3.1 DOM核心综合
 * [DOM核心综合](./src/views/DOM/1-DOM核心综合.html "DOM核心综合")
-## 3.2 DOM组成
-## 3.3 Node接口
-## 3.4 document节点对象
-## 3.5 element节点对象
-## 3.6 DOM增删改查
-## 3.7 JavaScript事件模型
-## 3.8 EventTarget接口
-## 3.9 JavaScript事件对象
-## 3.10 JavaScript事件常见类型
+## 3.2 DOM事件模型
+* [DOM事件模型](./src/views/DOM/2-DOM事件模型.html "DOM事件模型")
+
 
 # 四、浏览器对象模型BOM
 ## 4.1 BOM组成概述
