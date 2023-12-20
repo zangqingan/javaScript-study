@@ -62,12 +62,10 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 
 
 # 四、浏览器对象模型BOM
-## 4.1 BOM组成概述
-## 4.2 cookie
-## 4.3 XMLHttpRequest对象
-## 4.4 CORS
-## 4.5 JavaScript异步概述
-## 4.6 JavaScript定时器
+
+## 4.1 BOM综合
+* [BOM综合](./src/views/BOM/1-BOM综合.html "BOM综合")
+
 
 # 五、面试题
 
