@@ -321,25 +321,29 @@
             <h4>7. URLSearchParams对象</h4>
             <div>
                 <h5>1.概述</h5>
-                <p>
-                    在处理URL时,比较常见的是获取其中的查询字符串,可以通过location对象的location.search属性,也可以通过浏览器原生提供的URLSearchParams对象。
+                <pre>
+
+                    在处理URL时,比较常见的是获取其中的查询字符串,可以通过location对象的location.search属性或者URL对象的search属性。
+                    然后浏览器也原生提供的 URLSearchParams 对象、它本身是一个构造函数用来生成实例。
                     URLSearchParams对象提供了一组标准的用来构造、解析和处理 URL查询字符串(即 URL 问号后面的部分)的API方法。
                     URLSearchParams会对查询字符串自动编码。
-                </p>
+                </pre>
                 <h5>2.URLSearchParams实例的创建方法</h5>
-                <p>
+                <pre>
+
                     它是一个构造函数,创建实例方法如下:接收一个查询字符串参数,起首的问号?有没有都行,也可以是对应查询字符串的数组或对象。
                     // 方法一：传入字符串
-                    var params = new URLSearchParams('?foo=1&bar=2');
+                    const params = new URLSearchParams('?foo=1&bar=2');
                     // 等同于
-                    var params = new URLSearchParams(document.location.search);
+                    const params = new URLSearchParams(document.location.search);
                     // 方法二：传入数组
-                    var params = new URLSearchParams([['foo', 1], ['bar', 2]]);
+                    const params = new URLSearchParams([['foo', 1], ['bar', 2]]);
                     // 方法三：传入对象
-                    var params = new URLSearchParams({'foo' : 1 , 'bar' : 2});
-                </p>
+                    const params = new URLSearchParams({'foo' : 1 , 'bar' : 2});
+                </pre>
                 <h5>3.URLSearchParams常用的实例方法</h5>
-                <p>
+                <pre>
+
                     1.toString()方法返回实例的字符串形式。
                     2.append()方法用来追加一个查询参数。它接受两个参数,第一个为键名,第二个为键值,没有返回值。不会识别是否键名已经存在照样添加。
                     3.delete()方法用来删除指定的查询参数。它接受键名作为参数。
@@ -366,21 +370,21 @@
 
                     var params = new URLSearchParams('a=1&b=2');
                     for(var p of params.keys()) {
-                    console.log(p);
+                        console.log(p);
                     }
                     // a
                     // b
                     for(var p of params.values()) {
-                    console.log(p);
+                        console.log(p);
                     }
                     // 1
                     // 2
                     for(var p of params.entries()) {
-                    console.log(p);
+                        console.log(p);
                     }
                     // ["a", "1"]
                     // ["b", "2"]
-                </p>
+                </pre>
             </div>
         </div>
     </div>
