@@ -3,124 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <title>JavaScript异步编程</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <div>
-        <h3>1.js异步概述:</h3>
-        <p>
-            由于历史的原因,为了避免浏览器渲染DOM冲突(浏览器需要渲染DOM,js可以修改DOM,js代码执行时浏览器应该停止渲染不然会产生冲突),所以js程序设计成单线程执行的。
-            单线程:指的是JavaScript 程序只在一个线程上运行(即主线程),同一时间只能做一件事,两段js代码不能同时执行。
-            解决方案:异步,即先让其它同步js代码在主线程中先执行,而异步操作挂起之后再执行。
-            异步(asynchronous):异步任务(即需要等待的事)被浏览器引擎挂起到异步队列中等待执行的任务(写法通常是回调函数)。
-            同步(synchronous):没有被挂起而是在主线程中排队执行的任务,只有一个执行玩了,队列中的后一个才能执行下去。
-            同步和异步的区别:同步会阻塞代码的执行而异步不会,如alert是同步必须点击之后菜执行下一步,setTimeout是异步。<br>
+    <div class="content">
+        <h3>1.js异步编程概述</h3>
+        <pre>
+            由于历史的原因,为了避免浏览器渲染DOM冲突(浏览器需要渲染DOM,js可以修改DOM,js代码执行时浏览器应该停止渲染不然会产生冲突),所以js程序被设计成单线程执行的。
+            单线程:指的是JavaScript 程序只在一个线程上运行(即主线程),同一时间只能做一件事,两段js代码不能同时执行、前面的没执行完后面的只能等待。
+            解决方案:异步,即先让其它同步的js代码在主线程中先执行,而异步操作先挂起保存到浏览器提供的任务队列(task queue)里、
+            等同步操作完成之后再从任务队列里取出异步操作执行。
             
-            注意:JavaScript 只在一个线程上运行,不代表 JavaScript 引擎只有一个线程。事实上,JavaScript 引擎有多个线程,单个脚本只能在一个线程上运行(称为主线程),其他线程都是在后台配合。<br>
 
-            异步的具体实现方式:事件轮询(event loop)
+            JavaScript程序中所有的任务可以分成两类:同步任务和异步任务、它们的定义和区别如下。
+                同步(synchronous):没有被挂起而是在主线程中排队执行的任务,只有前一个执行完了,队列中的后一个才能执行下去。
+                异步(asynchronous):异步任务(即需要等待的事)被浏览器引擎挂起到异步队列中等待执行的任务。
+                同步和异步的区别:同步会阻塞代码的执行而异步不会,如alert是同步必须点击之后菜执行下一步,而setTimeout是异步。 
+            
+            注意:JavaScript 只在一个线程(主线程)上运行,不代表 JavaScript 引擎只有一个线程。
+            事实上,JavaScript 引擎有多个线程,单个脚本只能在一个线程上运行(称为主线程),其他线程都是在后台配合。 
+            为了利用多核 CPU 的计算能力、HTML5 提出 Web Worker 标准、允许 JavaScript 脚本创建多个线程。
+        </pre>
+        <h3>2.异步具体的实现方式</h3>
+        <pre>
+
+            异步的具体实现方式:事件轮询机制(Event loop)
                 所谓的事件轮询指:
-                    1.同步代码直接按照书写顺序执行
+                    1.同步代码直接按照书写顺序在主线程里依次执行
                     2.异步操作先放到异步队列中(延时的等时间到了后放入,Ajax通信等加载完成后放入)
-                    3.等同步操作执行完毕,轮询执行异步队列中的异步任务,即放回主进程中当成同步任务执行。
-                引擎在不停地检查,一遍又一遍,只要同步任务执行完了,引擎就会去检查那些挂起来的异步任务,是不是可以进入主线程了。
-                所以这种循环检查的机制叫做事件循环(Event Loop)。<br>
-            注意:异步队列也叫任务队列由浏览器提供,用来挂起当前程序需要处理的异步任务。<br>
+                    3.等同步操作执行完毕,轮询执行异步队列中的异步任务,即取出放回主进程中当成同步任务执行。
+                所谓轮询就是: 浏览器引擎在不停地检查,一遍又一遍,只要同步任务执行完了,引擎就会去检查那些挂起来的异步任务,是不是可以进入主线程了。
+                是就会把异步操作重新放回主线程中执行、所以这种循环检查的机制叫做事件循环(Event Loop)。  
 
             所以js程序运行的过程是:          
-            首先,主线程会去执行所有的同步任务。等到同步任务全部执行完,就会去看任务队列里面的异步任务。
-            如果满足查询条件,那么异步任务就重新进入主线程开始执行,这时它就变成同步任务了。 如果不满足查询条件,就查询下一个异步任务。
-            等到执行完,继续查询异步队列中满足条件的异步任务再进入主线程开始执行。
-            不断循环直到任务队列清空,js程序也就结束执行。   
-        </p>
-        <h3>2.js异步使用场景和操作模式</h3>
-        <p>
+                首先,主线程会去执行所有的同步任务。等到同步任务全部执行完,就会去看任务队列里面的异步任务。
+                如果满足查询条件,那么异步任务就重新进入主线程开始执行,这时它就变成同步任务了。 
+                如果不满足查询条件,就查询下一个异步任务同样满足就放回主线程执行。
+                等到执行完,继续查询异步队列中满足条件的异步任务再进入主线程开始执行。
+                不断循环直到任务队列清空,js程序也就结束执行。   
+        </pre>
+        <h3>3.js异步的使用场景和操作模式</h3>
+        <pre>
             在js中常见有3中场景会使用到异步:
                 定时任务:
-                Ajax网络请求:
+                Ajax通信:
                 事件绑定:
 
             异步任务操作模式:
-                回调函数:一旦异步任务重新进入主线程,就会执行对应的回调函数。如果一个异步任务没有回调函数,就不会进入任务队列,也就是说,不会重新进入主线程,因为没有用回调函数指定下一步的操作。 
-                事件监听:异步任务的执行不取决于代码的顺序,而取决于某个事件是否发生。
-                发布/订阅:如果存在一个“信号中心”,某个任务执行完成,就向信号中心“发布”(publish)一个信号,其他任务可以向信号中心“订阅”(subscribe)这个信号,从而知道什么时候自己可以开始执行。这就叫做”发布/订阅模式”(publish-subscribe pattern),又称“观察者模式”(observer pattern)。
-        </p>
-        <h3>3.js异步的代码层面解决方案</h3>
-        <p>
-            1.回调函数
-            2.Promise 在es6中学习
-            3.Async/Await 在es6中学习
-        </p>
+                回调函数:一旦异步任务重新进入主线程,就会执行对应的回调函数。
+                    如果一个异步任务没有回调函数,就不会进入任务队列,也就是说,不会重新进入主线程,因为没有用回调函数指定下一步的操作。 
+                事件监听:异步任务的执行不取决于代码的顺序,而取决于某个事件是否发生。事件发生执行对应的事件监听程序。
+                发布/订阅:如果存在一个“信号中心”,某个任务执行完成,就向信号中心“发布”(publish)一个信号,
+                    其他任务可以向信号中心“订阅”(subscribe)这个信号,从而知道什么时候自己可以开始执行。
+                    同时执行完之后也可以取消“订阅”(subscribe)
+                    这就叫做”发布/订阅模式”(publish-subscribe pattern),又称“观察者模式”(observer pattern)。
+        </pre>
     </div>
-    <div>
-        <h3>1.js定时器</h3>
-        <p>
-            JavaScript 提供定时执行代码的功能，叫做定时器（timer）。
-            主要由setTimeout()和setInterval()这两个函数来完成。它们会向任务队列添加定时任务。
+    <div class="content">
+        <h3>4.js定时器</h3>
+        <pre>
+            JavaScript 提供定时执行代码的功能、叫做定时器 (timer )。
+            主要由延时调用setTimeout()和定时调用setInterval()这两个全局函数来完成。
+            注意:延时调用和定时调用类似、区别在与定时调用会重复执行多次、而延时调用只执行一次。
+            这两个方法的this关键字指向全局环境、即window。
+            它们会向任务队列添加定时任务。
 
-            setInterval():定时调用，可以将一个函数，每隔一段时间执行一次。 
-            
-            参数：
-                1.回调函数，该函数每隔一段时间执行一次
-                2.每次调用的间隔时间，单位是毫秒。ls=1000ms，如果省略，则默认为0。
-            返回值：这个方法有一个返回值（number类型的），代表的是定时器的唯一标识。且返回的整数值是连续的,后一个比前一个大1。
-          
-            clearInterval():用来关闭一个定时器，方法中需要一个定时器的标识作为参数，来关闭指定的定时器。
-            参数：
-            定时器的唯一标识。
-            这个方法可以接收任意参数，如果参数是一个有效的定时器标识，则停止对应的定时器。不是则什么也不做。
+            setInterval():定时调用、可以将一个函数、每隔一段时间执行一次。 
+                语法:const timerId = setInterval(func|code, delay);
+                参数:
+                    1.回调函数、该函数每隔一段时间执行一次
+                    2.每次调用的间隔时间、单位是毫秒。ls=1000ms、如果省略、则默认为0。
+                返回值:这个方法返回一个整数值代表的是定时器的唯一标识。且返回的整数值是连续的,后一个比前一个大1。
+            clearInterval():用来关闭一个定时器、方法中需要一个定时器的标识作为参数、来关闭指定的定时器。
+                语法:clearInterval(timerId)
+                参数:
+                    定时器的唯一标识。如果参数是一个有效的定时器标识、则停止对应的定时器。不是则什么也不做。
 
-            setTimeout():延时调用，一个函数不马上执行，而是隔一段时间以后再执行且只执行一次。
-            语法：var timerId = setTimeout(func|code, delay);
-            参数：
-                1.回调函数，隔一段时间后只执行一次的函数。
-                2.隔的时间，单位是毫秒。如果省略，则默认为0。
-            返回值：这个方法有一个返回值（number类型的），代表的是定时器的唯一标识。且返回的整数值是连续的,后一个比前一个大1。
-            
-            clearTimeout():用来关闭延时调用，方法中需要一个定时器的标识作为参数，来关闭指定的定时器。
-             
-            注意：延时调用和定时调用类似，区别在与定时调用会重复执行多次，而延时调用只执行一次。
-            这两个方法的this关键字指向全局环境，即window。
-        </p>
+            setTimeout():延时调用、一个函数不马上执行、而是隔一段时间以后再执行且只执行一次。
+                语法:const timerId = setTimeout(func|code, delay);
+                参数:
+                    1.回调函数、隔一段时间后只执行一次的函数。
+                    2.隔的时间、单位是毫秒。如果省略、则默认为0。
+                返回值:这个方法返回一个整数代表的是定时器的唯一标识。且返回的整数值是连续的,后一个比前一个大1。
+            clearTimeout():用来关闭延时调用、方法中需要一个定时器的标识作为参数、来关闭指定的定时器。
+                语法:clearTimeout(timerId)
+                参数:
+                    定时器的唯一标识。如果参数是一个有效的定时器标识、则停止对应的定时器。不是则什么也不做。
+        </pre>
+        <h3>5.Promise对象</h3>
+        <div>
+            也是JavaScript 的异步操作解决方案为异步操作提供统一接口、在ecmascript中已学习。
+        </div>
+        <h3>6.异步函数</h3>
+        <div>
+            也是JavaScript 的异步操作解决方案、在ecmascript中已学习。
+        </div>
     </div>
-    <div>
-        <h3>2.js定时器切换图片练习</h3>
+    <hr>
+    <h3>js定时器练习</h3>
+    <!-- 定时改变图片路径 -->
+    <div class="content">
+        <h3>1.定时改变图片路径</h3>
         <p>本质是改变img元素的src路径</p>
     </div>
-    <img id="img" src="../images/one.jpg" alt="第一张图片">
-    <button id="btn1">开始</button>
-    <button id="btn2">停止</button>
-<!-- 防抖节流 -->
-<div>
-    <h3>1.debounce 防抖函数</h3>
-    <p>
-        应用场景:在实际开发中很多场景会频繁触发事件,比如说搜索框实时发请求,onmousemove, resize, onscroll等等。
-        触发事件就会执行回调函数,但是有些时候,我们并不能或者不想要频繁执行回调函数。
-        因为可能会造成一些意想不到的问题,如降低程序运行速度,甚至造成浏览器卡死、崩溃,造成网络拥塞,增加服务器压力等。
-        防抖函数（debounce）,所谓防抖,就是指触发事件后在 n 秒内函数只能执行一次,如果在 n 秒内又触发了事件,则会重新计算函数执行时间。
-        本质也还是一个函数,要点是需要一个 setTimeout函数来辅助实现,延迟运行需要执行的代码。
-        如果方法多次触发,则把上次记录的延迟执行代码用 clearTimeout 清掉,重新开始计时。
-        若计时期间事件没有被重新触发,等延迟时间计时完毕,则执行目标代码。
+    <div class="content">
+        <img id="img" src="../../assets/images/one.jpg" alt="第一张图片">
+        <button id="btn1">开始</button>
+        <button id="btn2">停止</button>
+    </div>
+    <!-- 防抖节流 -->
+    <div class="content">
+        <h3>2.debounce 防抖函数</h3>
+        <pre>
+            应用场景:在实际开发中很多场景会频繁触发事件,比如说搜索框实时发请求,onmousemove, resize, onscroll等等。
+            触发事件就会执行回调函数,但是有些时候,我们并不能或者不想要频繁执行回调函数。
+            因为可能会造成一些意想不到的问题,如降低程序运行速度,甚至造成浏览器卡死、崩溃,造成网络拥塞,增加服务器压力等。
+            防抖函数 (debounce ),所谓防抖,就是指触发事件后在 n 秒内函数只能执行一次,如果在 n 秒内又触发了事件,则会重新计算函数执行时间。
+            本质也还是一个函数,要点是需要一个 setTimeout函数来辅助实现,延迟运行需要执行的代码。
+            如果方法多次触发,则把上次记录的延迟执行代码用 clearTimeout 清掉,重新开始计时。
+            若计时期间事件没有被重新触发,等延迟时间计时完毕,则执行目标代码。
 
-        防抖函数分为非立即执行版和立即执行版。
-        非立即执行版的意思是触发事件后函数不会立即执行,而是在 n 秒后执行,如果在 n 秒内又触发了事件,则会重新计算函数执行时间。
-        立即执行版的意思是触发事件后函数会立即执行,然后 n 秒内不触发事件才能继续执行函数的效果。
+            防抖函数分为非立即执行版和立即执行版。
+            非立即执行版的意思是触发事件后函数不会立即执行,而是在 n 秒后执行,如果在 n 秒内又触发了事件,则会重新计算函数执行时间。
+            立即执行版的意思是触发事件后函数会立即执行,然后 n 秒内不触发事件才能继续执行函数的效果。
 
-        简单说就是在给定的延迟时间内,无论事件被触发多少次都只执行一次回调函数。这就是防抖函数的核心。
-    </p>
-</div>
-<div id="content" style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;"></div>
-<!-- 防抖节流 -->
-<div>
-    <h3>1.throttle 节流函数</h3>
-    <p>
-        如果短时间内大量触发同一事件,那么在函数执行一次之后,该函数在指定的时间期限内不再工作,直至过了这段时间才重新生效。
-        就是指连续触发事件但是在 n 秒中只会执行一次回调函数。
-        节流函数一般也有两种分别是时间戳版和定时器版。
-    </p>
-</div>
+            简单说就是在给定的延迟时间内,无论事件被触发多少次都只执行一次回调函数。这就是防抖函数的核心。
+        </pre>
+        <pre>
 
-<div id="content" style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;"></div>
-<!-- 防抖节流 -->
+            非立即执行版
+            function debounce(callback, delay) {
+                let timer
+                return function (...args) {
+                    if (timer) clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        callback.apply(this, args)
+                    }, delay)
+                }
+            }
+            立即执行版
+            function debounce(callback,delay) {
+                let timer;
+                return function (...args) {
+                    if (timer) clearTimeout(timer);
+                    // 设置一个标识
+                    let callNow = !timer;
+                    timer = setTimeout(() => {
+                        timer = null;
+                    }, delay)
+                    if (callNow) callback.apply(this, args)
+                }
+            }
+        </pre>
+    </div>
+    <div id="content" style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;"></div>
+    <!-- 防抖节流 -->
+    <div class="content">
+        <h3>3.throttle 节流函数</h3>
+        <pre>
+            如果短时间内大量触发同一事件,那么在函数执行一次之后,该函数在指定的时间期限内不再工作,直至过了这段时间才重新生效。
+            就是指连续触发事件但是在 n 秒中只会执行一次回调函数。
+            节流函数一般也有两种分别是时间戳版和定时器版。
+        </pre>
+        <pre>
+
+            时间戳版
+            function throttle(func, wait) {
+                let previous = 0;
+                return function() {
+                    let now = Date.now();
+                    let context = this;
+                    let args = arguments;
+                    if (now - previous > wait) {
+                        func.apply(context, args);
+                        previous = now;
+                    }
+                }
+            }
+            定时器版
+            function throttle(func, wait) {
+                let timeout;
+                return function(...args) {
+                      if (!timeout) {
+                        timeout = setTimeout(() => {
+                            timeout = null;
+                            func.apply(this, args)
+                        }, wait)
+                    }
+        
+                }
+            }
+        </pre>
+    </div>
+    <div id="content1" style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;"></div>
+    <br>
+    <br>
+    <br>
+
 <!-- js -->
 <script>
 window.onload = function (){
@@ -139,23 +218,23 @@ window.onload = function (){
     // 第二个在一秒后放入
 
     /**
-     * 使图片可以自动切换（修改src属性）
+     * 使图片可以自动切换 (修改src属性 )
      * 
      */
     //获取标签
-    var img = document.getElementById("img");
+    const img = document.getElementById("img");
     //定义一个数组用来保存图片的路径
-    var imgArr = ["../images/one.jpg","../images/two.jpg","../images/three.jpg","../images/four.png"];
+    const imgArr = ["../../assets/images/one.jpg","../../assets/images/two.jpg","../../assets/images/three.jpg","../../assets/images/four.png"];
     //定义一个变量用来保存当前图片的索引
-    var index = 0;
+    let index = 0;
     //定义一个变量用来标识开启的定时器
-    var timer;
+    let timer;
     //通过按钮来开始停止图片的自动切换
-    var btn1 = document.getElementById("btn1");
+    const btn1 = document.getElementById("btn1");
     btn1.onclick = function(){
         //每次开启定时器前都先关闭当前元素的其它定时器。
         clearInterval(timer);
-        // 开启一个定时器，用来让图片自动动起来
+        // 开启一个定时器、用来让图片自动动起来
         timer = setInterval(function(){
             //索引自增
             index++;
@@ -170,13 +249,14 @@ window.onload = function (){
         },1000);
     };
     //停止
-    var btn2 = document.getElementById("btn2");
+    const btn2 = document.getElementById("btn2");
     btn2.onclick = function(){
         //关闭定时器
         clearInterval(timer);
     };
+
 /*防抖节流*/
-// 例子：div 元素绑定了 mousemove 事件,当鼠标在 div（灰色）区域中移动的时候会持续地去触发该事件导致频繁执行函数。
+// 例子:div 元素绑定了 mousemove 事件,当鼠标在 div (灰色 )区域中移动的时候会持续地去触发该事件导致频繁执行函数。
     let num = 1;
     let content = document.getElementById('content');
     // 定义回调函数
@@ -202,6 +282,7 @@ window.onload = function (){
     //         }, delay);
 
     // }
+
     // //es6中可以直接对arguments参数解构
     // function debounce(callback, delay) {
     //     let timer
@@ -245,12 +326,13 @@ window.onload = function (){
         }
     }
     content.onmousemove = debounce(count,1000);
+
 /*防抖节流*/
-// 例子：div 元素绑定了 mousemove 事件,当鼠标在 div（灰色）区域中移动的时候会持续地去触发该事件导致频繁执行函数。
+// 例子:div 元素绑定了 mousemove 事件,当鼠标在 div (灰色 )区域中移动的时候会持续地去触发该事件导致频繁执行函数。
     let num1 = 1;
-    let content1 = document.getElementById('content');
+    let content1 = document.getElementById('content1');
     // 定义回调函数
-    function count() {
+    function count1() {
         content1.innerHTML = num++;
     };
     // 1.直接绑定事件
@@ -284,7 +366,7 @@ window.onload = function (){
 
         }
     }
-    content.onmousemove = throttle(count,1000);
+    content1.onmousemove = throttle(count1,1000);
 }
 </script>
 </body>

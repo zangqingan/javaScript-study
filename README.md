@@ -69,7 +69,9 @@ ECMAscript5是JavaScript语言的核心基础它定义了言语的基础构成�
 * [客户端存储](./src/views/BOM/2-客户端存储.html "客户端存储")
 ## 4.3 网络请求与远程资源
 * [网络请求与远程资源](./src/views/BOM/3-网络请求与远程资源.html "网络请求与远程资源")
-* 
+## 4.4 JavaScript异步编程
+* [JavaScript异步编程](./src/views/BOM/4-JS异步编程.html "JavaScript异步编程")
+
 # 五、面试题
 
 # 六、其它
