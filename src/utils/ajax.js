@@ -1,17 +1,35 @@
 //封装一个发送ajax请求的函数，
 /*
-* ajax(options)
-* options = {type:'get',url:'地址',data:{name:'zhangsan'},
-* header:{'Content-Type':'application/x-www-form-urlencoded'},
-* success:callback,error:callback}
-* 参数含义:
-* type ajax请求的方式
-* url 请求的地址
-* data 传递的参数
-* header post 请求时传递参数的类型
-* success 请求成功后的回调
-* error 请求成功后的回调
+* ajax函数封装
+*  ajax(options)
+* options = {type:'get',url:'地址',success:callback}
+* 
 */
+// function ajax(options){
+//     //创建ajax对象
+//      const xhr = new XMLHttpRequest()
+//     //配置对象
+//     xhr.open(options.type,options.url)
+//     // 发送请求
+//     xhr.send()
+//     //监听onload事件,它在ajax接收完服务器端响应数据后触发。
+//     xhr.onload = function(){
+//         options.success(xhr.responseText)
+//     }
+// }
+// 进一步封装
+/*
+* ajax(options)
+* options = {type:'get',url:'地址',data:{name:'zhangsan'},header:{'Content-Type':'application/x-www-form-urlencoded'},success:callback,error:callback}
+* 参数含义:
+*   type ajax请求的方式
+*   url 请求的地址
+*   data 传递的参数
+*   header post 请求时传递参数的类型
+*   success 请求成功后的回调
+*   error 请求成功后的回调
+*/
+
 function ajax(options){
     // 不传入参数时使用默认值
     let defaults = {
