@@ -2,33 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>错误处理与调试</title>
+    <title>Web Worker标准</title>
+    <link href="../../assets//styles/index.css" rel="stylesheet"></link>
 </head>
 <body>
-    <h3>5、错误处理和调试</h3>
-        <div>
-            
-            在开发中想要知道某个变量的值，可以通过控制台是输出查看。
-            也可以打断点,可以借助浏览器打，或者在代码里写 debugger;<br>
-            <img src="../../images/debugger.png" alt="">
-        </div>
+    <div class="content">
+        <h3>1.概述</h3>
+        <pre>
+            我们知道JavaScript语言采用的是单线程模型、而为了利用多核 CPU 的计算能力 HTML5 提出 Web Worker 标准。
+            Web Worker 的作用就是为 JavaScript 创造多线程环境、允许主线程创建 Worker 线程、将一些任务分配给后者运行。
+            Worker 线程一旦新建成功就会始终运行不会被主线程上的活动打断、这样有利于随时响应主线程的通信。
+            缺点是比较耗费资源、所以一旦使用完毕就应该关闭。
+            浏览器原生提供Worker()构造函数，用来供主线程生成 Worker 线程。
+        </pre>
+    </div>
 
 
         
 <!-- js -->
 <script>
-    window.onload = function(){
- //debug
- var num = 100;
-    var name = "wanggeng"
+window.onload = function(){
 
-    num = num +20;
-    name = "wangwu"
-
-    while(num < 200){
-        num+=2
-    }
-    num = 55
 
 
 };
